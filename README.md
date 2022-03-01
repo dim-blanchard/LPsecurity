@@ -1,4 +1,4 @@
 # LPsecurity
 Plugin de sécurité serveur minecraft (Erizia).
 
-![DiagClas](Doc/DiagClass-LPsecurity.drawio.png)
+![Diagramme de Class](doc/DiagClass-LPsecurity.drawio.png)
