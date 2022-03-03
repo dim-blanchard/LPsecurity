@@ -4,7 +4,7 @@ Réalisaion d'un plugin de sécurité pour Minecraft sous version 1.8.8 avec un 
 
 # Infrastructure d'une machine hôte.
 
-![Diagramme de l'infrastructure serveur Erizia](doc/DiagInfrastructure.drawio.png)
+![Diagramme de l'infrastructure hôte](doc/DiagInfrastructure.drawio.png)
 
 # LPsecurity ?
 
@@ -15,6 +15,9 @@ Le **plugin** a pour bute de sécurisé un **serveur Minecraft** en version 1.8.
  
 
 # Diagramme de cas d'utilisation
+
+![Diagramme de cas d'utilisation](doc/DiagCasUtilisation.drawio.png)
+
 
 1. Lors de la connection au serveur pour la premiere fois le joueur est invité à enregister un mot de passe pour pouvoir avoir acces au serveur il a alors 5 minute pour renseigner sont mot de passe au bout de ce temps impartie il est exclu.
 
