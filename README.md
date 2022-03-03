@@ -5,6 +5,8 @@ Réalisaion d'un plugin de sécurité pour Minecraft sous version 1.8.8 avec un 
 # Infrastructure d'une machine hôte.
 
 ![Diagramme de l'infrastructure hôte](doc/DiagInfrastructure.drawio.png)
+La **machine hote** execute les différents serveur. Ici ce sont en exemple **trois serveur Minecraft** ou plus relier à un **serveur proxy** qui gère la connection entre les différents serveur.
+Afin de **sécurisé les connections** des joueurs nous avons besoin d'un plugin. Ceci évitera **les voles de compte** permetra une **gestion de ses utilisateur** grace à une **base de données** le tout sur la même machine.
 
 # LPsecurity ?
 
