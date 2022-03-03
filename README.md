@@ -1,16 +1,17 @@
 # LPsecurity 
-Réalisaion d'un plugin de sécurité pour Minecraft sous version 1.8.8 avec un Proxy.
+Réalisaion d'un **plugin de sécurité** pour **Minecraft** sous version 1.8.8 avec un Proxy et base de données.
 
 
 # Infrastructure d'une machine hôte.
 
 ![Diagramme de l'infrastructure hôte](doc/DiagInfrastructure.drawio.png)
-La **machine hote** execute les différents serveur. Ici ce sont en exemple **trois serveur Minecraft** ou plus relier à un **serveur proxy** qui gère la connection entre les différents serveur.
-Afin de **sécurisé les connections** des joueurs nous avons besoin d'un plugin. Ceci évitera **les voles de compte** permetra une **gestion de ses utilisateur** grace à une **base de données** le tout sur la même machine.
+**La machine hote** execute les différents processus. 
+- Nous avons en exemple trois **serveur Minecraft** (ou plus) relier à un serveur **proxy** qui gère la connection entre les différents serveur Minecraft et  un serveur **mysql**.
+- Afin de **sécurisé les connections des joueurs** nous avons besoin d'un **plugin**. Ceci évitera les voles de compte permetra une gestion de ses utilisateur grace à une base de données le tout sur la même machine.
 
 # LPsecurity ?
 
-Le **plugin** a pour bute de sécurisé un **serveur Minecraft** en version 1.8.8 relier à un **proxy** en récupérent les données joueurs et les enregistrer dans une **base de donnée**.
+**Le plugin** a pour bute de **sécurisé** un serveur Minecraft en version 1.8.8 relier à un proxy en **récupérent** les données joueurs et les **enregistrer** dans une base de donnée.
 > Exemple proxy ([BungeeCord](https://www.spigotmc.org/wiki/bungeecord/))
 , serveur Minecraft ([Spigot 1.8.8](https://www.spigotmc.org))
 
