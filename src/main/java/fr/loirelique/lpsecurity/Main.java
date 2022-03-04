@@ -1,6 +1,10 @@
 package fr.loirelique.lpsecurity;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
@@ -14,30 +18,31 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin implements Listener{
     
-
+    public static Liaison liaison;
+    public static Player player;
     @Override
-    public void onEnable(){
-        // Actions à effectuer au démarrage du plugin, c'est-à-dire :
-        //   - Au démarrage du serveur
-        //   - Après un /reload
-
-        System.out.println("Plugin pour la sécurité Erizia activer.");
+    public void onEnable(){ 
+        Bukkit.getServer().getPluginManager().registerEvents(this,this);
+       
+        System.out.println("Chargement plugin LPsecurity... ===> OK");
+        
+       
     }
-
 
     @Override
     public void onDisable(){
-        // Actions à effectuer à la désactivation du plugin
-        //   - A l'extinction du serveur
-        //   - Pendant un /reload
 
-        System.out.println("Plugin pour la sécurité Erizia désactiver.");
+        System.out.println("Arret du plugin LPsecurity... ===> OK");
     }
 
-    public static void main( String[] args )
-    {
-        System.out.println( "TEST" );
+    @EventHandler
+    public void playerJoinServer(PlayerJoinEvent event){
+        player = event.getPlayer(); 
+        player.sendMessage("Salut bienvuenue sur le serveur !");
     }
+
+
+
 
 
 }

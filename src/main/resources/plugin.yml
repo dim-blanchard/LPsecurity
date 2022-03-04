@@ -3,5 +3,4 @@ name: LPsecurity
 version: 1.0
 description: Ce plugin incorport la sécurité du serveur au niveau des joueurs et de leurs compte utilisateur ainsi que des permission et commande en rapport avec la sécurité.
 author: LoiRelique
-authors: [LoiRelique, Erizia]
-api-version: 1.8.8
+
