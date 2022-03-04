@@ -22,7 +22,6 @@ public class Liaison {
         this.pass = config.getConfig().getString("bdd.pass");
 
         this.database = config.getConfig().getString("bdd.database");
-        config.saveDefaultConfig();
     }
 
 

@@ -1,6 +1,7 @@
 package fr.loirelique.lpsecurity;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,7 +24,7 @@ public class Main extends JavaPlugin implements Listener{
     @Override
     public void onEnable(){ 
         Bukkit.getServer().getPluginManager().registerEvents(this,this);
-       
+        saveDefaultConfig();
         System.out.println("Chargement plugin LPsecurity... ===> OK");
         
        
@@ -38,10 +39,33 @@ public class Main extends JavaPlugin implements Listener{
     @EventHandler
     public void playerJoinServer(PlayerJoinEvent event){
         player = event.getPlayer(); 
-        player.sendMessage("Salut bienvuenue sur le serveur !");
+      
+        String player_name = player.getName();
+        float speed_default = player.getWalkSpeed();
+        Long player_time = player.getPlayerTime();
+
+
+        String title = getConfig().getString("premiereConnection.titre") ;
+        String subtitle =  getConfig().getString("premiereConnection.soustitre");
+        
+        //5 seconde == 100 ticks
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title "+player_name+" times 10 1200 10 ");
+        player.sendTitle(title, subtitle);
+    
+        System.out.println("Vitess: " +speed_default);
+        player.setWalkSpeed(0f);
+        System.out.println("temps joueur: " +player_time);
+
+        
+        if (player_time > player_time+10L) {
+
+            System.out.println("exclu");
+            
+        }
+
     }
 
-
+   
 
 
 

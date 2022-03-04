@@ -4,3 +4,9 @@ bdd:
   user: root
   pass: root
   database: spigot
+
+
+premiereConnection:
+  titre: Bienvenue
+  soustitre: Enregistre toi avec cette commande ->
+
