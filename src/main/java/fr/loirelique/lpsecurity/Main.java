@@ -1,5 +1,11 @@
 package fr.loirelique.lpsecurity;
 
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -21,6 +27,13 @@ public class Main extends JavaPlugin implements Listener{
     
     public static Liaison liaison;
     public static Player player;
+    private static String player_name;
+    private static Runnable task1;
+
+
+    private static HashMap<Integer,Runnable> tasks = new HashMap<Integer,Runnable>();
+    
+
     @Override
     public void onEnable(){ 
         Bukkit.getServer().getPluginManager().registerEvents(this,this);
@@ -32,18 +45,22 @@ public class Main extends JavaPlugin implements Listener{
 
     @Override
     public void onDisable(){
-
         System.out.println("Arret du plugin LPsecurity... ===> OK");
     }
 
     @EventHandler
     public void playerJoinServer(PlayerJoinEvent event){
         player = event.getPlayer(); 
-      
-        String player_name = player.getName();
+        player_name = player.getName();
         float speed_default = player.getWalkSpeed();
         Long player_time = player.getPlayerTime();
 
+        tasks.put(1,task1);
+
+        
+
+
+       
 
         String title = getConfig().getString("premiereConnection.titre") ;
         String subtitle =  getConfig().getString("premiereConnection.soustitre");
@@ -55,18 +72,33 @@ public class Main extends JavaPlugin implements Listener{
         System.out.println("Vitess: " +speed_default);
         player.setWalkSpeed(0f);
         System.out.println("temps joueur: " +player_time);
+     
 
+        task1 = new Runnable() {
+
+            int time = 10;
+
+            @Override
+            public void run() {
+                System.out.println("Temps: "+time);
+
+                if(time == 5){
+                    System.out.println("TIME 5");
+                    player.kickPlayer("Exclu");
+                }
+
+                if(time == 0)
+                {
+                    
+                    Bukkit.getScheduler().cancelTask( tasks.getKey(task1));
+                }
+                time--;
+            }
+        };
         
-        if (player_time > player_time+10L) {
 
-            System.out.println("exclu");
-            
-        }
+        Bukkit.getScheduler().runTaskTimer(this, tasks.get(1), 20, 20);
+
 
     }
-
-   
-
-
-
 }
