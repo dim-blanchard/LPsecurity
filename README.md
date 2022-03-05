@@ -11,7 +11,7 @@ Réalisaion d'un **plugin de sécurité** pour **Minecraft** sous version 1.8.8 
 
 # LPsecurity ?
 
-**Le plugin** a pour bute de **sécurisé** un serveur Minecraft en version 1.8.8 relier à un proxy en **récupérent** les données joueurs et les **enregistrer** dans une base de donnée.
+**Le plugin** a pour bute de **sécurisé** un serveur Minecraft en version 1.8.8 relier à un proxy en **récupérent** les données joueurs et les **enregistrer** dans une base de donnée et incorpore .
 > Exemple proxy ([BungeeCord](https://www.spigotmc.org/wiki/bungeecord/))
 , serveur Minecraft ([Spigot 1.8.8](https://www.spigotmc.org))
 
