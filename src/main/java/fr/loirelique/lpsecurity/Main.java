@@ -31,7 +31,9 @@ public class Main extends JavaPlugin implements Listener{
     private static Runnable task1;
 
 
-    private static HashMap<Integer,Runnable> tasks = new HashMap<Integer,Runnable>();
+    //private static HashMap<Integer,Runnable> tasks = new HashMap<Integer,Runnable>();
+    
+    private static Map<Integer, Runnable> tasks = new HashMap<>();
     
 
     @Override
@@ -55,7 +57,9 @@ public class Main extends JavaPlugin implements Listener{
         float speed_default = player.getWalkSpeed();
         Long player_time = player.getPlayerTime();
 
-        tasks.put(1,task1);
+        tasks.put(1," task1");
+      
+        
 
         
 
@@ -90,14 +94,14 @@ public class Main extends JavaPlugin implements Listener{
                 if(time == 0)
                 {
                     
-                    Bukkit.getScheduler().cancelTask( tasks.getKey(task1));
+                    Bukkit.getScheduler().cancelTask();
                 }
                 time--;
             }
         };
         
 
-        Bukkit.getScheduler().runTaskTimer(this, tasks.get(1), 20, 20);
+        Bukkit.getScheduler().runTaskTimer(this, , 20, 20);
 
 
     }
