@@ -13,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
 
 
@@ -28,12 +29,9 @@ public class Main extends JavaPlugin implements Listener{
     public static Liaison liaison;
     public static Player player;
     private static String player_name;
-    private static Runnable task1;
+    private static BukkitTask task1;
 
 
-    //private static HashMap<Integer,Runnable> tasks = new HashMap<Integer,Runnable>();
-    
-    private static Map<Integer, Runnable> tasks = new HashMap<>();
     
 
     @Override
@@ -57,15 +55,6 @@ public class Main extends JavaPlugin implements Listener{
         float speed_default = player.getWalkSpeed();
         Long player_time = player.getPlayerTime();
 
-        tasks.put(1," task1");
-      
-        
-
-        
-
-
-       
-
         String title = getConfig().getString("premiereConnection.titre") ;
         String subtitle =  getConfig().getString("premiereConnection.soustitre");
         
@@ -78,9 +67,11 @@ public class Main extends JavaPlugin implements Listener{
         System.out.println("temps joueur: " +player_time);
      
 
-        task1 = new Runnable() {
 
-            int time = 10;
+        // Run pour 
+        Runnable run1 = new Runnable() {
+
+            int time = 60;
 
             @Override
             public void run() {
@@ -88,21 +79,22 @@ public class Main extends JavaPlugin implements Listener{
 
                 if(time == 5){
                     System.out.println("TIME 5");
-                    player.kickPlayer("Exclu");
+                    
                 }
 
                 if(time == 0)
                 {
-                    
-                    Bukkit.getScheduler().cancelTask();
+                    player.kickPlayer("Exclu");
+                    task1.cancel();
                 }
                 time--;
             }
         };
-        
 
-        Bukkit.getScheduler().runTaskTimer(this, , 20, 20);
+        task1= Bukkit.getScheduler().runTaskTimer(this,run1 , 20, 20);
 
+
+       
 
     }
 }
