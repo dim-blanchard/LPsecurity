@@ -41,11 +41,10 @@ public class Main extends JavaPlugin implements Listener{
     @Override
     public void onEnable(){ 
         Bukkit.getServer().getPluginManager().registerEvents(this,this);
+        liaison = new Liaison(getConfig().getString("bdd.driver"),getConfig().getString("bdd.host"),getConfig().getString("bdd.port"), getConfig().getString("bdd.database"),getConfig().getString("bdd.user"), getConfig().getString("bdd.pass"));
         saveDefaultConfig();
-
-        liaison = new Liaison(getConfig().getString("bdd.url"),getConfig().getString("bdd.host"), getConfig().getString("bdd.database"),getConfig().getString("bdd.user"), getConfig().getString("bdd.pass"));
         System.out.println("Chargement plugin LPsecurity... ===> OK");
-        liaison.connect();
+        
     }
 
     @Override
@@ -54,10 +53,11 @@ public class Main extends JavaPlugin implements Listener{
     }
 
 
-    @EventHandler
+    @EventHandler 
     public void playerBeforeJoinServer(AsyncPlayerPreLoginEvent event){
         final String player = event.getName();
         final UUID playerUuid = event.getUniqueId();
+        liaison.connect();
         liaison.isAccount(playerUuid);
         System.out.println(player);
 

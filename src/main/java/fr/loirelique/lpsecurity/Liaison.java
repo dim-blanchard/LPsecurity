@@ -7,16 +7,18 @@ import java.util.UUID;
 
 public class Liaison {
 
-    private String url;
+    private String driver;
     private String host;
+    private String port;
     private String data;
     private String username;
     private String password;
     private static Connection connection;
 
-    public Liaison(String url, String host, String data, String username, String password){
-        this.url = url;
+    public Liaison(String driver, String host,String port, String data, String username, String password){
+        this.driver = driver;
         this.host = host;
+        this.port = port;
         this.data = data;
         this.username = username;
         this.password = password;
@@ -32,9 +34,13 @@ public class Liaison {
     public void connect(){
         if(!isOnline()){
             try{
-                
-                //connection = DriverManager.getConnection(this.url + this.host + this.data, this.username, this.password);
-                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/spigot?characterEncoding=latin1&useConfigs=maxPerformance","dimdim","Dimitri11!");
+                String url = this.driver+"://"+this.host+":"+this.port+"/"+this.data+"?characterEncoding=latin1&useConfigs=maxPerformance";
+                String user = this.username;
+                String pass = this.password;
+                connection = DriverManager.getConnection(url,user,pass);
+                //connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/spigot?characterEncoding=latin1&useConfigs=maxPerformance","dimdim","Dimitri11!");
+                //connection = DriverManager.getConnection(this.driver+"://"+this.host+":"+this.port+"/"+this.data+"?characterEncoding=latin1&useConfigs=maxPerformance",this.username,this.password);
+                                                    
                 System.out.println("§aConnexion réussie !");
             } catch (SQLException e){
                 e.printStackTrace();
