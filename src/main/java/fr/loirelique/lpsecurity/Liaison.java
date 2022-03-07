@@ -1,53 +1,116 @@
 package fr.loirelique.lpsecurity;
 
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.Bukkit;
 
+import java.sql.*;
+import java.util.UUID;
 
 public class Liaison {
-    
-    private JavaPlugin config;
 
     private String url;
-    private String host ;
-    private String user ;
-    private String pass;
+    private String host;
+    private String data;
+    private String username;
+    private String password;
+    private static Connection connection;
 
-    private String database;
-
-    public Liaison() {
-        
-        this.url = config.getConfig().getString("bdd.url");
-        this.host = config.getConfig().getString("bdd.host");
-        this.user = config.getConfig().getString("bdd.user");
-        this.pass = config.getConfig().getString("bdd.pass");
-
-        this.database = config.getConfig().getString("bdd.database");
+    public Liaison(String url, String host, String data, String username, String password){
+        this.url = url;
+        this.host = host;
+        this.data = data;
+        this.username = username;
+        this.password = password;
     }
 
+    /*
+     * CONNEXION A LA BASE DE DONNEE
+     */
 
-    public String getUrl() {
-         return url;
-     }
-
-    public String getHost() {
-        return host;
+    public static Connection getConnection() {
+        return connection;
     }
-     
-    public String getUser() {
-        return user;
+    public void connect(){
+        if(!isOnline()){
+            try{
+                
+                //connection = DriverManager.getConnection(this.url + this.host + this.data, this.username, this.password);
+                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/spigot","dimdim","Dimitri11!");
+                System.out.println("§aConnexion réussie !");
+            } catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
     }
 
-    public String getPass() {
-        return pass;
+    /*
+    * AJOUTER LE COMPTE
+     */
+
+    public void addAccount(UUID uuid){
+        if(!isAccount(uuid)){
+            try {
+                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO players (pseudo, uuid_player, ip_player) VALUES (?, ?, ?)");
+                preparedStatement.setString(1, Bukkit.getPlayer(uuid).getName());
+                preparedStatement.setString(2, uuid.toString());
+                preparedStatement.setString(3, Bukkit.getPlayer(uuid).getAddress().getHostName());
+                preparedStatement.execute();
+                preparedStatement.close();
+            } catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
     }
 
-    public String getDatabase() {
-        return database;
+    /*
+    * VERIFIER S'IL POSSEDE DEJA UN COMPTE
+     */
+
+    public boolean isAccount(UUID uuid) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT pseudo FROM players WHERE uuid_player = ?");
+            preparedStatement.setString(1, Bukkit.getPlayer(uuid).getName());
+            preparedStatement.setString(2, uuid.toString());
+            preparedStatement.setString(3, Bukkit.getPlayer(uuid).getAddress().getHostName());
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                return true;
+            }
+            return false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
+    /*
+    * DECONNEXION DE LA BASE DE DONNEE
+     */
 
+    public void disconnect(){
+        if(isOnline()){
+            try {
+                connection.close();
+                System.out.println("§cDéconnexion réussie !");
+            } catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+    }
 
-    
+    /**
+     * VERIFICATION DE LA CONNEXION DE LA BASE DE DONNEE
+     */
 
+    public boolean isOnline(){
+        try {
+            if((connection == null) || (connection.isClosed())){
+                return false;
+            }
+            return true;
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
-

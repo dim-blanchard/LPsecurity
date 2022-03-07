@@ -1,12 +1,13 @@
 bdd:
   url: jdbc:mysql://
-  host: localhost
+  host: localhost:3306/
   user: root
   pass: root
   database: spigot
 
 
-premiereConnection:
-  titre: Bienvenue
-  soustitre: Enregistre toi avec cette commande ->
-
+Connection:
+  titre: Bienvenue !
+  soustitre: Enregistre toi !
+  message_kick: Tu as étais exclue pour inactivité.
+  temps_enregistrement: 120
