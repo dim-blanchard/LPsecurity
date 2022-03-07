@@ -34,7 +34,7 @@ public class Liaison {
             try{
                 
                 //connection = DriverManager.getConnection(this.url + this.host + this.data, this.username, this.password);
-                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/spigot","dimdim","Dimitri11!");
+                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/spigot?characterEncoding=latin1&useConfigs=maxPerformance","dimdim","Dimitri11!");
                 System.out.println("§aConnexion réussie !");
             } catch (SQLException e){
                 e.printStackTrace();
@@ -67,7 +67,7 @@ public class Liaison {
 
     public boolean isAccount(UUID uuid) {
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT pseudo FROM players WHERE uuid_player = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT pseudo FROM players WHERE uuid = ?");
             preparedStatement.setString(1, Bukkit.getPlayer(uuid).getName());
             preparedStatement.setString(2, uuid.toString());
             preparedStatement.setString(3, Bukkit.getPlayer(uuid).getAddress().getHostName());

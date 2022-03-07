@@ -6,6 +6,7 @@ package fr.loirelique.lpsecurity;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -56,7 +57,8 @@ public class Main extends JavaPlugin implements Listener{
     @EventHandler
     public void playerBeforeJoinServer(AsyncPlayerPreLoginEvent event){
         final String player = event.getName();
-
+        final UUID playerUuid = event.getUniqueId();
+        liaison.isAccount(playerUuid);
         System.out.println(player);
 
         
