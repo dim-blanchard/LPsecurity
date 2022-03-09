@@ -38,8 +38,7 @@ public class Liaison {
                 String user = this.username;
                 String pass = this.password;
                 connection = DriverManager.getConnection(url,user,pass);
-                //connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/spigot?characterEncoding=latin1&useConfigs=maxPerformance","dimdim","Dimitri11!");
-                //connection = DriverManager.getConnection(this.driver+"://"+this.host+":"+this.port+"/"+this.data+"?characterEncoding=latin1&useConfigs=maxPerformance",this.username,this.password);
+               
                                                     
                 System.out.println("§aConnexion réussie !");
             } catch (SQLException e){

@@ -58,7 +58,7 @@ public class Main extends JavaPlugin implements Listener{
         final String player = event.getName();
         final UUID playerUuid = event.getUniqueId();
         liaison.connect();
-        liaison.isAccount(playerUuid);
+        //liaison.isAccount(playerUuid);
         System.out.println(player);
 
         
