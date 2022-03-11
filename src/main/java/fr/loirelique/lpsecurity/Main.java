@@ -3,13 +3,13 @@ package fr.loirelique.lpsecurity;
 
 
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+//import java.sql.Connection;
+//import java.sql.DriverManager;
+//import java.sql.SQLException;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+//import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,12 +35,19 @@ public class Main extends JavaPlugin implements Listener{
     private static BukkitTask task1;
     private static float speed_default;
     private static Long player_time;
- 
     
+    private String title;
+    private String subtitle;
+    private int time_run1;
 
     @Override
     public void onEnable(){ 
         Bukkit.getServer().getPluginManager().registerEvents(this,this);
+
+        time_run1 = Integer.parseInt(getConfig().getString("Connection.temps_enregistrement"));
+        title = getConfig().getString("Connection.titre") ;
+        subtitle =  getConfig().getString("Connection.soustitre");
+
         liaison = new Liaison(getConfig().getString("bdd.driver"),getConfig().getString("bdd.host"),getConfig().getString("bdd.port"), getConfig().getString("bdd.database"),getConfig().getString("bdd.user"), getConfig().getString("bdd.pass"));
         saveDefaultConfig();
         System.out.println("Chargement plugin LPsecurity... ===> OK");
@@ -54,12 +61,32 @@ public class Main extends JavaPlugin implements Listener{
 
 
     @EventHandler 
-    public void playerBeforeJoinServer(AsyncPlayerPreLoginEvent event){
-        final String player = event.getName();
-        final UUID playerUuid = event.getUniqueId();
+    public void playerBeforeJoinServer(AsyncPlayerPreLoginEvent player){
+        //final String players = player.getName();
+        final UUID playerUuid = player.getUniqueId();
         liaison.connect();
-        //liaison.isAccount(playerUuid);
-        System.out.println(player);
+        System.out.println(playerUuid);
+
+        if(liaison.isAccount(playerUuid) == true /*&& pas deja connecter  &&  pas bannie*/ )
+        {
+            //login 
+            System.out.println("login");
+
+
+        }
+        else if(liaison.isAccount(playerUuid) == false)
+        {
+
+            //register
+            System.out.println("Register :)");
+
+        }
+        else{
+
+            //kick
+           player.setKickMessage("Joueur deja en ligne / Vous êtes bannie !");
+
+        }
 
         
         //si le nom du joueur ce trouve dans la bdd alors appler methode login 
@@ -75,8 +102,7 @@ public class Main extends JavaPlugin implements Listener{
         speed_default = player.getWalkSpeed();
         player_time = player.getPlayerTime();
 
-        String title = getConfig().getString("Connection.titre") ;
-        String subtitle =  getConfig().getString("Connection.soustitre");
+        
         
         //5 seconde == 100 ticks
         int time = Integer.parseInt(getConfig().getString("Connection.temps_enregistrement"));
@@ -86,29 +112,29 @@ public class Main extends JavaPlugin implements Listener{
         System.out.println("Vitess: " +speed_default);
         player.setWalkSpeed(0f);
         System.out.println("temps joueur: " +player_time);
-     
+        
+        
         
 
         // Run pour 
         Runnable run1 = new Runnable() {
 
-            int time = Integer.parseInt(getConfig().getString("Connection.temps_enregistrement"));
-
             @Override
             public void run() {
                 System.out.println("Temps: "+time);
 
-                if(time == 5){
+                if(time_run1 == 5){
                     System.out.println("TIME 5");
                     
                 }
 
-                if(time == 0)
+                if(time_run1 == 0)
                 {
+                    liaison.disconnect();
                     player.kickPlayer(getConfig().getString("Connection.message_kick"));
                     task1.cancel();
                 }
-                time--;
+                time_run1--;
             }
 
           
@@ -126,6 +152,7 @@ public class Main extends JavaPlugin implements Listener{
     private void playerQuitServer(PlayerQuitEvent event){
        final Player player = event.getPlayer();
        task1.cancel();
+       liaison.disconnect();
        player.setWalkSpeed(speed_default);
        System.out.println(speed_default);
     }
