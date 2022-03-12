@@ -70,6 +70,8 @@ public class Liaison {
     * VERIFIER S'IL POSSEDE DEJA UN COMPTE
      */
 
+    
+
     public boolean isAccount(UUID uuid) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT pseudo FROM players WHERE uuid = ?");
@@ -115,6 +117,28 @@ public class Liaison {
             return true;
         } catch (SQLException e){
             e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * VERIFICATION SI LE JOUEUR ET DEJA CONNECTER
+     */
+
+    public boolean playerIsOnline(UUID uuid){
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT pseudo FROM players WHERE uuid = ?");
+            preparedStatement.setString(1, Bukkit.getPlayer(uuid).getName());
+            preparedStatement.setString(2, uuid.toString());
+            preparedStatement.setString(3, Bukkit.getPlayer(uuid).getAddress().getHostName());
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                return true;
+            }
+            
+        } catch (Exception e) {
+            //TODO: handle exception
         }
         return false;
     }
