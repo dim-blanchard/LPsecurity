@@ -209,9 +209,6 @@ public class Main extends JavaPlugin implements Listener {
 
         getCommande1(player);
         player.sendTitle(getTitre(), getSoustitre());
-
-        //getTask1(player);
-
         setTask1(player);
         
 
