@@ -29,6 +29,8 @@ public class Main extends JavaPlugin implements Listener {
      */
 
     /*
+
+
      * @EventHandler
      * public void playerBeforeJoinServer(AsyncPlayerPreLoginEvent p) {
      * connection1.connect();
@@ -55,109 +57,55 @@ public class Main extends JavaPlugin implements Listener {
      * 
      * }
      */
-    // Attribut de la classe main
+
 
     
 
     /**
      * 
-     * GETTER ET SETTER DE CONFIGURATION DE LA BDD
+     * GETTER DE CONFIGURATION DE LA BDD
      * 
      * 
      */
-
-    private String getDriver() {
-        String driver = getConfig().getString("bdd.driver");
-        return driver;
+    public String getConfigBdd(String config) {    
+       String configBdd =  getConfig().getString(config);
+        return configBdd;
     }
-
-    private String getHost() {
-        String host = getConfig().getString("bdd.host");
-        return host;
-    }
-
-    private String getPort() {
-        String port = getConfig().getString("bdd.port");
-        return port;
-    }
-
-    private String getData() {
-        String data = getConfig().getString("bdd.database");
-        return data;
-    }
-
-    private String getUser() {
-        String user = getConfig().getString("bdd.user");
-        return user;
-    }
-
-    private String getPass() {
-        String pass = getConfig().getString("bdd.pass");
-        return pass;
-    }
-
-
      /**
      * 
-     * GETTER ET SETTER DE CONFIG MESSAGE
+     * GETTER DE CONFIG MESSAGE
      * 
      * 
      */   
-
-    private int registertemps;
     public int getRegistertemps() {
-        return registertemps;
-    }
-
-    public void setRegistertemps() {
         int registertemps = Integer.parseInt(getConfig().getString("Connection.temps_enregistrement"));
-        this.registertemps = registertemps;
-    }
-    ////////////////////////
-    private String soustitre;
+        return registertemps;
+    }  
     public String getSoustitreMessage(){
+        String soustitre = getConfig().getString("Connection.soustitre");
         return soustitre;
     }
-    public void setSoustitreMessage() {
-        String soustitre = getConfig().getString("Connection.soustitre");
-        this.soustitre = soustitre;
-    }
-    ////////////////////////
-    private String titre;
     public String getTitreMessage() {
-        return titre;
-    }
-    public void setTitreMessage() {
         String titre = getConfig().getString("Connection.titre");
-        this.titre = titre;
-    }
-    /////////////////////////
-    private String kick;
+        return titre;
+    }    
     public String getKickMessage() {
-        return kick;
-    }
-    public void setKickMessage() {
         String kick = getConfig().getString("Connection.message_kick");
-        this.kick = kick;
+        return kick;
     }
 
     /**
      * 
-     * GETTER ET SETTER DE RUNNABLE
+     * GETTER DE RUNNABLE
      * 
      * 
      */
 
-    private Runnable run1;
-    public Runnable getRun1() {
-        return run1;
-    }
-
-    public void setRun1(Player event) {
+    public Runnable getRun1(Player event) {
         Runnable run1 = new Runnable() {
 
             double x = 0;
-            double y = 66;
+            double y = 64;
             double z = 0;
 
             World player_world = event.getWorld();
@@ -179,14 +127,10 @@ public class Main extends JavaPlugin implements Listener {
                 time_run1--;
             }
         };
-        this.run1 = run1;
-    }
-
-    private Runnable run2;
+    
+    return run1;
+    }   
     public Runnable getRun2() {
-        return run2;
-    }
-    public void setRun2() {
         Runnable run2 = new Runnable() {
 
             @Override
@@ -195,14 +139,9 @@ public class Main extends JavaPlugin implements Listener {
             }
 
         }; 
-        this.run2 = run2;
+        return run2;
     }
-   
-    private Runnable run3;
     public Runnable getRun3() {
-        return run3;
-    }
-    public void setRun3() {
         Runnable run3 = new Runnable() {
 
             @Override
@@ -211,7 +150,7 @@ public class Main extends JavaPlugin implements Listener {
             }
 
         }; 
-        this.run3 = run3;
+        return run3;
     }
     /**
      * 
@@ -223,9 +162,9 @@ public class Main extends JavaPlugin implements Listener {
     public BukkitTask getTask1() {
         return tache1;
     }
-
     public void setTask1(Player event) {
-        BukkitTask tache1 = Bukkit.getScheduler().runTaskTimer(this, getRun1(), 20, 20);
+        
+        BukkitTask tache1 = Bukkit.getScheduler().runTaskTimer(this,getRun1(event), 20, 20);
         this.tache1 = tache1;
     }
 
@@ -233,8 +172,7 @@ public class Main extends JavaPlugin implements Listener {
     public BukkitTask getTask2() {
         return tache2;
     }
-
-    public void setTask2(Player event) {
+    public void setTask2() {
         BukkitTask tache2 = Bukkit.getScheduler().runTaskTimer(this, getRun2(), 20, 20);
         this.tache2 = tache2;
     }
@@ -243,51 +181,36 @@ public class Main extends JavaPlugin implements Listener {
     public BukkitTask getTask3() {
         return tache3;
     }
-
-    public void setTask3(Player event) {
+    public void setTask3() {
         BukkitTask tache3 = Bukkit.getScheduler().runTaskTimer(this, getRun3(), 20, 20);
         this.tache3 = tache3;
     }
-
-
     /**
      * 
-     * GETTER ET SETTER DE COMMANDE
+     * GETTER DE COMMANDE
      * 
      * 
      */
-
-    private Boolean commande1;
-    public Boolean getCommande1() {
-        return commande1;
-    }
-
-    public void setCommande1(Player event) {
+    public Boolean getCommande1(Player event) {
         String player_name = event.getName();
         Boolean commande1 = Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
                 "title " + player_name + " times 10 " + getRegistertemps() * 20 + " 10 ");
-        this.commande1 = commande1;
+        return commande1;
     }
-   
-
-
     /**
      * 
      * EVENT PLAYER JOIN EVENT
      * 
      * 
      */    
-
     @EventHandler
     public void playerJoinServer(PlayerJoinEvent event) {
-
         final Player player = event.getPlayer();
-        final String player_name = player.getName();
-
-        setCommande1(player);
+        
+    
+        getCommande1(player);
         player.sendTitle(getTitreMessage(), getSoustitreMessage());
         setTask1(player);
-
     }
 
     @Override
