@@ -163,7 +163,7 @@ public class Main extends JavaPlugin implements Listener {
             World player_world = event.getWorld();
             Location player_tp = new Location(player_world, x, y, z);
 
-            int time_run1 = getRegisterTemps();
+            int time_run1 = getRegistertemps();
 
             @Override
             public void run() {
@@ -174,7 +174,7 @@ public class Main extends JavaPlugin implements Listener {
 
                 if (time_run1 == 0) {
                     getTask1().cancel();
-                    event.kickPlayer(getMessKick());
+                    event.kickPlayer(getKickMessage());
                 }
                 time_run1--;
             }
