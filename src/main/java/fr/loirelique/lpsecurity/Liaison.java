@@ -1,6 +1,7 @@
 package fr.loirelique.lpsecurity;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.sql.*;
 import java.util.UUID;
@@ -176,16 +177,23 @@ public class Liaison {
      * 
      * }
      */
-/* 
+
     //-1 on ouvre la connection
-    try( Connection ouverture_connection = DriverManager.getConnection(url, user, password))
+
+    public void test(Player pevent) throws SQLException{
+    String url = this.driver + "://" + this.host + ":" + this.port + "/" + this.data
+                        + "?characterEncoding=latin1&useConfigs=maxPerformance";
+                String user = this.username;
+                String pass = this.password;
+    try( Connection ouverture_connection = DriverManager.getConnection(url, user, pass))
     {
 
         //-2 Fait une ou plusieure requete connection au jeux
-        UUID uuid_player ;
+        
         String requet_Select_sql2 = "SELECT * FROM Table_user WHERE uuid=?";
         try (PreparedStatement statement2_select = ouverture_connection.prepareStatement(requet_Select_sql2)) {
-            statement2_select.setObject(1, uuid_player);
+            UUID uuid_player = pevent.getUniqueId() ;
+            statement2_select.setObject(1,uuid_player);
             // 
             try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                 if(resultat_requete_select.next()){
@@ -200,6 +208,7 @@ public class Liaison {
             }
         }
 
-    } */
+    }
+ }
 
 }

@@ -4,3 +4,37 @@ version: 1.0
 description: Ce plugin incorport la sécurité du serveur au niveau des joueurs et de leurs compte utilisateur ainsi que des permission et commande en rapport avec la sécurité.
 author: LoiRelique
 
+
+
+commands:
+  register:
+    description: Permet d'enregister son mdp à la premiere connection.
+    usage: /register [pass] [pass]
+    permission: securiter.lpsecurity.register
+
+  login:
+    description: Permet de s'identifer au serveur.
+    usage: /login [pass]
+    permission: securiter.lpsecurity.login
+
+
+  banish:
+    description: Description de la commande.
+    usage: /banish true/false [non du joueur]
+    permission: securiter.lpsecurity.ban
+
+
+
+
+permissions:
+  securiter.lpsecurity.login:
+    description: permet d'utiliser la commande login.
+    default: true
+
+  securiter.lpsecurity.register:
+    description: permet d'utiliser la commande register.
+    default: true
+
+  securiter.lpsecurity.ban:
+    description: permet d'utiliser les commande banish.
+    default: true

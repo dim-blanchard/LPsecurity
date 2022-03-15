@@ -3,7 +3,9 @@ package fr.loirelique.lpsecurity;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -191,12 +193,15 @@ public class Main extends JavaPlugin implements Listener {
      * 
      * 
      */
-    public Boolean getCommande1(Player event) {
+    public Boolean getExecution1(Player event) {
         String player_name = event.getName();
         Boolean commande1 = Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
                 "title " + player_name + " times 10 " + getRegistertemps() * 20 + " 10 ");
         return commande1;
     }
+    
+
+
     /**
      * 
      * EVENT PLAYER JOIN EVENT
@@ -208,7 +213,7 @@ public class Main extends JavaPlugin implements Listener {
         final Player player = event.getPlayer();
         
     
-        getCommande1(player);
+        getExecution1(player);
         player.sendTitle(getTitreMessage(), getSoustitreMessage());
         setTask1(player);
     }
@@ -218,6 +223,14 @@ public class Main extends JavaPlugin implements Listener {
 
         Bukkit.getServer().getPluginManager().registerEvents(this, this);
 
+        //Commandes
+        CommandExecutor commandRegister = new commandRegister();
+        getCommand("register").setExecutor(commandRegister);
+        CommandExecutor commandLogin = new commandLogin();
+        getCommand("login").setExecutor(commandLogin);
+        CommandExecutor commandBanish = new commandBanish();
+        getCommand("banish").setExecutor(commandBanish);
+        /////
         saveDefaultConfig();
 
         System.out.println("Chargement plugin LPsecurity... ===> OK");
