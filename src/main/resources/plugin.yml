@@ -23,9 +23,6 @@ commands:
     usage: /banish true/false [non du joueur]
     permission: securiter.lpsecurity.ban
 
-
-
-
 permissions:
   securiter.lpsecurity.login:
     description: permet d'utiliser la commande login.

@@ -1,7 +1,10 @@
 package fr.loirelique.lpsecurity;
 
+
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -21,10 +24,85 @@ import org.bukkit.scheduler.BukkitTask;
  */
 
 public class Main extends JavaPlugin implements Listener {
- 
+
+    public static Main plugin;
+    private String driver = getConfigBdd("bdd.driver");
+    private String host = getConfigBdd("bdd.host");
+    private String port = getConfigBdd("bdd.port");
+    private String data = getConfigBdd("bdd.database");
+
+    private String username = getConfigBdd("bdd.user");
+    private String password = getConfigBdd("bdd.pass");
+
+    private String url = driver + "://" + host + ":" + port + "/" + data
+            + "?characterEncoding=latin1&useConfigs=maxPerformance";
+    /**
+     * EVENT PLAYER JOIN EVENT
+     */
+    @EventHandler
+    public void playerJoinServer(PlayerJoinEvent event) {
+        final Player player = event.getPlayer();
+
+        getExecution1(player);
+        player.sendTitle(getTitreMessage(), getSoustitreMessage());
+        setTask1(player);
+        
+        
+
+        try (Connection connection_addPlayer = DriverManager.getConnection(url, username, password)) {
+            // -2 Fait une ou plusieure requete connection au jeux
+
+            String requet_insert_sql2 = "INSERT INTO players (uuid,pseudo,ip) VALUES(?,?,?)";
+            try (PreparedStatement statement2_insert = connection_addPlayer.prepareStatement(requet_insert_sql2)) {
+                String uuid = player.getUniqueId().toString();
+                String pseudo = player.getName();
+                String ip = player.getAddress().toString();
+
+                statement2_insert.setString(1, uuid);
+                statement2_insert.setString(2, pseudo);
+                statement2_insert.setString(3, ip);
+                statement2_insert.executeUpdate();
+                // 
+                }
+                catch (Exception e) 
+                {
+                    e.printStackTrace();
+                }
+
+
+
+            }
+            catch (Exception e) 
+                {
+                    e.printStackTrace();
+                }
+    }
+
+    @Override
+    public void onEnable() {
+        plugin = this;
+        Bukkit.getServer().getPluginManager().registerEvents(this, this);
+        saveDefaultConfig();
+        // Commandes
+        CommandExecutor commandRegister = new commandRegister();
+        getCommand("register").setExecutor(commandRegister);
+        CommandExecutor commandLogin = new commandLogin();
+        getCommand("login").setExecutor(commandLogin);
+        CommandExecutor commandBanish = new commandBanish();
+        getCommand("banish").setExecutor(commandBanish);
+        // Liaison
+
+        System.out.println("Chargement plugin LPsecurity... ===> OK");
+    }
+
+    @Override
+    public void onDisable() {
+        System.out.println("Arret du plugin LPsecurity... ===> OK");
+    }
+
     /*
-
-
+     * 
+     * 
      * @EventHandler
      * public void playerBeforeJoinServer(AsyncPlayerPreLoginEvent p) {
      * connection1.connect();
@@ -52,47 +130,39 @@ public class Main extends JavaPlugin implements Listener {
      * }
      */
 
-
-    
-
     /**
-     * 
      * GETTER DE CONFIGURATION DE LA BDD
-     * 
-     * 
      */
-    public String getConfigBdd(String config) {    
-       String configBdd =  getConfig().getString(config);
+    public String getConfigBdd(String config) {
+        String configBdd = getConfig().getString(config);
         return configBdd;
     }
+
     /**
-     * 
      * GETTER DE CONFIG MESSAGE
-     * 
-     * 
-     */   
+     */
     public int getRegistertemps() {
         int registertemps = Integer.parseInt(getConfig().getString("Connection.temps_enregistrement"));
         return registertemps;
-    }  
-    public String getSoustitreMessage(){
+    }
+
+    public String getSoustitreMessage() {
         String soustitre = getConfig().getString("Connection.soustitre");
         return soustitre;
     }
+
     public String getTitreMessage() {
         String titre = getConfig().getString("Connection.titre");
         return titre;
-    }    
+    }
+
     public String getKickMessage() {
         String kick = getConfig().getString("Connection.message_kick");
         return kick;
     }
 
-    /**
-     * 
+    /** 
      * GETTER DE RUNNABLE
-     * 
-     * 
      */
 
     public Runnable getRun1(Player event) {
@@ -121,9 +191,10 @@ public class Main extends JavaPlugin implements Listener {
                 time_run1--;
             }
         };
-    
-    return run1;
-    }   
+
+        return run1;
+    }
+
     public Runnable getRun2() {
         Runnable run2 = new Runnable() {
 
@@ -132,9 +203,10 @@ public class Main extends JavaPlugin implements Listener {
 
             }
 
-        }; 
+        };
         return run2;
     }
+
     public Runnable getRun3() {
         Runnable run3 = new Runnable() {
 
@@ -143,113 +215,55 @@ public class Main extends JavaPlugin implements Listener {
 
             }
 
-        }; 
+        };
         return run3;
     }
+
     /**
-     * 
      * GETTER ET SETTER DE TACHE
-     * 
-     * 
      */
     private BukkitTask tache1;
+
     public BukkitTask getTask1() {
         return tache1;
     }
+
     public void setTask1(Player event) {
-        
-        BukkitTask tache1 = Bukkit.getScheduler().runTaskTimer(this,getRun1(event), 20, 20);
+
+        BukkitTask tache1 = Bukkit.getScheduler().runTaskTimer(this, getRun1(event), 20, 20);
         this.tache1 = tache1;
     }
 
     private BukkitTask tache2;
+
     public BukkitTask getTask2() {
         return tache2;
     }
+
     public void setTask2() {
         BukkitTask tache2 = Bukkit.getScheduler().runTaskTimer(this, getRun2(), 20, 20);
         this.tache2 = tache2;
     }
 
     private BukkitTask tache3;
+
     public BukkitTask getTask3() {
         return tache3;
     }
+
     public void setTask3() {
         BukkitTask tache3 = Bukkit.getScheduler().runTaskTimer(this, getRun3(), 20, 20);
         this.tache3 = tache3;
     }
+
     /**
-     * 
      * GETTER DE COMMANDE
-     * 
-     * 
      */
     public Boolean getExecution1(Player event) {
         String player_name = event.getName();
         Boolean commande1 = Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
                 "title " + player_name + " times 10 " + getRegistertemps() * 20 + " 10 ");
         return commande1;
-    }
-    
-
-
-    /**
-     * 
-     * EVENT PLAYER JOIN EVENT
-     * 
-     * 
-     */    
-    @EventHandler
-    public void playerJoinServer(PlayerJoinEvent event) {
-        final Player player = event.getPlayer();
-        
-    
-        getExecution1(player);
-        player.sendTitle(getTitreMessage(), getSoustitreMessage());
-        setTask1(player);
-    }
-    private Liaison liaison = new Liaison(getConfigBdd("bdd.driver"), getConfigBdd("bdd.host"),
-    getConfigBdd("bdd.port"), getConfigBdd("bdd.database"), getConfigBdd("bdd.user"), getConfigBdd("bdd.pass"));
-
-    public Liaison getLiaison() {
-        return liaison;
-    }
-    public void setLiaison(Liaison liaison) {
-
-
-        
-        this.liaison = liaison;
-    }
-  
-
-
-    @Override
-    public void onEnable() {
-
-        Bukkit.getServer().getPluginManager().registerEvents(this, this);
-        saveDefaultConfig();
-        //Commandes
-            CommandExecutor commandRegister = new commandRegister();
-                getCommand("register").setExecutor(commandRegister);
-            CommandExecutor commandLogin = new commandLogin();
-                getCommand("login").setExecutor(commandLogin);
-            CommandExecutor commandBanish = new commandBanish();
-                getCommand("banish").setExecutor(commandBanish);
-        //Liaison
-  /*          
-        url = getConfigBdd("bdd.driver") + "://" + getConfigBdd("bdd.host")+ ":" + getConfigBdd("bdd.port") + "/" + getConfigBdd("bdd.database")
-                        + "?characterEncoding=latin1&useConfigs=maxPerformance";
-        user = getConfigBdd("bdd.user");
-        pass = getConfigBdd("bdd.pass");
- */    
-
-        System.out.println("Chargement plugin LPsecurity... ===> OK");
-    }
-
-    @Override
-    public void onDisable() {
-        System.out.println("Arret du plugin LPsecurity... ===> OK");
     }
 
 }
