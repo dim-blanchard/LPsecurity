@@ -1,11 +1,12 @@
 package fr.loirelique.lpsecurity;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,16 +21,7 @@ import org.bukkit.scheduler.BukkitTask;
  */
 
 public class Main extends JavaPlugin implements Listener {
-
-    /*
-     * 
-     * 
-     * private static Liaison connection1 = new
-     * Liaison(ConfigurationBdd.getDriver(), ConfigurationBdd.getHost(),
-     * ConfigurationBdd.getPort(),ConfigurationBdd.getData(),
-     * ConfigurationBdd.getUser(), ConfigurationBdd.getPass());
-     */
-
+ 
     /*
 
 
@@ -55,7 +47,7 @@ public class Main extends JavaPlugin implements Listener {
      * } catch (Exception e) {
      * // TODO: handle exception
      * }
-     * 
+     * https://bukkit.fandom.com/wiki/Plugin_Tutorial/fr#Les_commandes_2
      * 
      * }
      */
@@ -73,7 +65,7 @@ public class Main extends JavaPlugin implements Listener {
        String configBdd =  getConfig().getString(config);
         return configBdd;
     }
-     /**
+    /**
      * 
      * GETTER DE CONFIG MESSAGE
      * 
@@ -217,21 +209,40 @@ public class Main extends JavaPlugin implements Listener {
         player.sendTitle(getTitreMessage(), getSoustitreMessage());
         setTask1(player);
     }
+    private Liaison liaison = new Liaison(getConfigBdd("bdd.driver"), getConfigBdd("bdd.host"),
+    getConfigBdd("bdd.port"), getConfigBdd("bdd.database"), getConfigBdd("bdd.user"), getConfigBdd("bdd.pass"));
+
+    public Liaison getLiaison() {
+        return liaison;
+    }
+    public void setLiaison(Liaison liaison) {
+
+
+        
+        this.liaison = liaison;
+    }
+  
+
 
     @Override
     public void onEnable() {
 
         Bukkit.getServer().getPluginManager().registerEvents(this, this);
-
-        //Commandes
-        CommandExecutor commandRegister = new commandRegister();
-        getCommand("register").setExecutor(commandRegister);
-        CommandExecutor commandLogin = new commandLogin();
-        getCommand("login").setExecutor(commandLogin);
-        CommandExecutor commandBanish = new commandBanish();
-        getCommand("banish").setExecutor(commandBanish);
-        /////
         saveDefaultConfig();
+        //Commandes
+            CommandExecutor commandRegister = new commandRegister();
+                getCommand("register").setExecutor(commandRegister);
+            CommandExecutor commandLogin = new commandLogin();
+                getCommand("login").setExecutor(commandLogin);
+            CommandExecutor commandBanish = new commandBanish();
+                getCommand("banish").setExecutor(commandBanish);
+        //Liaison
+  /*          
+        url = getConfigBdd("bdd.driver") + "://" + getConfigBdd("bdd.host")+ ":" + getConfigBdd("bdd.port") + "/" + getConfigBdd("bdd.database")
+                        + "?characterEncoding=latin1&useConfigs=maxPerformance";
+        user = getConfigBdd("bdd.user");
+        pass = getConfigBdd("bdd.pass");
+ */    
 
         System.out.println("Chargement plugin LPsecurity... ===> OK");
     }

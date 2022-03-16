@@ -10,7 +10,7 @@ public class commandLogin implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         
-        if (cmd.getName().equalsIgnoreCase("login")) { // Si c'est la commande "exemple" qui a été tapée:
+        if (cmd.getName().equalsIgnoreCase("login")) { // Si c'est la commande "login" qui a été tapée:
 
             if (sender instanceof Player) {
                 // C'est un joueur qui a effectué la commande

@@ -7,15 +7,21 @@ import org.bukkit.entity.Player;
 
 public class commandRegister implements CommandExecutor {
 
+
+
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-        if (cmd.getName().equalsIgnoreCase("register")) { // Si c'est la commande "exemple" qui a été tapée:
+        if (cmd.getName().equalsIgnoreCase("register")) { // Si c'est la commande "register" qui a été tapée:
 
             if (sender instanceof Player) {
                 // C'est un joueur qui a effectué la commande
                 Player p = (Player) sender;// On récupère le joueur.
                 p.sendMessage("C'est okay register");
+                
+                
+                
 
             } else {
                 // C'est la console du serveur qui a effectuée la commande.
@@ -27,5 +33,7 @@ public class commandRegister implements CommandExecutor {
                      // n'était pas valide.
 
     }
+
+    
 
 }
