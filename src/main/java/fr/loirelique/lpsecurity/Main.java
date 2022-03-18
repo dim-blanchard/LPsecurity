@@ -4,9 +4,8 @@ package fr.loirelique.lpsecurity;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.HashMap;
-
-import com.avaje.ebeaninternal.server.core.ConfigBuilder;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -43,37 +42,15 @@ public class Main extends JavaPlugin implements Listener {
     public void playerJoinServer(PlayerJoinEvent p_event) {
         final Player p = p_event.getPlayer();
 
-        ConfigMessage.sendRegister(p);
-        setTaskRegisterTime(p);
+        if(jouerDansLaBdd(p) == true){
+            System.out.println("Joueur deja dans la bdd");
+        }
+        else if(jouerDansLaBdd(p) == false){
+            connectionRegister(p);
+        }
 
-        try (Connection connection_addPlayer = DriverManager.getConnection(ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/" + ConfigBdd.getDatabase1()
-        + "?characterEncoding=latin1&useConfigs=maxPerformance", ConfigBdd.getUser1(),ConfigBdd.getPass1())) {
-            // -2 Fait une ou plusieure requete connection au jeux
-
-            String requet_insert_sql2 = "INSERT INTO pf8kr9g9players (uuid,pseudo,ip,password) VALUES(?,?,?,?)";
-            try (PreparedStatement statement2_insert = connection_addPlayer.prepareStatement(requet_insert_sql2)) {
-                String uuid = p.getUniqueId().toString();
-                String pseudo = p.getName();
-                String ip = p.getAddress().toString();
-                String pass = "temporaire";
-
-                statement2_insert.setString(1, uuid);
-                statement2_insert.setString(2, pseudo);
-                statement2_insert.setString(3, ip);
-                statement2_insert.setString(4, pass);
-                statement2_insert.executeUpdate();
-                // 
-                }
-                catch (Exception e) 
-                {
-                    e.printStackTrace();
-                }
-
-            }
-            catch (Exception e) 
-                {
-                    e.printStackTrace();
-                }
+        
+       
     }
 
 
@@ -198,6 +175,72 @@ public class Main extends JavaPlugin implements Listener {
     }
 
 
+     /**
+     * Methode des diffrente connection à la bdd
+     */
 
+
+     public void connectionRegister(Player p){
+        ConfigMessage.sendRegister(p);
+        setTaskRegisterTime(p);
+        try (Connection connection_addPlayer = DriverManager.getConnection(ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/" + ConfigBdd.getDatabase1()
+        + "?characterEncoding=latin1&useConfigs=maxPerformance", ConfigBdd.getUser1(),ConfigBdd.getPass1())) {
+            // -2 Fait une ou plusieure requete connection au jeux
+
+            String requet_insert_sql2 = "INSERT INTO pf8kr9g9players (uuid,pseudo,ip,password) VALUES(?,?,?,?)";
+            try (PreparedStatement statement2_insert = connection_addPlayer.prepareStatement(requet_insert_sql2)) {
+                String uuid = p.getUniqueId().toString();
+                String pseudo = p.getName();
+                String ip = p.getAddress().toString();
+                String pass = "temporaire";
+
+                statement2_insert.setString(1, uuid);
+                statement2_insert.setString(2, pseudo);
+                statement2_insert.setString(3, ip);
+                statement2_insert.setString(4, pass);
+                statement2_insert.executeUpdate();
+                // 
+                }
+                catch (Exception e) 
+                {
+                    e.printStackTrace();
+                }
+
+            }
+            catch (Exception e) 
+                {
+                    e.printStackTrace();
+                }
+     }
+
+
+     public boolean jouerDansLaBdd(Player p){
+        
+        try (Connection connection_register = DriverManager.getConnection(ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/" + ConfigBdd.getDatabase1()
+        + "?characterEncoding=latin1&useConfigs=maxPerformance", ConfigBdd.getUser1(),ConfigBdd.getPass1())) {
+            // -2 Fait une ou plusieure requete connection au jeux
+            
+            String requet_Select_sql2 = "SELECT * FROM pf8kr9g9players WHERE uuid=?";
+            try (PreparedStatement statement2_select = connection_register
+                    .prepareStatement(requet_Select_sql2)) {
+                String uuid = p.getUniqueId().toString();
+                statement2_select.setObject(1, uuid);
+                
+                try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
+                    while(resultat_requete_select.next()) {
+                     resultat_requete_select.getString(4);
+                        
+                    }
+                    System.out.println("Pas d'uuid correspondant");
+                    return true;
+                }
+            }
+       
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+        
+     }
 
 }
