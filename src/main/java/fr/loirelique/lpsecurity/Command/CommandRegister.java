@@ -11,20 +11,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import fr.loirelique.lpsecurity.Main;
+import fr.loirelique.lpsecurity.String.ConfigBdd;
 
 public class CommandRegister implements CommandExecutor {
 
-    private String driver = Main.plugin.getConfigBdd("bdd.driver");
-    private String host = Main.plugin.getConfigBdd("bdd.host");
-    private String port = Main.plugin.getConfigBdd("bdd.port");
-    private String data = Main.plugin.getConfigBdd("bdd.database");
-
-    private String username = Main.plugin.getConfigBdd("bdd.user");
-    private String password = Main.plugin.getConfigBdd("bdd.pass");
-
-    private String url = driver + "://" + host + ":" + port + "/" + data
-            + "?characterEncoding=latin1&useConfigs=maxPerformance";
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -35,7 +25,8 @@ public class CommandRegister implements CommandExecutor {
                 // C'est un joueur qui a effectué la commande
                 Player p = (Player) sender;// On récupère le joueur.
                 
-                try (Connection connection_register = DriverManager.getConnection(url, username, password)) {
+                try (Connection connection_register = DriverManager.getConnection(ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/" + ConfigBdd.getDatabase1()
+                + "?characterEncoding=latin1&useConfigs=maxPerformance", ConfigBdd.getUser1(),ConfigBdd.getPass1())) {
                     // -2 Fait une ou plusieure requete connection au jeux
 
                     String requet_Select_sql2 = "SELECT * FROM pf8kr9g9players WHERE uuid=?";

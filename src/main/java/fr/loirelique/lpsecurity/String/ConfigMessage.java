@@ -1,8 +1,11 @@
 package fr.loirelique.lpsecurity.String;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
 import fr.loirelique.lpsecurity.Main;
 
-public class MessagePerso {
+public class ConfigMessage {
     
 
 
@@ -27,7 +30,15 @@ public class MessagePerso {
     public static String getKick() {
         String kick = Main.plugin.getConfig().getString("Connection.message_kick");
         return kick;
-    }        
+    } 
+    
+
+    public static void sendRegister(Player p) {
+        String player_name = p.getName();
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),"title " + player_name + " times 10 " + ConfigMessage.getRegistertemps() * 20 + " 10 "); 
+        p.sendTitle(ConfigMessage.getTitre(), ConfigMessage.getSoustitre()); 
+    }
+    
 
 
 

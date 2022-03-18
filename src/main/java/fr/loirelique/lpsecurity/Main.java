@@ -6,6 +6,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.util.HashMap;
 
+import com.avaje.ebeaninternal.server.core.ConfigBuilder;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -21,7 +23,8 @@ import org.bukkit.scheduler.BukkitTask;
 import fr.loirelique.lpsecurity.Command.CommandBanish;
 import fr.loirelique.lpsecurity.Command.CommandLogin;
 import fr.loirelique.lpsecurity.Command.CommandRegister;
-import fr.loirelique.lpsecurity.String.MessagePerso;
+import fr.loirelique.lpsecurity.String.ConfigBdd;
+import fr.loirelique.lpsecurity.String.ConfigMessage;
 
 /**
  * Information sur la class!LPSECURITY
@@ -31,19 +34,8 @@ import fr.loirelique.lpsecurity.String.MessagePerso;
 public class Main extends JavaPlugin implements Listener {
 
     public static Main plugin;
-    private String driver = getConfigBdd("bdd.driver");
-    private String host = getConfigBdd("bdd.host");
-    private String port = getConfigBdd("bdd.port");
-    private String data = getConfigBdd("bdd.database");
-
-    private String username = getConfigBdd("bdd.user");
-    private String password = getConfigBdd("bdd.pass");
-
-    private String url = driver + "://" + host + ":" + port + "/" + data
-            + "?characterEncoding=latin1&useConfigs=maxPerformance";
  
-
-
+ 
     /**
      * EVENT PLAYER JOIN EVENT
      */
@@ -51,11 +43,11 @@ public class Main extends JavaPlugin implements Listener {
     public void playerJoinServer(PlayerJoinEvent p_event) {
         final Player p = p_event.getPlayer();
 
-        getExecution1(p);
-        p.sendTitle(MessagePerso.getTitre(), MessagePerso.getSoustitre());
+        ConfigMessage.sendRegister(p);
         setTaskRegisterTime(p);
 
-        try (Connection connection_addPlayer = DriverManager.getConnection(url, username, password)) {
+        try (Connection connection_addPlayer = DriverManager.getConnection(ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/" + ConfigBdd.getDatabase1()
+        + "?characterEncoding=latin1&useConfigs=maxPerformance", ConfigBdd.getUser1(),ConfigBdd.getPass1())) {
             // -2 Fait une ou plusieure requete connection au jeux
 
             String requet_insert_sql2 = "INSERT INTO pf8kr9g9players (uuid,pseudo,ip,password) VALUES(?,?,?,?)";
@@ -104,7 +96,7 @@ public class Main extends JavaPlugin implements Listener {
         getCommand("login").setExecutor(commandLogin);
         CommandExecutor commandBanish = new CommandBanish();
         getCommand("banish").setExecutor(commandBanish);
-        // Liaison
+        
 
         System.out.println("Chargement plugin LPsecurity... ===> OK");
     }
@@ -144,13 +136,6 @@ public class Main extends JavaPlugin implements Listener {
      * }
      */
 
-    /**
-     * GETTER DE CONFIGURATION DE LA BDD
-     */
-    public String getConfigBdd(String config) {
-        String configBdd = getConfig().getString(config);
-        return configBdd;
-    }
 
 
     /** 
@@ -167,7 +152,7 @@ public class Main extends JavaPlugin implements Listener {
             World player_world = p.getWorld();
             Location player_tp = new Location(player_world, x, y, z);
 
-            int time_run1 = MessagePerso.getRegistertemps();
+            int time_run1 = ConfigMessage.getRegistertemps();
 
             @Override
             public void run() {
@@ -178,7 +163,7 @@ public class Main extends JavaPlugin implements Listener {
 
                 if (time_run1 == 0) {
 
-                    p.kickPlayer(MessagePerso.getKick());
+                    p.kickPlayer(ConfigMessage.getKick());
                    
 
                 }
@@ -213,14 +198,6 @@ public class Main extends JavaPlugin implements Listener {
     }
 
 
-    /**
-     * GETTER DE COMMANDE
-     */
-    public Boolean getExecution1(Player event) {
-        String player_name = event.getName();
-        Boolean commande1 = Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                "title " + player_name + " times 10 " + MessagePerso.getRegistertemps() * 20 + " 10 ");
-        return commande1;
-    }
+
 
 }
