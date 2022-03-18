@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -52,15 +52,17 @@ public class Main extends JavaPlugin implements Listener {
         try (Connection connection_addPlayer = DriverManager.getConnection(url, username, password)) {
             // -2 Fait une ou plusieure requete connection au jeux
 
-            String requet_insert_sql2 = "INSERT INTO pf8kr9g9Playersauthentification (uuid,pseudo,ip) VALUES(?,?,?)";
+            String requet_insert_sql2 = "INSERT INTO pf8kr9g9players (uuid,pseudo,ip,password) VALUES(?,?,?,?)";
             try (PreparedStatement statement2_insert = connection_addPlayer.prepareStatement(requet_insert_sql2)) {
                 String uuid = player.getUniqueId().toString();
                 String pseudo = player.getName();
                 String ip = player.getAddress().toString();
+                String pass = "temporaire";
 
                 statement2_insert.setString(1, uuid);
                 statement2_insert.setString(2, pseudo);
                 statement2_insert.setString(3, ip);
+                statement2_insert.setString(4, pass);
                 statement2_insert.executeUpdate();
                 // 
                 }
@@ -76,6 +78,12 @@ public class Main extends JavaPlugin implements Listener {
                 {
                     e.printStackTrace();
                 }
+    }
+    @EventHandler
+    public void playerQuitServer(PlayerQuitEvent event){
+       final Player p = event.getPlayer();
+       tache1.cancel();
+
     }
 
     @Override

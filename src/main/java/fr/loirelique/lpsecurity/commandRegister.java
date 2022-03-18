@@ -36,7 +36,7 @@ public class commandRegister implements CommandExecutor {
                 try (Connection connection_register = DriverManager.getConnection(url, username, password)) {
                     // -2 Fait une ou plusieure requete connection au jeux
 
-                    String requet_Select_sql2 = "SELECT * FROM pf8kr9g9Playersauthentification WHERE uuid=?";
+                    String requet_Select_sql2 = "SELECT * FROM pf8kr9g9players WHERE uuid=?";
                     try (PreparedStatement statement2_select = connection_register
                             .prepareStatement(requet_Select_sql2)) {
                         String uuid = p.getUniqueId().toString();
@@ -45,7 +45,7 @@ public class commandRegister implements CommandExecutor {
                         try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                             while(resultat_requete_select.next()) {
                                 p.sendMessage("C'est okay register");
-                                p.sendMessage(resultat_requete_select.getString(3));
+                                p.sendMessage(resultat_requete_select.getString(4));
                                 
                             }
                             System.out.println("Pas d'uuid correspondant");
