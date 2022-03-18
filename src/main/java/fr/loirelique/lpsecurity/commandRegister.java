@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.UUID;
+
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -36,7 +36,7 @@ public class commandRegister implements CommandExecutor {
                 try (Connection connection_register = DriverManager.getConnection(url, username, password)) {
                     // -2 Fait une ou plusieure requete connection au jeux
 
-                    String requet_Select_sql2 = "SELECT * FROM players WHERE uuid=?";
+                    String requet_Select_sql2 = "SELECT * FROM pf8kr9g9Playersauthentification WHERE uuid=?";
                     try (PreparedStatement statement2_select = connection_register
                             .prepareStatement(requet_Select_sql2)) {
                         String uuid = p.getUniqueId().toString();

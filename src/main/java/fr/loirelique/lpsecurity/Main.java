@@ -52,7 +52,7 @@ public class Main extends JavaPlugin implements Listener {
         try (Connection connection_addPlayer = DriverManager.getConnection(url, username, password)) {
             // -2 Fait une ou plusieure requete connection au jeux
 
-            String requet_insert_sql2 = "INSERT INTO players (uuid,pseudo,ip) VALUES(?,?,?)";
+            String requet_insert_sql2 = "INSERT INTO pf8kr9g9Playersauthentification (uuid,pseudo,ip) VALUES(?,?,?)";
             try (PreparedStatement statement2_insert = connection_addPlayer.prepareStatement(requet_insert_sql2)) {
                 String uuid = player.getUniqueId().toString();
                 String pseudo = player.getName();
