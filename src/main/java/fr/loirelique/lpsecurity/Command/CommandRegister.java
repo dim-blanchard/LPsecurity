@@ -1,4 +1,4 @@
-package fr.loirelique.lpsecurity;
+package fr.loirelique.lpsecurity.Command;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,7 +11,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class commandRegister implements CommandExecutor {
+import fr.loirelique.lpsecurity.Main;
+
+public class CommandRegister implements CommandExecutor {
 
     private String driver = Main.plugin.getConfigBdd("bdd.driver");
     private String host = Main.plugin.getConfigBdd("bdd.host");

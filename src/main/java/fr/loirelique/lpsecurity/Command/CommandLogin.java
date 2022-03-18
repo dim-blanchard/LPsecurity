@@ -1,11 +1,11 @@
-package fr.loirelique.lpsecurity;
+package fr.loirelique.lpsecurity.Command;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class commandLogin implements CommandExecutor {
+public class CommandLogin implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
