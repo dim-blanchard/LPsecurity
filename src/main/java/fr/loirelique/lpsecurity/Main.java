@@ -93,12 +93,12 @@ public class Main extends JavaPlugin implements Listener {
       
       // si joueur et en ligne
      // (condition) {
-      p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Joueur deja en ligne");
+      //p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Joueur deja en ligne");
       
       
       // si joueur et bannie
       //if (condition) {
-      p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Tu es bannie du serveur");
+      //p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Tu es bannie du serveur");
      }
       
     
@@ -109,7 +109,7 @@ public class Main extends JavaPlugin implements Listener {
      * GETTER DE RUNNABLE
      */
 
-    public Runnable getRun1(Player p) {
+    public Runnable getRunTempsRegister(Player p) {
         Runnable run1 = new Runnable() {
 
             double x = 0;
@@ -155,7 +155,7 @@ public class Main extends JavaPlugin implements Listener {
     public void setTaskRegisterTime(Player p) {
 
 
-        BukkitTask tache = Bukkit.getScheduler().runTaskTimer(this, getRun1(p), 20, 20);
+        BukkitTask tache = Bukkit.getScheduler().runTaskTimer(this, getRunTempsRegister(p), 20, 20);
 
         int idtache = tache.getTaskId();
 
