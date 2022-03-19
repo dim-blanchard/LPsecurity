@@ -14,6 +14,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.Event.Result;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -33,33 +35,6 @@ import fr.loirelique.lpsecurity.String.ConfigMessage;
 public class Main extends JavaPlugin implements Listener {
 
     public static Main plugin;
- 
- 
-    /**
-     * EVENT PLAYER JOIN EVENT
-     */
-    @EventHandler
-    public void playerJoinServer(PlayerJoinEvent p_event) {
-        final Player p = p_event.getPlayer();
-
-        if(jouerDansLaBdd(p) == true){
-            System.out.println("Joueur deja dans la bdd");
-        }
-        else if(jouerDansLaBdd(p) == false){
-            connectionRegister(p);
-        }
-
-        
-       
-    }
-
-
-    @EventHandler
-    public void playerQuitServer(PlayerQuitEvent p_event){
-       final Player p = p_event.getPlayer();
-       Bukkit.getScheduler().cancelTask(getTaskRegisterTime(p));
-
-    }
 
     @Override
     public void onEnable() {
@@ -82,36 +57,51 @@ public class Main extends JavaPlugin implements Listener {
     public void onDisable() {
         System.out.println("Arret du plugin LPsecurity... ===> OK");
     }
-
-    /*
-     * 
-     * 
-     * @EventHandler
-     * public void playerBeforeJoinServer(AsyncPlayerPreLoginEvent p) {
-     * connection1.connect();
-     * /*
-     * UUID player_uuid = p.getUniqueId();
-     * try {
-     * // si joueur dans la bdd
-     * if (liaison.isAccount(player_uuid) == true) {
-     * 
-     * // si joueur et en ligne
-     * if (condition) {
-     * p.disallow(Result.KICK_OTHER, "Joueur deja en ligne");
-     * }
-     * 
-     * // si joueur et bannie
-     * if (condition) {
-     * p.disallow(Result.KICK_OTHER, "Tu es bannie du serveur");
-     * }
-     * }
-     * } catch (Exception e) {
-     * // TODO: handle exception
-     * }
-     * https://bukkit.fandom.com/wiki/Plugin_Tutorial/fr#Les_commandes_2
-     * 
-     * }
+ 
+    /**
+     * EVENT PLAYER JOIN EVENT
      */
+
+    @EventHandler
+    public void playerJoinServer(PlayerJoinEvent p_event) {
+        final Player p = p_event.getPlayer();
+
+        if(jouerDansLaBdd(p) == true){
+            System.out.println("Joueur deja dans la bdd");
+        }
+        else if(jouerDansLaBdd(p) == false){
+            connectionRegister(p);
+        }  
+    }
+
+
+    @EventHandler
+    public void playerQuitServer(PlayerQuitEvent p_event){
+       final Player p = p_event.getPlayer();
+       Bukkit.getScheduler().cancelTask(getTaskRegisterTime(p));
+
+    }  
+
+    
+      @EventHandler
+     public void playerBeforeJoinServer(AsyncPlayerPreLoginEvent p_event) {
+
+      String player_uuid = p_event.getUniqueId().toString();
+     
+     // si joueur dans la bdd
+    // if ((player_uuid) == true) {
+      
+      // si joueur et en ligne
+     // (condition) {
+      p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Joueur deja en ligne");
+      
+      
+      // si joueur et bannie
+      //if (condition) {
+      p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Tu es bannie du serveur");
+     }
+      
+    
 
 
 
