@@ -109,7 +109,7 @@ public class Main extends JavaPlugin implements Listener {
      * GETTER DE RUNNABLE
      */
 
-    public Runnable getRunTempsRegister(Player p) {
+/*     public Runnable getRunTempsRegister(Player p) {
         Runnable run1 = new Runnable() {
 
             double x = 0;
@@ -139,7 +139,7 @@ public class Main extends JavaPlugin implements Listener {
         };
 
         return run1;
-    }
+    } */
 
 
 
@@ -155,7 +155,31 @@ public class Main extends JavaPlugin implements Listener {
     public void setTaskRegisterTime(Player p) {
 
 
-        BukkitTask tache = Bukkit.getScheduler().runTaskTimer(this, getRunTempsRegister(p), 20, 20);
+        BukkitTask tache = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
+            double x = 0;
+            double y = 64;
+            double z = 0;
+
+            World player_world = p.getWorld();
+            Location player_tp = new Location(player_world, x, y, z);
+
+            int time_run1 = ConfigMessage.getRegistertemps();
+            @Override
+            public void run() {
+                p.teleport(player_tp);
+
+                System.out.println("Temps: " + time_run1);
+
+                if (time_run1 == 0) {
+
+                    p.kickPlayer(ConfigMessage.getKick());
+                   
+
+                }
+                time_run1--;
+            }
+            
+        }, 20, 20);
 
         int idtache = tache.getTaskId();
 
