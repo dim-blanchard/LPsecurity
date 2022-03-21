@@ -35,6 +35,11 @@ public class ConfigBdd {
     public static String getPass1() {
         String pass = Main.plugin.getConfig().getString("bdd.pass");
         return pass;
+    } 
+    
+    public static String getTable1() {
+        String table = Main.plugin.getConfig().getString("bdd.table");
+        return table;
     }  
 
 }

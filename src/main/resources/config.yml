@@ -5,6 +5,7 @@ bdd:
   database: ec4wdw13erizia
   user: dimdim
   pass: Dimitri11!
+  table: pf8kr9g9players
 
 Connection:
   message_kick: Tu as étais exclue pour inactivité.
@@ -14,4 +15,9 @@ Connection:
   temps_indentification: 120
   titre_indentification: "Salut !"
   soustitre_indentification: "Identifie toi -> /login  !"
+
+message_commande:
+  mdp_erreur: Le mdp dois faire au mini 8 caractère | mdp ne correspond pas .
   
+
+

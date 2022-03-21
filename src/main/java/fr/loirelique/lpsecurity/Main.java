@@ -68,7 +68,7 @@ public class Main extends JavaPlugin implements Listener {
                 ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
             // -2 Fait une ou plusieure requete connection au jeux
 
-            String requet_Select_sql2 = "SELECT * FROM pf8kr9g9players WHERE uuid=?";
+            String requet_Select_sql2 = "SELECT * FROM "+ConfigBdd.getTable1()+" WHERE uuid=?";
             try (PreparedStatement statement2_select = connection_register
                     .prepareStatement(requet_Select_sql2)) {
                 statement2_select.setObject(1, uuid);
@@ -107,7 +107,7 @@ public class Main extends JavaPlugin implements Listener {
                 ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
             // -2 Fait une ou plusieure requete connection au jeux
 
-            String requet_Select_sql2 = "SELECT * FROM pf8kr9g9players WHERE uuid=?";
+            String requet_Select_sql2 = "SELECT * FROM "+ConfigBdd.getTable1()+" WHERE uuid=?";
             try (PreparedStatement statement2_select = connection_register
                     .prepareStatement(requet_Select_sql2)) {
                 statement2_select.setObject(1, uuid);
@@ -135,14 +135,14 @@ public class Main extends JavaPlugin implements Listener {
                             + "?characterEncoding=latin1&useConfigs=maxPerformance",
                     ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
                 // -2 Fait une ou plusieure requete connection au jeux
-                String requet_Select_sql2 = "SELECT * FROM pf8kr9g9players WHERE uuid=?";
+                String requet_Select_sql2 = "SELECT * FROM "+ConfigBdd.getTable1()+" WHERE uuid=?";
                 try (PreparedStatement statement2_select =connection_update.prepareStatement(requet_Select_sql2)) {
                     uuid = p.getUniqueId().toString();
                     statement2_select.setString(1, uuid);
                     //
                     try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                         if (resultat_requete_select.next()) {
-                            String requet_Update_sql3 = "UPDATE pf8kr9g9players SET online=1 , ip=? WHERE uuid=?";
+                            String requet_Update_sql3 = "UPDATE "+ConfigBdd.getTable1()+" SET online=1 , ip=? WHERE uuid=?";
                             try (PreparedStatement statement3_update = connection_update
                                     .prepareStatement(requet_Update_sql3)) { 
                                 statement3_update.setString(1,p.getAddress().toString());
@@ -178,14 +178,14 @@ public class Main extends JavaPlugin implements Listener {
                     + "?characterEncoding=latin1&useConfigs=maxPerformance",
             ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
         // -2 Fait une ou plusieure requete connection au jeux
-        String requet_Select_sql2 = "SELECT * FROM pf8kr9g9players WHERE uuid=?";
+        String requet_Select_sql2 = "SELECT * FROM "+ConfigBdd.getTable1()+" WHERE uuid=?";
         try (PreparedStatement statement2_select =connection_update.prepareStatement(requet_Select_sql2)) {
             uuid = p.getUniqueId().toString();
             statement2_select.setString(1, uuid);
             //
             try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                 if (resultat_requete_select.next()) {
-                    String requet_Update_sql3 = "UPDATE pf8kr9g9players SET online=0  WHERE uuid=?";
+                    String requet_Update_sql3 = "UPDATE "+ConfigBdd.getTable1()+" SET online=0  WHERE uuid=?";
                     try (PreparedStatement statement3_update = connection_update
                             .prepareStatement(requet_Update_sql3)) { 
                         statement3_update.setString(1, resultat_requete_select.getString("uuid"));

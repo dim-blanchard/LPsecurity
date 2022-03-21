@@ -46,8 +46,13 @@ public class ConfigMessage {
         String kick = Main.plugin.getConfig().getString("Connection.message_kick");
         return kick;
     } 
-    
 
+    public static String getMdpError() {
+        String mdpError = Main.plugin.getConfig().getString("message_commande.mdp_erreur");
+        return mdpError;
+    } 
+    
+    
     public static void sendRegister(Player p) {
         String player_name = p.getName();
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),"title " + player_name + " times 10 " + ConfigMessage.getRegistertemps() * 20 + " 10 "); 

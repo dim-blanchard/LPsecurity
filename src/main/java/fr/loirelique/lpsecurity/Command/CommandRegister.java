@@ -39,7 +39,7 @@ public class CommandRegister implements CommandExecutor {
                             ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
                         // -2 Fait une ou plusieure requete connection au jeux
 
-                        String requet_Select_sql2 = "SELECT * FROM pf8kr9g9players WHERE uuid=?";
+                        String requet_Select_sql2 = "SELECT * FROM "+ConfigBdd.getTable1()+" WHERE uuid=?";
                         try (PreparedStatement statement2_select = connection_register
                                 .prepareStatement(requet_Select_sql2)) {
                             statement2_select.setObject(1, uuid);
@@ -70,7 +70,7 @@ public class CommandRegister implements CommandExecutor {
                                     ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
                                 // -2 Fait une ou plusieure requete connection au jeux
 
-                                String requet_insert_sql2 = "INSERT INTO pf8kr9g9players (uuid,pseudo,ip,password) VALUES(?,?,?,?)";
+                                String requet_insert_sql2 = "INSERT INTO "+ConfigBdd.getTable1()+" (uuid,pseudo,ip,password) VALUES(?,?,?,?)";
                                 try (PreparedStatement statement2_insert = connection_addPlayer
                                         .prepareStatement(requet_insert_sql2)) {
                                     uuid = p.getUniqueId().toString();
@@ -94,10 +94,8 @@ public class CommandRegister implements CommandExecutor {
                             ConfigMessage.sendLogin(p);
 
                         } else{
-                            System.out.println(args0 + args1);
-                            p.sendMessage("Mdp dois contenir un pass de minimum 8 caratère");
-                            p.sendMessage("Mdp ne dois pas etre null");
-                            p.sendMessage("Les deux Mdp saisie ne corresponde pas ");
+                            p.sendMessage(ConfigMessage.getMdpError());
+                          
 
                         }
                     }
