@@ -122,7 +122,7 @@ public class Main extends JavaPlugin implements Listener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (uuid == uuidfrombdd) {
+        if (uuid.equals(uuidfrombdd)) {
             System.out.println("Le joueur est dans la bdd.");
             setTaskBlockSpawn(p);
             setTaskLoginTime(p);
@@ -140,19 +140,29 @@ public class Main extends JavaPlugin implements Listener {
     @EventHandler
     public void playerQuitServer(PlayerQuitEvent p_event) {
         final Player p = p_event.getPlayer();
-        Bukkit.getScheduler().cancelTask(getTaskRegisterTime(p)); 
-        Bukkit.getScheduler().cancelTask(getTaskLoginTime(p));
-        Bukkit.getScheduler().cancelTask(getTaskBlockSpawn(p));
+  
+        if (listTacheRegister.get(p.getName()) != null) {
+            Bukkit.getScheduler().cancelTask(getTaskRegisterTime(p));
+        }
+        if (listTacheLogin.get(p.getName()) != null) {
+            Bukkit.getScheduler().cancelTask(getTaskLoginTime(p));
+        }
+        if (listTacheSpawnBlock.get(p.getName()) != null) {
+            Bukkit.getScheduler().cancelTask(getTaskBlockSpawn(p));
+        }
+        
       
     }
 
     /**
      * GETTER ET SETTER DE TACHE
      */
-    private HashMap<String, Integer> listTache = new HashMap<String, Integer>();
+    private HashMap<String, Integer> listTacheRegister = new HashMap<String, Integer>();
+    private HashMap<String, Integer> listTacheLogin = new HashMap<String, Integer>();
+    private HashMap<String, Integer> listTacheSpawnBlock = new HashMap<String, Integer>();
 
     public Integer getTaskRegisterTime(Player p) {
-        return listTache.get(p.getName());
+        return listTacheRegister.get(p.getName());
     }
 
     public void setTaskRegisterTime(Player p) {
@@ -180,12 +190,12 @@ public class Main extends JavaPlugin implements Listener {
 
         int idtache = tache.getTaskId();
 
-        listTache.put(p.getName(), idtache);
+        listTacheRegister.put(p.getName(), idtache);
 
     }
-
+    //////////////////////////////////////////////////
     public Integer getTaskLoginTime(Player p) {
-        return listTache.get(p.getName());
+        return listTacheLogin.get(p.getName());
     }
 
     public void setTaskLoginTime(Player p) {
@@ -213,12 +223,12 @@ public class Main extends JavaPlugin implements Listener {
 
         int idtache = tache.getTaskId();
 
-        listTache.put(p.getName(), idtache);
+        listTacheLogin.put(p.getName(), idtache);
 
     }
-
+    ////////////////////////////////////////////
     public Integer getTaskBlockSpawn(Player p) {
-        return listTache.get(p.getName());
+        return listTacheSpawnBlock.get(p.getName());
     }
 
     public void setTaskBlockSpawn(Player p) {
@@ -242,7 +252,7 @@ public class Main extends JavaPlugin implements Listener {
 
         int idtache = tache.getTaskId();
 
-        listTache.put(p.getName(), idtache);
+        listTacheSpawnBlock.put(p.getName(), idtache);
 
     }
 
@@ -273,8 +283,6 @@ public class Main extends JavaPlugin implements Listener {
                 statement2_insert.setString(4, pass);
                 statement2_insert.executeUpdate();
                 //
-            } catch (Exception e) {
-                e.printStackTrace();
             }
 
         } catch (Exception e) {
