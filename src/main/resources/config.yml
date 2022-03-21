@@ -7,7 +7,11 @@ bdd:
   pass: Dimitri11!
 
 Connection:
-  titre: Bienvenue !
-  soustitre: Enregistre toi !
   message_kick: Tu as étais exclue pour inactivité.
+  titre_enregistrement: Bienvenue !
+  soustitre_enregistrement: Enregistre toi -> /register !
   temps_enregistrement: 120
+  temps_indentification: 120
+  titre_indentification: "Salut !"
+  soustitre_indentification: "Identifie toi -> /login  !"
+  

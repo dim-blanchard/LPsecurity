@@ -55,6 +55,42 @@ public class Main extends JavaPlugin implements Listener {
         System.out.println("Arret du plugin LPsecurity... ===> OK");
     }
 
+    @EventHandler
+    public void playerBeforeJoinServer(AsyncPlayerPreLoginEvent p_event) {
+
+        int online = 0;
+        int ban = 0;
+        String uuid = p_event.getUniqueId().toString();
+        try (Connection connection_register = DriverManager.getConnection(
+                ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
+                        + ConfigBdd.getDatabase1()
+                        + "?characterEncoding=latin1&useConfigs=maxPerformance",
+                ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
+            // -2 Fait une ou plusieure requete connection au jeux
+
+            String requet_Select_sql2 = "SELECT * FROM pf8kr9g9players WHERE uuid=?";
+            try (PreparedStatement statement2_select = connection_register
+                    .prepareStatement(requet_Select_sql2)) {
+                statement2_select.setObject(1, uuid);
+
+                try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
+                    while (resultat_requete_select.next()) {
+                        online = resultat_requete_select.getInt(6);
+                        ban = resultat_requete_select.getInt(7);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (online == 1 | ban == 1) {
+            p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
+                    "Joueur deja en ligne ou Bannie");
+        }
+
+    }
+
     /**
      * EVENT PLAYER JOIN EVENT
      */
@@ -62,38 +98,52 @@ public class Main extends JavaPlugin implements Listener {
     @EventHandler
     public void playerJoinServer(PlayerJoinEvent p_event) {
         final Player p = p_event.getPlayer();
+        String uuid = p.getUniqueId().toString();
+        String uuidfrombdd = "";
+        try (Connection connection_register = DriverManager.getConnection(
+                ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
+                        + ConfigBdd.getDatabase1()
+                        + "?characterEncoding=latin1&useConfigs=maxPerformance",
+                ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
+            // -2 Fait une ou plusieure requete connection au jeux
 
-        if (jouerDansLaBdd(p) == true) {
-            System.out.println("Joueur deja dans la bdd");
-        } else{
-            connectionRegister(p);
+            String requet_Select_sql2 = "SELECT * FROM pf8kr9g9players WHERE uuid=?";
+            try (PreparedStatement statement2_select = connection_register
+                    .prepareStatement(requet_Select_sql2)) {
+                statement2_select.setObject(1, uuid);
+
+                try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
+                    while (resultat_requete_select.next()) {
+                        uuidfrombdd = resultat_requete_select.getString(2);
+
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        if (uuid == uuidfrombdd) {
+            System.out.println("Le joueur est dans la bdd.");
+            setTaskBlockSpawn(p);
+            setTaskLoginTime(p);
+            ConfigMessage.sendLogin(p);
+
+        } else {
+            System.out.println("Le joueur n'est pas dans la bdd.");
+            setTaskBlockSpawn(p);
+            setTaskRegisterTime(p);
+            ConfigMessage.sendRegister(p);
+        }
+
     }
 
     @EventHandler
     public void playerQuitServer(PlayerQuitEvent p_event) {
         final Player p = p_event.getPlayer();
-        Bukkit.getScheduler().cancelTask(getTaskRegisterTime(p));
-
-    }
-
-    @EventHandler
-    public void playerBeforeJoinServer(AsyncPlayerPreLoginEvent p_event) {
-
-        String player_uuid = p_event.getUniqueId().toString();
-
-        // si joueur dans la bdd
-        // if ((player_uuid) == true) {
-
-        // si joueur et en ligne
-        // (condition) {
-        // p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-        // "Joueur deja en ligne");
-
-        // si joueur et bannie
-        // if (condition) {
-        // p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-        // "Tu es bannie du serveur");
+        Bukkit.getScheduler().cancelTask(getTaskRegisterTime(p)); 
+        Bukkit.getScheduler().cancelTask(getTaskLoginTime(p));
+        Bukkit.getScheduler().cancelTask(getTaskBlockSpawn(p));
+      
     }
 
     /**
@@ -108,20 +158,15 @@ public class Main extends JavaPlugin implements Listener {
     public void setTaskRegisterTime(Player p) {
 
         BukkitTask tache = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
-            double x = 0;
-            double y = 73;
-            double z = 0;
-
-            World player_world = p.getWorld();
-            Location player_tp = new Location(player_world, x, y, z);
+           
 
             int time_run1 = ConfigMessage.getRegistertemps();
 
             @Override
             public void run() {
-                p.teleport(player_tp);
+            
 
-                System.out.println("Temps: " + time_run1);
+                System.out.println(" Kick Register Actif Temps: " + time_run1);
 
                 if (time_run1 == 0) {
 
@@ -132,6 +177,68 @@ public class Main extends JavaPlugin implements Listener {
             }
 
         }, 20, 20);
+
+        int idtache = tache.getTaskId();
+
+        listTache.put(p.getName(), idtache);
+
+    }
+
+    public Integer getTaskLoginTime(Player p) {
+        return listTache.get(p.getName());
+    }
+
+    public void setTaskLoginTime(Player p) {
+
+        BukkitTask tache = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
+           
+
+            int time_run1 = ConfigMessage.getRegistertemps();
+
+            @Override
+            public void run() {
+            
+
+                System.out.println(" Kick Login Actif Temps: " + time_run1);
+
+                if (time_run1 == 0) {
+
+                    p.kickPlayer(ConfigMessage.getKick());
+
+                }
+                time_run1--;
+            }
+
+        }, 20, 20);
+
+        int idtache = tache.getTaskId();
+
+        listTache.put(p.getName(), idtache);
+
+    }
+
+    public Integer getTaskBlockSpawn(Player p) {
+        return listTache.get(p.getName());
+    }
+
+    public void setTaskBlockSpawn(Player p) {
+
+        BukkitTask tache = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
+
+            double x = 0;
+            double y = 73;
+            double z = 0;
+
+            World player_world = p.getWorld();
+            Location player_tp = new Location(player_world, x, y, z);
+
+            @Override
+            public void run() {
+                p.teleport(player_tp);
+                System.out.println(p.getName()+" Spawn block Actif");
+            }
+
+        }, 10, 10);
 
         int idtache = tache.getTaskId();
 
@@ -191,19 +298,19 @@ public class Main extends JavaPlugin implements Listener {
                 statement2_select.setObject(1, uuid);
 
                 try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
-                   String pseudo;
-                    while (resultat_requete_select.next()) { 
+                    String pseudo;
+                    while (resultat_requete_select.next()) {
                         pseudo = resultat_requete_select.getString(4);
                         return pseudo;
                     }
-                   
-                } 
+
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
-      
+
     }
 
 }
