@@ -22,7 +22,7 @@ Réalisaion d'un **plugin de sécurité** pour **Minecraft** sous version 1.8.8 
 ![Diagramme de cas d'utilisation](doc/DiagCasUtilisation.drawio.png)
 
 
-1. Lors de la connection au serveur pour la premiere fois le joueur est invité à enregister un mot de passe pour pouvoir avoir acces au serveur il a alors 5 minute pour renseigner sont mot de passe au bout de ce temps impartie il est exclu.
+1. Lors de la connection au serveur pour la premiere fois le joueur est invité à enregister un mot de passe pour pouvoir avoir acces au serveur il a alors X minute pour renseigner sont mot de passe au bout de ce temps impartie il est exclu.
 
 - Si celui ci ne renseigne pas de mot de passe pour une premiere connection ses données joueur ne sont pas inscrite dans la base de données donc à la prochaine reconnection on demande un enregistrement.
 
@@ -30,8 +30,8 @@ Réalisaion d'un **plugin de sécurité** pour **Minecraft** sous version 1.8.8 
 	- Données enregistrer : 
 		-  	Jouer-mot-de-passe ("Son mot de passe hash par algorithme sha256").
 	- Données ajouter par default :
-		- 	Joueur-ban ("False") .
-		- 	Joueur-warn (0) . 
+		- 	Joueur-ban (0/1) .
+		- 	Joueur-online (0/1) . 
 	- Données enregistrer automatique en fonction du joueur:
 		-	Joueur-pseudo ("Son peseudo").
 		-   Joueur-uuid ("Son uudi").
@@ -39,19 +39,17 @@ Réalisaion d'un **plugin de sécurité** pour **Minecraft** sous version 1.8.8 
 
 2. Lors d'une connection avec connaissance du joueur dans la base de données.
 
-- Le joueur devras renseigner sont mot de passe dans le 2 minutes suivant la connection sinon celui ci sera exclu:
+- Le joueur devras renseigner sont mot de passe dans le X minutes suivant la connection sinon celui ci sera exclu:
 	- Si celui ci ne coresspond pas le joueur est invité à retaper sont mot de passe il a alors trois tentative si celui ci echou il sera déconnecter du serveur.
 
 3. Lors d'une connection au serveur avec le même pseudo qu'un autre joueur à des fin d'usurpé son identité.
 
-	- Si un joueur essaye de ce connecter à un serveur en prenent l'identité de celui alors il est automatiquement exclue.
+	- Si un joueur essaye de ce connecter à un serveur en prenent l'identité de celui alors il est automatiquement exclue si le joueur et en ligne.
 
 
 
 
-![Diagramme de Class](doc/DiagClass-LPsecurity.drawio.png)
+<!-- ![Diagramme de Class](doc/DiagClass-LPsecurity.drawio.png)
+ -->
 
 
-- Données par default ajouter:
-	- 	Joueur-ban ("False") + temps si == 0 Banissement indéfinie.
-	- 	Joueur-warn (0) si warn incrémentation +1 et si warn == 3 ban == true et warn remit à 0. 
