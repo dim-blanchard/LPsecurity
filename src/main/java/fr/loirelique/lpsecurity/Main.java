@@ -128,6 +128,35 @@ public class Main extends JavaPlugin implements Listener {
             setTaskLoginTime(p);
             ConfigMessage.sendLogin(p);
 
+            try (Connection connection_update = DriverManager.getConnection(
+                    ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort()
+                            + "/"
+                            + ConfigBdd.getDatabase1()
+                            + "?characterEncoding=latin1&useConfigs=maxPerformance",
+                    ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
+                // -2 Fait une ou plusieure requete connection au jeux
+                String requet_Select_sql2 = "SELECT * FROM pf8kr9g9players WHERE uuid=?";
+                try (PreparedStatement statement2_select =connection_update.prepareStatement(requet_Select_sql2)) {
+                    uuid = p.getUniqueId().toString();
+                    statement2_select.setString(1, uuid);
+                    //
+                    try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
+                        if (resultat_requete_select.next()) {
+                            String requet_Update_sql3 = "UPDATE pf8kr9g9players SET online=1 , ip=? WHERE uuid=?";
+                            try (PreparedStatement statement3_update = connection_update
+                                    .prepareStatement(requet_Update_sql3)) { 
+                                statement3_update.setString(1,p.getAddress().toString());
+                                statement3_update.setString(2, resultat_requete_select.getString("uuid"));
+                                statement3_update.executeUpdate();
+                            }
+                        }
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         } else {
             System.out.println("Le joueur n'est pas dans la bdd.");
             setTaskBlockSpawn(p);
@@ -140,7 +169,35 @@ public class Main extends JavaPlugin implements Listener {
     @EventHandler
     public void playerQuitServer(PlayerQuitEvent p_event) {
         final Player p = p_event.getPlayer();
-  
+
+        String uuid = p.getUniqueId().toString();
+        try (Connection connection_update = DriverManager.getConnection(
+            ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort()
+                    + "/"
+                    + ConfigBdd.getDatabase1()
+                    + "?characterEncoding=latin1&useConfigs=maxPerformance",
+            ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
+        // -2 Fait une ou plusieure requete connection au jeux
+        String requet_Select_sql2 = "SELECT * FROM pf8kr9g9players WHERE uuid=?";
+        try (PreparedStatement statement2_select =connection_update.prepareStatement(requet_Select_sql2)) {
+            uuid = p.getUniqueId().toString();
+            statement2_select.setString(1, uuid);
+            //
+            try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
+                if (resultat_requete_select.next()) {
+                    String requet_Update_sql3 = "UPDATE pf8kr9g9players SET online=0  WHERE uuid=?";
+                    try (PreparedStatement statement3_update = connection_update
+                            .prepareStatement(requet_Update_sql3)) { 
+                        statement3_update.setString(1, resultat_requete_select.getString("uuid"));
+                        statement3_update.executeUpdate();
+                    }
+                }
+            }
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
         if (listTacheRegister.get(p.getName()) != null) {
             Bukkit.getScheduler().cancelTask(getTaskRegisterTime(p));
         }
@@ -150,8 +207,7 @@ public class Main extends JavaPlugin implements Listener {
         if (listTacheSpawnBlock.get(p.getName()) != null) {
             Bukkit.getScheduler().cancelTask(getTaskBlockSpawn(p));
         }
-        
-      
+
     }
 
     /**
@@ -168,13 +224,11 @@ public class Main extends JavaPlugin implements Listener {
     public void setTaskRegisterTime(Player p) {
 
         BukkitTask tache = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
-           
 
             int time_run1 = ConfigMessage.getRegistertemps();
 
             @Override
             public void run() {
-            
 
                 System.out.println(" Kick Register Actif Temps: " + time_run1);
 
@@ -193,6 +247,7 @@ public class Main extends JavaPlugin implements Listener {
         listTacheRegister.put(p.getName(), idtache);
 
     }
+
     //////////////////////////////////////////////////
     public Integer getTaskLoginTime(Player p) {
         return listTacheLogin.get(p.getName());
@@ -201,13 +256,11 @@ public class Main extends JavaPlugin implements Listener {
     public void setTaskLoginTime(Player p) {
 
         BukkitTask tache = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
-           
 
             int time_run1 = ConfigMessage.getRegistertemps();
 
             @Override
             public void run() {
-            
 
                 System.out.println(" Kick Login Actif Temps: " + time_run1);
 
@@ -226,6 +279,7 @@ public class Main extends JavaPlugin implements Listener {
         listTacheLogin.put(p.getName(), idtache);
 
     }
+
     ////////////////////////////////////////////
     public Integer getTaskBlockSpawn(Player p) {
         return listTacheSpawnBlock.get(p.getName());
@@ -245,7 +299,7 @@ public class Main extends JavaPlugin implements Listener {
             @Override
             public void run() {
                 p.teleport(player_tp);
-                System.out.println(p.getName()+" Spawn block Actif");
+                System.out.println(p.getName() + " Spawn block Actif");
             }
 
         }, 10, 10);
