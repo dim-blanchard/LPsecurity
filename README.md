@@ -51,4 +51,3 @@ Réalisaion d'un **plugin de sécurité** pour **Minecraft** sous version 1.8.8 
 
 <!-- ![Diagramme de Class](doc/DiagClass-LPsecurity.drawio.png)
  -->
-
