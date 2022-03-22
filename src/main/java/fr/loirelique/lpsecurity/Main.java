@@ -158,7 +158,6 @@ public class Main extends JavaPlugin implements Listener {
             }
 
         } else {
-            System.out.println("Le joueur n'est pas dans la bdd.");
             setTaskBlockSpawn(p);
             setTaskRegisterTime(p);
             ConfigMessage.sendRegister(p);
@@ -198,16 +197,18 @@ public class Main extends JavaPlugin implements Listener {
     } catch (Exception e) {
         e.printStackTrace();
     }
-        if (listTacheRegister.get(p.getName()) != null) {
+        if (listTacheRegister.get(p.getName()) != null) { 
             Bukkit.getScheduler().cancelTask(getTaskRegisterTime(p));
-            //Pensé à supprimer les entrés liste.
-            //listTacheRegister.remove(p.getName());
+            listTacheRegister.remove(p.getName());  
+           
         }
         if (listTacheLogin.get(p.getName()) != null) {
             Bukkit.getScheduler().cancelTask(getTaskLoginTime(p));
+            listTacheLogin.remove(p.getName());
         }
         if (listTacheSpawnBlock.get(p.getName()) != null) {
             Bukkit.getScheduler().cancelTask(getTaskBlockSpawn(p));
+            listTacheSpawnBlock.remove(p.getName());
         }
 
     }
