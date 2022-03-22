@@ -200,6 +200,8 @@ public class Main extends JavaPlugin implements Listener {
     }
         if (listTacheRegister.get(p.getName()) != null) {
             Bukkit.getScheduler().cancelTask(getTaskRegisterTime(p));
+            //Pensé à supprimer les entrés liste.
+            //listTacheRegister.remove(p.getName());
         }
         if (listTacheLogin.get(p.getName()) != null) {
             Bukkit.getScheduler().cancelTask(getTaskLoginTime(p));
