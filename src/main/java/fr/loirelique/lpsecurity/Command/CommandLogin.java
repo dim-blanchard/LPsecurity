@@ -24,90 +24,100 @@ public class CommandLogin implements CommandExecutor {
             if (sender instanceof Player) {
                 Player p = (Player) sender;// On récupère le joueur.
                 if (cmd.getName().equalsIgnoreCase("login")) { // Si c'est la commande "login" qui a été tapée:
-    
+
                     if (args.length == 0) {
-                        
+
                     }
-    
+
                     if (args.length == 1) {
                         String uuid = p.getUniqueId().toString();
                         String uuidfrombdd = "";
-                        
+
                         try (Connection connection_register = DriverManager.getConnection(
                                 ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
                                         + ConfigBdd.getDatabase1()
                                         + "?characterEncoding=latin1&useConfigs=maxPerformance",
                                 ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
                             // -2 Fait une ou plusieure requete connection au jeux
-    
-                            String requet_Select_sql2 = "SELECT * FROM "+ConfigBdd.getTable1()+" WHERE uuid=?";
+
+                            String requet_Select_sql2 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
                             try (PreparedStatement statement2_select = connection_register
                                     .prepareStatement(requet_Select_sql2)) {
                                 statement2_select.setObject(1, uuid);
-    
+
                                 try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                                     while (resultat_requete_select.next()) {
                                         uuidfrombdd = resultat_requete_select.getString(2);
-    
+
                                     }
                                 }
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-    
+
                         if (uuid.equals(uuidfrombdd)) {
-                            p.sendMessage("Tu es déja enregistrer, indentifie toi avec /login <Ton mpd>");
-                        } else {
                             String args0 = args[0];
-                            String args1 = args[1];
-                            if (args0.equals(args1) && args[0].length()>=8 && args[1].length()>=8 ) {
-    
-                                try (Connection connection_addPlayer = DriverManager.getConnection(
-                                        ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort()
-                                                + "/"
-                                                + ConfigBdd.getDatabase1()
-                                                + "?characterEncoding=latin1&useConfigs=maxPerformance",
-                                        ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-                                    // -2 Fait une ou plusieure requete connection au jeux
-    
-                                    String requet_insert_sql2 = "INSERT INTO "+ConfigBdd.getTable1()+" (uuid,pseudo,ip,password) VALUES(?,?,?,?)";
-                                    try (PreparedStatement statement2_insert = connection_addPlayer
-                                            .prepareStatement(requet_insert_sql2)) {
-                                        uuid = p.getUniqueId().toString();
-                                        String pseudo = p.getName();
-                                        String ip = p.getAddress().toString();
-                                        String pass = args0;
-    
-                                        statement2_insert.setString(1, uuid);
-                                        statement2_insert.setString(2, pseudo);
-                                        statement2_insert.setString(3, ip);
-                                        statement2_insert.setString(4, pass);
-                                        statement2_insert.executeUpdate();
-                                        //
+                            String password="";
+                            try (Connection connection_register = DriverManager.getConnection(
+                                    ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort()
+                                            + "/"
+                                            + ConfigBdd.getDatabase1()
+                                            + "?characterEncoding=latin1&useConfigs=maxPerformance",
+                                    ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
+                                // -2 Fait une ou plusieure requete connection au jeux
+
+                                String requet_Select_sql2 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
+                                try (PreparedStatement statement2_select = connection_register
+                                        .prepareStatement(requet_Select_sql2)) {
+                                    statement2_select.setObject(1, uuid);
+
+                                    try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
+                                        while (resultat_requete_select.next()) {
+                                            password = resultat_requete_select.getString("password");
+
+                                        }
                                     }
-    
-                                } catch (Exception e) {
-                                    e.printStackTrace();
                                 }
-                                Bukkit.getScheduler().cancelTask(Main.plugin.getTaskRegisterTime(p));
-                                Main.plugin.setTaskLoginTime(p);
-                                ConfigMessage.sendLogin(p);
-    
-                            } else{
-                                p.sendMessage(ConfigMessage.getMdpError());
-                              
-    
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
+
+                            if (args0.equals(password)) {
+
+                                if (Main.plugin.getTaskRegisterTime(p) != null) { 
+                                    Bukkit.getScheduler().cancelTask(Main.plugin.getTaskRegisterTime(p));
+                                    Main.plugin.getTaskRegisterTimeRemove(p); 
+                                   
+                                }
+                                if (Main.plugin.getTaskLoginTime(p) != null) {
+                                    Bukkit.getScheduler().cancelTask(Main.plugin.getTaskLoginTime(p));
+                                    Main.plugin.getTaskLoginTimeRemove(p); 
+                                }
+                                if (Main.plugin.getTaskBlockSpawn(p) != null) {
+                                    Bukkit.getScheduler().cancelTask(Main.plugin.getTaskBlockSpawn(p));
+                                    Main.plugin.getTaskBlockSpawnRemove(p); 
+                                }
+                            
+                                p.sendMessage("Tu es bien identifier");
+
+                            } else {
+                                p.sendMessage(ConfigMessage.getMdpNotEqual());
+
+                            }
+
+
+                        } else {
+                            p.sendMessage(ConfigMessage.getLoginError());
                         }
-    
+
                     }
-    
+
                 }
             }
-    
+
             return false;
         }
-    
+
     }
 }

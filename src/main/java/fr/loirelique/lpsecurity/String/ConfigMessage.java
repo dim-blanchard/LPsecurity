@@ -51,6 +51,16 @@ public class ConfigMessage {
         String mdpError = Main.plugin.getConfig().getString("message_commande.mdp_erreur");
         return mdpError;
     } 
+
+    public static String getLoginError() {
+        String loginError = Main.plugin.getConfig().getString("message_commande.login_erreur");
+        return loginError;
+    }
+
+    public static String getMdpNotEqual() {
+        String mdpNotEqual = Main.plugin.getConfig().getString("message_commande.mdpNotEqual_erreur");
+        return mdpNotEqual;
+    } 
     
     
     public static void sendRegister(Player p) {

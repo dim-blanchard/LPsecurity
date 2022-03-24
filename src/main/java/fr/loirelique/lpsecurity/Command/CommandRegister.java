@@ -90,6 +90,7 @@ public class CommandRegister implements CommandExecutor {
                                 e.printStackTrace();
                             }
                             Bukkit.getScheduler().cancelTask(Main.plugin.getTaskRegisterTime(p));
+                            Main.plugin.getTaskRegisterTimeRemove(p);
                             Main.plugin.setTaskLoginTime(p);
                             ConfigMessage.sendLogin(p);
 

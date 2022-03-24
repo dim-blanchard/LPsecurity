@@ -18,6 +18,8 @@ Connection:
 
 message_commande:
   mdp_erreur: Le mdp dois faire au mini 8 caractère | mdp ne correspond pas .
+  login_erreur: Tu n'es pas enregistrer, utilise la commande /register.
+  mdpNotEqual_erreur: Mot de passe incorecte. 
   
 
 

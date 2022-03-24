@@ -199,16 +199,16 @@ public class Main extends JavaPlugin implements Listener {
     }
         if (listTacheRegister.get(p.getName()) != null) { 
             Bukkit.getScheduler().cancelTask(getTaskRegisterTime(p));
-            listTacheRegister.remove(p.getName());  
+            getTaskRegisterTimeRemove(p); 
            
         }
         if (listTacheLogin.get(p.getName()) != null) {
             Bukkit.getScheduler().cancelTask(getTaskLoginTime(p));
-            listTacheLogin.remove(p.getName());
+            getTaskLoginTimeRemove(p);
         }
         if (listTacheSpawnBlock.get(p.getName()) != null) {
             Bukkit.getScheduler().cancelTask(getTaskBlockSpawn(p));
-            listTacheSpawnBlock.remove(p.getName());
+            getTaskBlockSpawnRemove(p);
         }
 
     }
@@ -222,6 +222,9 @@ public class Main extends JavaPlugin implements Listener {
 
     public Integer getTaskRegisterTime(Player p) {
         return listTacheRegister.get(p.getName());
+    }
+    public void getTaskRegisterTimeRemove(Player p) {
+        listTacheRegister.remove(p.getName());        
     }
 
     public void setTaskRegisterTime(Player p) {
@@ -254,6 +257,9 @@ public class Main extends JavaPlugin implements Listener {
     //////////////////////////////////////////////////
     public Integer getTaskLoginTime(Player p) {
         return listTacheLogin.get(p.getName());
+    }
+    public void getTaskLoginTimeRemove(Player p) {
+        listTacheLogin.remove(p.getName());        
     }
 
     public void setTaskLoginTime(Player p) {
@@ -288,6 +294,10 @@ public class Main extends JavaPlugin implements Listener {
         return listTacheSpawnBlock.get(p.getName());
     }
 
+    public void getTaskBlockSpawnRemove(Player p) {
+        listTacheSpawnBlock.remove(p.getName());        
+    }
+
     public void setTaskBlockSpawn(Player p) {
 
         BukkitTask tache = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
@@ -313,69 +323,7 @@ public class Main extends JavaPlugin implements Listener {
 
     }
 
-    /**
-     * Methode des diffrente connection à la bdd
-     */
-
-    public void connectionRegister(Player p) {
-        ConfigMessage.sendRegister(p);
-        setTaskRegisterTime(p);
-        try (Connection connection_addPlayer = DriverManager.getConnection(
-                ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
-                        + ConfigBdd.getDatabase1()
-                        + "?characterEncoding=latin1&useConfigs=maxPerformance",
-                ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-            // -2 Fait une ou plusieure requete connection au jeux
-
-            String requet_insert_sql2 = "INSERT INTO pf8kr9g9players (uuid,pseudo,ip,password) VALUES(?,?,?,?)";
-            try (PreparedStatement statement2_insert = connection_addPlayer.prepareStatement(requet_insert_sql2)) {
-                String uuid = p.getUniqueId().toString();
-                String pseudo = p.getName();
-                String ip = p.getAddress().toString();
-                String pass = "temporaire";
-
-                statement2_insert.setString(1, uuid);
-                statement2_insert.setString(2, pseudo);
-                statement2_insert.setString(3, ip);
-                statement2_insert.setString(4, pass);
-                statement2_insert.executeUpdate();
-                //
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public String jouerDansLaBdd(Player p) {
-
-        try (Connection connection_register = DriverManager.getConnection(
-                ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
-                        + ConfigBdd.getDatabase1()
-                        + "?characterEncoding=latin1&useConfigs=maxPerformance",
-                ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-            // -2 Fait une ou plusieure requete connection au jeux
-
-            String requet_Select_sql2 = "SELECT * FROM pf8kr9g9players WHERE uuid=?";
-            try (PreparedStatement statement2_select = connection_register
-                    .prepareStatement(requet_Select_sql2)) {
-                String uuid = p.getUniqueId().toString();
-                statement2_select.setObject(1, uuid);
-
-                try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
-                    String pseudo;
-                    while (resultat_requete_select.next()) {
-                        pseudo = resultat_requete_select.getString(4);
-                        return pseudo;
-                    }
-
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-
-    }
+   
+ 
 
 }
