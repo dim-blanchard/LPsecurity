@@ -75,6 +75,12 @@ public class ConfigMessage {
         p.sendTitle(ConfigMessage.getTitreLogin(), ConfigMessage.getSoustitreLogin()); 
     }
 
+    public static void sendAfterLogin(Player p) {
+        String player_name = p.getName();
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),"title " + player_name + " times 10 20 10 "); 
+        p.sendTitle("Bienvenue","Tu es bien identifier !"); 
+    }
+
 
 
 }

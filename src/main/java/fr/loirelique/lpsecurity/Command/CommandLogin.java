@@ -99,7 +99,8 @@ public class CommandLogin implements CommandExecutor {
                                     Main.plugin.getTaskBlockSpawnRemove(p); 
                                 }
                             
-                                p.sendMessage("Tu es bien identifier");
+                                ConfigMessage.sendAfterLogin(p);
+                                
 
                             } else {
                                 p.sendMessage(ConfigMessage.getMdpNotEqual());
