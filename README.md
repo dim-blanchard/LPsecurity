@@ -51,4 +51,4 @@ Réalisaion d'un **plugin de sécurité** pour **Minecraft** sous version 1.8.8 
 # Lien utiles à la suivie du projet
 
 > Liens ([Plannig LPsecurity](https://docs.google.com/spreadsheets/d/1M6eF-qHVqqDWeEFvFPF7m3PK6LDU6fDgVOAws3adxWI/edit?usp=sharing))
-, serveur Minecraft ([Dictionnaire des données]())
+, ([Dictionnaire des données]())
