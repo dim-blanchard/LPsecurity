@@ -94,12 +94,22 @@ public class Main extends JavaPlugin implements Listener {
     /**
      * EVENT PLAYER JOIN EVENT
      */
+    private HashMap<String, Player> listPlayer  = new HashMap<String, Player>();
+
+    public void getListPlayerRemove(String pseudo) {
+        listPlayer.remove(pseudo);        
+    }
+
+    public Player getListPlayer(String pseudo) {
+        return listPlayer.get(pseudo);        
+    }
 
     @EventHandler
     public void playerJoinServer(PlayerJoinEvent p_event) {
         final Player p = p_event.getPlayer();
         String uuid = p.getUniqueId().toString();
         String uuidfrombdd = "";
+        listPlayer.put(p.getName(), p);
         try (Connection connection_register = DriverManager.getConnection(
                 ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
                         + ConfigBdd.getDatabase1()
@@ -209,6 +219,9 @@ public class Main extends JavaPlugin implements Listener {
         if (listTacheSpawnBlock.get(p.getName()) != null) {
             Bukkit.getScheduler().cancelTask(getTaskBlockSpawn(p));
             getTaskBlockSpawnRemove(p);
+        }
+        if(listPlayer.get(p.getName()) != null){
+            getListPlayerRemove(p.getName());
         }
 
     }

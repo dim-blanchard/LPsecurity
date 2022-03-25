@@ -19,7 +19,7 @@ public class CommandLogin implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        {
+        
             // C'est un joueur qui a effectué la commande
             if (sender instanceof Player) {
                 Player p = (Player) sender;// On récupère le joueur.
@@ -118,7 +118,7 @@ public class CommandLogin implements CommandExecutor {
             }
 
             return false;
-        }
+        
 
     }
 }
