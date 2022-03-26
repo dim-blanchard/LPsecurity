@@ -6,6 +6,7 @@ bdd:
   user: dimdim
   pass: Dimitri11!
   table: pf8kr9g9players
+  sel: ec4wdw13
 
 Connection:
   message_kick: Tu as étais exclue pour inactivité.

@@ -1,10 +1,12 @@
 package fr.loirelique.lpsecurity;
 
+import java.security.Security;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.HashMap;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -83,10 +85,15 @@ public class Main extends JavaPlugin implements Listener {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
 
-        if (online == 1 | ban == 1) {
+        if (online == 1) {
             p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                    "Joueur deja en ligne ou Bannie");
+                    "Joueur deja en ligne");
+        }
+        if (ban == 1) {
+            p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
+                    "Tu es Bannie");
         }
 
     }

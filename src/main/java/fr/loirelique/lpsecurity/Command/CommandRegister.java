@@ -1,9 +1,15 @@
 package fr.loirelique.lpsecurity.Command;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
+import com.google.common.hash.Hashing;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -25,13 +31,13 @@ public class CommandRegister implements CommandExecutor {
             if (cmd.getName().equalsIgnoreCase("register")) { // Si c'est la commande "register" qui a été tapée:
 
                 if (args.length == 0) {
-                    
+
                 }
 
                 if (args.length == 2) {
                     String uuid = p.getUniqueId().toString();
                     String uuidfrombdd = "";
-                    
+
                     try (Connection connection_register = DriverManager.getConnection(
                             ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
                                     + ConfigBdd.getDatabase1()
@@ -39,7 +45,7 @@ public class CommandRegister implements CommandExecutor {
                             ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
                         // -2 Fait une ou plusieure requete connection au jeux
 
-                        String requet_Select_sql2 = "SELECT * FROM "+ConfigBdd.getTable1()+" WHERE uuid=?";
+                        String requet_Select_sql2 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
                         try (PreparedStatement statement2_select = connection_register
                                 .prepareStatement(requet_Select_sql2)) {
                             statement2_select.setObject(1, uuid);
@@ -60,7 +66,7 @@ public class CommandRegister implements CommandExecutor {
                     } else {
                         String args0 = args[0];
                         String args1 = args[1];
-                        if (args0.equals(args1) && args[0].length()>=8 && args[1].length()>=8 ) {
+                        if (args0.equals(args1) && args[0].length() >= 8 && args[1].length() >= 8) {
 
                             try (Connection connection_addPlayer = DriverManager.getConnection(
                                     ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort()
@@ -70,18 +76,20 @@ public class CommandRegister implements CommandExecutor {
                                     ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
                                 // -2 Fait une ou plusieure requete connection au jeux
 
-                                String requet_insert_sql2 = "INSERT INTO "+ConfigBdd.getTable1()+" (uuid,pseudo,ip,password) VALUES(?,?,?,?)";
+                                String requet_insert_sql2 = "INSERT INTO " + ConfigBdd.getTable1()
+                                        + " (uuid,pseudo,ip,password) VALUES(?,?,?,?)";
                                 try (PreparedStatement statement2_insert = connection_addPlayer
                                         .prepareStatement(requet_insert_sql2)) {
                                     uuid = p.getUniqueId().toString();
                                     String pseudo = p.getName();
                                     String ip = p.getAddress().toString();
-                                    String pass = args0;
+
+                                    String pass = ConfigBdd.getHash(args0);
 
                                     statement2_insert.setString(1, uuid);
                                     statement2_insert.setString(2, pseudo);
                                     statement2_insert.setString(3, ip);
-                                    statement2_insert.setString(4, pass);
+                                    statement2_insert.setString(4,pass);
                                     statement2_insert.executeUpdate();
                                     //
                                 }
@@ -94,9 +102,8 @@ public class CommandRegister implements CommandExecutor {
                             Main.plugin.setTaskLoginTime(p);
                             ConfigMessage.sendLogin(p);
 
-                        } else{
+                        } else {
                             p.sendMessage(ConfigMessage.getMdpError());
-                          
 
                         }
                     }
