@@ -1,5 +1,8 @@
 package fr.loirelique.lpsecurity;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.Security;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -110,6 +113,8 @@ public class Main extends JavaPlugin implements Listener {
     public Player getListPlayer(String pseudo) {
         return listPlayer.get(pseudo);        
     }
+
+
 
     @EventHandler
     public void playerJoinServer(PlayerJoinEvent p_event) {
@@ -343,7 +348,20 @@ public class Main extends JavaPlugin implements Listener {
 
     }
 
-   
- 
+    public String getHash(String password) throws NoSuchAlgorithmException {
+        String pass = password;
+
+        System.out.println(pass);
+
+        MessageDigest crypt = MessageDigest.getInstance("SHA-256");
+        crypt.update(pass.getBytes(StandardCharsets.UTF_8));
+
+        byte[] bytes = crypt.digest();
+        String passHash = new String(bytes, StandardCharsets.UTF_8);
+        System.out.println(bytes.toString());
+        
+        return passHash;
+    }
+    
 
 }

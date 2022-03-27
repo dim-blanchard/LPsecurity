@@ -61,6 +61,13 @@ public class ConfigMessage {
         String mdpNotEqual = Main.plugin.getConfig().getString("message_commande.mdpNotEqual_erreur");
         return mdpNotEqual;
     } 
+
+    
+    public static String getSel() {
+        String sel = Main.plugin.getConfig().getString("bdd.sel");
+
+        return sel;
+    }
     
     
     public static void sendRegister(Player p) {

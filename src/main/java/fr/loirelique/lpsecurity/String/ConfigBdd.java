@@ -1,9 +1,5 @@
 package fr.loirelique.lpsecurity.String;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import fr.loirelique.lpsecurity.Main;
 
 public class ConfigBdd {
@@ -46,25 +42,7 @@ public class ConfigBdd {
         return table;
     }
 
-    public static String getSel() {
-        String sel = Main.plugin.getConfig().getString("bdd.sel");
 
-        return sel;
-    }
-
-    public static String getHash(String password) throws NoSuchAlgorithmException {
-        String pass = password;
-
-        System.out.println(pass);
-
-        MessageDigest crypt = MessageDigest.getInstance("SHA-256");
-        crypt.update(pass.getBytes(StandardCharsets.UTF_8));
-
-        byte[] bytes = crypt.digest();
-        String passHash = new String(bytes, StandardCharsets.UTF_8);
-        System.out.println(bytes.toString());
-        
-        return passHash;
-    }
+   
 
 }

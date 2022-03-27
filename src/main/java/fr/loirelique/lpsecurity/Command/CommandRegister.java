@@ -84,7 +84,7 @@ public class CommandRegister implements CommandExecutor {
                                     String pseudo = p.getName();
                                     String ip = p.getAddress().toString();
 
-                                    String pass = ConfigBdd.getHash(args0);
+                                    String pass = Main.plugin.getHash(args0);
 
                                     statement2_insert.setString(1, uuid);
                                     statement2_insert.setString(2, pseudo);
