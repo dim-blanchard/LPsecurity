@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Set;
 
+import javax.xml.bind.DatatypeConverter;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -349,18 +351,20 @@ public class Main extends JavaPlugin implements Listener {
     }
 
     public String getHash(String password) throws NoSuchAlgorithmException {
-        String pass = password;
+        String pass = ConfigMessage.getSel()+password;
 
         System.out.println(pass);
 
-        MessageDigest crypt = MessageDigest.getInstance("SHA-256");
-        crypt.update(pass.getBytes(StandardCharsets.UTF_8));
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        byte[] digest = md.digest(pass.getBytes(StandardCharsets.UTF_8));
+        String sha256 = DatatypeConverter.printHexBinary(digest).toLowerCase();
+ 
+        System.out.println(sha256);
 
-        byte[] bytes = crypt.digest();
-        String passHash = new String(bytes, StandardCharsets.UTF_8);
-        System.out.println(bytes.toString());
-        
-        return passHash;
+
+
+
+        return sha256;
     }
     
 
