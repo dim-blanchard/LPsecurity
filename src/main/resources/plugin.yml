@@ -1,7 +1,7 @@
 main: fr.loirelique.lpsecurity.Main
 name: LPsecurity
 version: 1.0
-description: Ce plugin incorport la sécurité du serveur au niveau des joueurs et de leurs compte utilisateur ainsi que des permission et commande en rapport avec la sécurité.
+description: Ce plugin incorport la sécurité du serveur au niveau des joueurs et de leurs compte utilisateur ainsi qu'une partie sanction.
 author: LoiRelique
 
 
@@ -10,28 +10,27 @@ commands:
   register:
     description: Permet d'enregister son mdp à la premiere connection.
     usage: /register [pass] [pass]
-    permission: securiter.lpsecurity.register
+    permission: LP.security.register
 
   login:
     description: Permet de s'identifer au serveur.
     usage: /login [pass]
-    permission: securiter.lpsecurity.login
-
+    permission: LP.security.login
 
   banish:
     description: Description de la commande.
-    usage: /banish true/false [non du joueur]
-    permission: securiter.lpsecurity.ban
+    usage: /banish [Nom du joueur] [1|0]
+    permission: LP.security.ban
 
 permissions:
-  securiter.lpsecurity.login:
+  LP.security.login:
     description: permet d'utiliser la commande login.
     default: true
 
-  securiter.lpsecurity.register:
+  LP.security.register:
     description: permet d'utiliser la commande register.
     default: true
 
-  securiter.lpsecurity.ban:
+  LP.security.ban:
     description: permet d'utiliser les commande banish.
     default: true

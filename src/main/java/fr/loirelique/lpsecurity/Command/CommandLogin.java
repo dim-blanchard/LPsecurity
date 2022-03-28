@@ -111,12 +111,12 @@ public class CommandLogin implements CommandExecutor {
                             ConfigMessage.sendAfterLogin(p);
 
                         } else {
-                            p.sendMessage(ConfigMessage.getMdpNotEqual());
+                            p.sendMessage(ConfigMessage.getErrorLoginPass());
 
                         }
 
                     } else {
-                        p.sendMessage(ConfigMessage.getLoginError());
+                        p.sendMessage(ConfigMessage.getErrorLogin());
                     }
 
                 }

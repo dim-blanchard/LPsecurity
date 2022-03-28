@@ -1,15 +1,11 @@
 package fr.loirelique.lpsecurity.Command;
 
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+
+import java.net.InetSocketAddress;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
-import com.google.common.hash.Hashing;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -62,7 +58,7 @@ public class CommandRegister implements CommandExecutor {
                     }
 
                     if (uuid.equals(uuidfrombdd)) {
-                        p.sendMessage("Tu es déja enregistrer, indentifie toi avec /login <Ton mpd>");
+                        p.sendMessage(ConfigMessage.getErrorRegister());
                     } else {
                         String args0 = args[0];
                         String args1 = args[1];
@@ -82,13 +78,14 @@ public class CommandRegister implements CommandExecutor {
                                         .prepareStatement(requet_insert_sql2)) {
                                     uuid = p.getUniqueId().toString();
                                     String pseudo = p.getName();
-                                    String ip = p.getAddress().toString();
+                                    InetSocketAddress iptest = p.getAddress();
+                                        
 
                                     String pass = Main.plugin.getHash(args0);
 
                                     statement2_insert.setString(1, uuid);
                                     statement2_insert.setString(2, pseudo);
-                                    statement2_insert.setString(3, ip);
+                                    statement2_insert.setString(3, iptest.getHostName());
                                     statement2_insert.setString(4,pass);
                                     statement2_insert.executeUpdate();
                                     //
@@ -103,7 +100,7 @@ public class CommandRegister implements CommandExecutor {
                             ConfigMessage.sendLogin(p);
 
                         } else {
-                            p.sendMessage(ConfigMessage.getMdpError());
+                            p.sendMessage(ConfigMessage.getErrorRegisterPass());
 
                         }
                     }

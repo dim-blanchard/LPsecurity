@@ -3,13 +3,12 @@ package fr.loirelique.lpsecurity;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.Security;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.HashMap;
-import java.util.Set;
+
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -94,11 +93,11 @@ public class Main extends JavaPlugin implements Listener {
 
         if (online == 1) {
             p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                    "Joueur deja en ligne");
+                    ConfigMessage.getKickOnline());
         }
         if (ban == 1) {
             p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                    "Tu es Bannie");
+                    ConfigMessage.getKickBan());
         }
 
     }
@@ -147,7 +146,7 @@ public class Main extends JavaPlugin implements Listener {
             e.printStackTrace();
         }
         if (uuid.equals(uuidfrombdd)) {
-            System.out.println("Le joueur est dans la bdd.");
+           // System.out.println("Le joueur est dans la bdd.");
             setTaskBlockSpawn(p);
             setTaskLoginTime(p);
             ConfigMessage.sendLogin(p);
@@ -258,7 +257,7 @@ public class Main extends JavaPlugin implements Listener {
 
         BukkitTask tache = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
 
-            int time_run1 = ConfigMessage.getRegistertemps();
+            int time_run1 = ConfigMessage.getRegisterTime();
 
             @Override
             public void run() {
@@ -267,7 +266,7 @@ public class Main extends JavaPlugin implements Listener {
 
                 if (time_run1 == 0) {
 
-                    p.kickPlayer(ConfigMessage.getKick());
+                    p.kickPlayer(ConfigMessage.getKickOvertime());
 
                 }
                 time_run1--;
@@ -293,7 +292,7 @@ public class Main extends JavaPlugin implements Listener {
 
         BukkitTask tache = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
 
-            int time_run1 = ConfigMessage.getRegistertemps();
+            int time_run1 = ConfigMessage.getLoginTime();
 
             @Override
             public void run() {
@@ -302,7 +301,7 @@ public class Main extends JavaPlugin implements Listener {
 
                 if (time_run1 == 0) {
 
-                    p.kickPlayer(ConfigMessage.getKick());
+                    p.kickPlayer(ConfigMessage.getKickOvertime());
 
                 }
                 time_run1--;
@@ -353,16 +352,13 @@ public class Main extends JavaPlugin implements Listener {
     public String getHash(String password) throws NoSuchAlgorithmException {
         String pass = ConfigMessage.getSel()+password;
 
-        System.out.println(pass);
+       //System.out.println(pass);
 
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         byte[] digest = md.digest(pass.getBytes(StandardCharsets.UTF_8));
         String sha256 = DatatypeConverter.printHexBinary(digest).toLowerCase();
  
-        System.out.println(sha256);
-
-
-
+        //System.out.println(sha256);
 
         return sha256;
     }

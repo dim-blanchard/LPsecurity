@@ -12,82 +12,108 @@ public class ConfigMessage {
     /**
      * GETTER DE CONFIG MESSAGE
      */
-    public static int getRegistertemps() {
-        int registertemps = Integer.parseInt(Main.plugin.getConfig().getString("Connection.temps_enregistrement"));
+    public static String getRegisterTitle() {
+        String titre = Main.plugin.getConfig().getString("string.register_title");
+        return titre;
+    }
+    public static String getRegisterSubtitles() {
+        String soustitre = Main.plugin.getConfig().getString("string.register_subtitles");
+        return soustitre;
+    }
+    public static int getRegisterTime() {
+        int registertemps = Integer.parseInt(Main.plugin.getConfig().getString("string.register_time"));
         return registertemps;
     }
 
-    public static int getLogintemps() {
-        int logintemps = Integer.parseInt(Main.plugin.getConfig().getString("Connection.temps_indentification"));
+    public static String getLoginTitle() {
+        String titre = Main.plugin.getConfig().getString("string.login_title");
+        return titre;
+    }
+
+    public static String getLoginSubtitles() {
+        String soustitre = Main.plugin.getConfig().getString("string.login_subtitles");
+        return soustitre;
+    }
+
+
+    public static int getLoginTime() {
+        int logintemps = Integer.parseInt(Main.plugin.getConfig().getString("string.login_time"));
         return logintemps;
     }
 
-    public static String getSoustitreRegister() {
-        String soustitre = Main.plugin.getConfig().getString("Connection.soustitre_enregistrement");
-        return soustitre;
-    }
 
-    public static String getTitreRegister() {
-        String titre = Main.plugin.getConfig().getString("Connection.titre_enregistrement");
-        return titre;
-    }
 
-    public static String getSoustitreLogin() {
-        String soustitre = Main.plugin.getConfig().getString("Connection.soustitre_indentification");
-        return soustitre;
+    public static String getErrorRegisterPass() {
+        String errorRegisterPass = Main.plugin.getConfig().getString("string.error_register_pass");
+        return errorRegisterPass;
     }
-
-    public static String getTitreLogin() {
-        String titre = Main.plugin.getConfig().getString("Connection.titre_indentification");
-        return titre;
-    }
-
-    public static String getKick() {
-        String kick = Main.plugin.getConfig().getString("Connection.message_kick");
-        return kick;
+    public static String getErrorRegister() {
+        String errorRegister = Main.plugin.getConfig().getString("string.error_register");
+        return errorRegister;
     } 
 
-    public static String getMdpError() {
-        String mdpError = Main.plugin.getConfig().getString("message_commande.mdp_erreur");
-        return mdpError;
-    } 
-
-    public static String getLoginError() {
-        String loginError = Main.plugin.getConfig().getString("message_commande.login_erreur");
-        return loginError;
+    public static String getErrorLogin() {
+        String errorlogin = Main.plugin.getConfig().getString("string.error_login");
+        return errorlogin;
     }
 
-    public static String getMdpNotEqual() {
-        String mdpNotEqual = Main.plugin.getConfig().getString("message_commande.mdpNotEqual_erreur");
-        return mdpNotEqual;
+    public static String getErrorLoginPass() {
+        String errorLoginPass = Main.plugin.getConfig().getString("string.error_login_pass");
+        return errorLoginPass;
     } 
 
-    
-    public static String getSel() {
-        String sel = Main.plugin.getConfig().getString("bdd.sel");
 
-        return sel;
+    public static String getKickOnline() {
+        String kickOnline = Main.plugin.getConfig().getString("string_kick.online");
+
+        return kickOnline;
+    }
+    public static String getKickBan() {
+        String kickBan = Main.plugin.getConfig().getString("string_kick.ban");
+
+        return kickBan;
+    }
+
+    public static String getKickOvertime() {
+        String kickOvertime = Main.plugin.getConfig().getString("string_kick.over_time");
+        return kickOvertime;
+    } 
+    
+
+    public static String getAfterLoginTitle() {
+        String afterLoginTitle = Main.plugin.getConfig().getString("string.after_login_title");
+        return afterLoginTitle;
     }
     
-    
+    public static String getAfterLoginSubtitles() {
+        String afterLoginSubtitles = Main.plugin.getConfig().getString("string.after_login_subtitles");
+        return afterLoginSubtitles;
+    } 
+
     public static void sendRegister(Player p) {
         String player_name = p.getName();
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),"title " + player_name + " times 10 " + ConfigMessage.getRegistertemps() * 20 + " 10 "); 
-        p.sendTitle(ConfigMessage.getTitreRegister(), ConfigMessage.getSoustitreRegister()); 
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),"title " + player_name + " times 10 " + ConfigMessage.getRegisterTime() * 20 + " 10 "); 
+        p.sendTitle(ConfigMessage.getRegisterTitle(),ConfigMessage.getRegisterSubtitles()); 
     }
     
     public static void sendLogin(Player p) {
         String player_name = p.getName();
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),"title " + player_name + " times 10 " + ConfigMessage.getLogintemps() * 20 + " 10 "); 
-        p.sendTitle(ConfigMessage.getTitreLogin(), ConfigMessage.getSoustitreLogin()); 
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),"title " + player_name + " times 10 " + ConfigMessage.getLoginTime() * 20 + " 10 "); 
+        p.sendTitle(ConfigMessage.getLoginTitle(), ConfigMessage.getLoginSubtitles()); 
     }
 
     public static void sendAfterLogin(Player p) {
         String player_name = p.getName();
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),"title " + player_name + " times 10 20 10 "); 
-        p.sendTitle("Bienvenue","Tu es bien identifier !"); 
+        p.sendTitle(ConfigMessage.getAfterLoginTitle(),ConfigMessage.getAfterLoginSubtitles()); 
     }
 
+
+    public static String getSel() {
+        String sel = Main.plugin.getConfig().getString("security.sel");
+
+        return sel;
+    }
 
 
 }
