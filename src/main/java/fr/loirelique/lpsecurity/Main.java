@@ -1,5 +1,6 @@
 package fr.loirelique.lpsecurity;
 
+import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -39,7 +40,6 @@ import fr.loirelique.lpsecurity.String.ConfigMessage;
 public class Main extends JavaPlugin implements Listener {
 
     public static Main plugin;
-
     @Override
     public void onEnable() {
         plugin = this;
@@ -64,6 +64,11 @@ public class Main extends JavaPlugin implements Listener {
     @EventHandler
     public void playerBeforeJoinServer(AsyncPlayerPreLoginEvent p_event) {
 
+        //SELECT count(ip) FROM pf8kr9g9players  WHERE ip="127.0.0.1";
+        
+        InetAddress ip = p_event.getAddress();
+        ip.getHostName();
+        
         int online = 0;
         int ban = 0;
         String uuid = p_event.getUniqueId().toString();
