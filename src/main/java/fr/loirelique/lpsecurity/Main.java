@@ -10,7 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.HashMap;
 
-
 import javax.xml.bind.DatatypeConverter;
 
 import org.bukkit.Bukkit;
@@ -40,6 +39,7 @@ import fr.loirelique.lpsecurity.String.ConfigMessage;
 public class Main extends JavaPlugin implements Listener {
 
     public static Main plugin;
+
     @Override
     public void onEnable() {
         plugin = this;
@@ -53,6 +53,26 @@ public class Main extends JavaPlugin implements Listener {
         CommandExecutor commandBanish = new CommandBanish();
         getCommand("banish").setExecutor(commandBanish);
 
+/*         try (Connection connection_update = DriverManager.getConnection(
+                ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort()
+                        + "/"
+                        + ConfigBdd.getDatabase1()
+                        + "?characterEncoding=latin1&useConfigs=maxPerformance",
+                ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
+
+            // UPDATE pf8kr9g9players SET online=0 , ip=0 WHERE pseudo="LoiRelique";
+            // -2 Fait une ou plusieure requete connection au jeux
+            String requet_Select_sql2 = "UPDATE " + ConfigBdd.getTable1() + " SET online=? WHERE uuid=?";
+            try (PreparedStatement statement2_select = connection_update.prepareStatement(requet_Select_sql2)) {
+                statement2_select.setInt(1, 0);
+                statement2_select.setString(2, uuid);
+                statement2_select.executeUpdate();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+ */
         System.out.println("Chargement plugin LPsecurity... ===> OK");
     }
 
@@ -64,11 +84,11 @@ public class Main extends JavaPlugin implements Listener {
     @EventHandler
     public void playerBeforeJoinServer(AsyncPlayerPreLoginEvent p_event) {
 
-        //SELECT count(ip) FROM pf8kr9g9players  WHERE ip="127.0.0.1";
-        
+        // SELECT count(ip) FROM pf8kr9g9players WHERE ip="127.0.0.1";
+
         InetAddress ip = p_event.getAddress();
         ip.getHostName();
-        
+
         int online = 0;
         int ban = 0;
         String uuid = p_event.getUniqueId().toString();
@@ -79,7 +99,7 @@ public class Main extends JavaPlugin implements Listener {
                 ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
             // -2 Fait une ou plusieure requete connection au jeux
 
-            String requet_Select_sql2 = "SELECT * FROM "+ConfigBdd.getTable1()+" WHERE uuid=?";
+            String requet_Select_sql2 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
             try (PreparedStatement statement2_select = connection_register
                     .prepareStatement(requet_Select_sql2)) {
                 statement2_select.setObject(1, uuid);
@@ -94,7 +114,6 @@ public class Main extends JavaPlugin implements Listener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
 
         if (online == 1) {
             p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
@@ -110,17 +129,15 @@ public class Main extends JavaPlugin implements Listener {
     /**
      * EVENT PLAYER JOIN EVENT
      */
-    private HashMap<String, Player> listPlayer  = new HashMap<String, Player>();
+    private HashMap<String, Player> listPlayer = new HashMap<String, Player>();
 
     public void getListPlayerRemove(String pseudo) {
-        listPlayer.remove(pseudo);        
+        listPlayer.remove(pseudo);
     }
 
     public Player getListPlayer(String pseudo) {
-        return listPlayer.get(pseudo);        
+        return listPlayer.get(pseudo);
     }
-
-
 
     @EventHandler
     public void playerJoinServer(PlayerJoinEvent p_event) {
@@ -128,6 +145,7 @@ public class Main extends JavaPlugin implements Listener {
         String uuid = p.getUniqueId().toString();
         String uuidfrombdd = "";
         listPlayer.put(p.getName(), p);
+
         try (Connection connection_register = DriverManager.getConnection(
                 ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
                         + ConfigBdd.getDatabase1()
@@ -135,7 +153,7 @@ public class Main extends JavaPlugin implements Listener {
                 ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
             // -2 Fait une ou plusieure requete connection au jeux
 
-            String requet_Select_sql2 = "SELECT * FROM "+ConfigBdd.getTable1()+" WHERE uuid=?";
+            String requet_Select_sql2 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
             try (PreparedStatement statement2_select = connection_register
                     .prepareStatement(requet_Select_sql2)) {
                 statement2_select.setObject(1, uuid);
@@ -151,7 +169,7 @@ public class Main extends JavaPlugin implements Listener {
             e.printStackTrace();
         }
         if (uuid.equals(uuidfrombdd)) {
-           // System.out.println("Le joueur est dans la bdd.");
+            // System.out.println("Le joueur est dans la bdd.");
             setTaskBlockSpawn(p);
             setTaskLoginTime(p);
             ConfigMessage.sendLogin(p);
@@ -162,23 +180,15 @@ public class Main extends JavaPlugin implements Listener {
                             + ConfigBdd.getDatabase1()
                             + "?characterEncoding=latin1&useConfigs=maxPerformance",
                     ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
+
+                // UPDATE pf8kr9g9players SET online=0 , ip=0 WHERE pseudo="LoiRelique";
                 // -2 Fait une ou plusieure requete connection au jeux
-                String requet_Select_sql2 = "SELECT * FROM "+ConfigBdd.getTable1()+" WHERE uuid=?";
-                try (PreparedStatement statement2_select =connection_update.prepareStatement(requet_Select_sql2)) {
-                    uuid = p.getUniqueId().toString();
-                    statement2_select.setString(1, uuid);
-                    //
-                    try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
-                        if (resultat_requete_select.next()) {
-                            String requet_Update_sql3 = "UPDATE "+ConfigBdd.getTable1()+" SET online=1 , ip=? WHERE uuid=?";
-                            try (PreparedStatement statement3_update = connection_update
-                                    .prepareStatement(requet_Update_sql3)) { 
-                                statement3_update.setString(1,p.getAddress().toString());
-                                statement3_update.setString(2, resultat_requete_select.getString("uuid"));
-                                statement3_update.executeUpdate();
-                            }
-                        }
-                    }
+                String requet_Select_sql2 = "UPDATE " + ConfigBdd.getTable1() + " SET online=? , ip=? WHERE uuid=?";
+                try (PreparedStatement statement2_select = connection_update.prepareStatement(requet_Select_sql2)) {
+                    statement2_select.setInt(1, 1);
+                    statement2_select.setString(2, p.getAddress().getHostName().toString());
+                    statement2_select.setString(3, uuid);
+                    statement2_select.executeUpdate();
                 }
 
             } catch (Exception e) {
@@ -196,39 +206,62 @@ public class Main extends JavaPlugin implements Listener {
     @EventHandler
     public void playerQuitServer(PlayerQuitEvent p_event) {
         final Player p = p_event.getPlayer();
-
         String uuid = p.getUniqueId().toString();
+
         try (Connection connection_update = DriverManager.getConnection(
-            ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort()
-                    + "/"
-                    + ConfigBdd.getDatabase1()
-                    + "?characterEncoding=latin1&useConfigs=maxPerformance",
-            ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-        // -2 Fait une ou plusieure requete connection au jeux
-        String requet_Select_sql2 = "SELECT * FROM "+ConfigBdd.getTable1()+" WHERE uuid=?";
-        try (PreparedStatement statement2_select =connection_update.prepareStatement(requet_Select_sql2)) {
-            uuid = p.getUniqueId().toString();
-            statement2_select.setString(1, uuid);
-            //
-            try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
-                if (resultat_requete_select.next()) {
-                    String requet_Update_sql3 = "UPDATE "+ConfigBdd.getTable1()+" SET online=0  WHERE uuid=?";
-                    try (PreparedStatement statement3_update = connection_update
-                            .prepareStatement(requet_Update_sql3)) { 
-                        statement3_update.setString(1, resultat_requete_select.getString("uuid"));
-                        statement3_update.executeUpdate();
+                ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort()
+                        + "/"
+                        + ConfigBdd.getDatabase1()
+                        + "?characterEncoding=latin1&useConfigs=maxPerformance",
+                ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
+
+            // UPDATE pf8kr9g9players SET online=0 , ip=0 WHERE pseudo="LoiRelique";
+            // -2 Fait une ou plusieure requete connection au jeux
+            String requet_Select_sql2 = "UPDATE " + ConfigBdd.getTable1() + " SET online=? WHERE uuid=?";
+            try (PreparedStatement statement2_select = connection_update.prepareStatement(requet_Select_sql2)) {
+                statement2_select.setInt(1, 0);
+                statement2_select.setString(2, uuid);
+                statement2_select.executeUpdate();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+/*         try (Connection connection_update = DriverManager.getConnection(
+                ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort()
+                        + "/"
+                        + ConfigBdd.getDatabase1()
+                        + "?characterEncoding=latin1&useConfigs=maxPerformance",
+                ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
+            // -2 Fait une ou plusieure requete connection au jeux
+            String requet_Select_sql2 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
+            try (PreparedStatement statement2_select = connection_update.prepareStatement(requet_Select_sql2)) {
+                uuid = p.getUniqueId().toString();
+                statement2_select.setString(1, uuid);
+                //
+                try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
+                    if (resultat_requete_select.next()) {
+                        String requet_Update_sql3 = "UPDATE " + ConfigBdd.getTable1() + " SET online=0  WHERE uuid=?";
+                        try (PreparedStatement statement3_update = connection_update
+                                .prepareStatement(requet_Update_sql3)) {
+                            statement3_update.setString(1, resultat_requete_select.getString("uuid"));
+                            statement3_update.executeUpdate();
+                        }
                     }
                 }
             }
-        }
 
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-        if (listTacheRegister.get(p.getName()) != null) { 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+ */
+
+
+        if (listTacheRegister.get(p.getName()) != null) {
             Bukkit.getScheduler().cancelTask(getTaskRegisterTime(p));
-            getTaskRegisterTimeRemove(p); 
-           
+            getTaskRegisterTimeRemove(p);
+
         }
         if (listTacheLogin.get(p.getName()) != null) {
             Bukkit.getScheduler().cancelTask(getTaskLoginTime(p));
@@ -238,7 +271,7 @@ public class Main extends JavaPlugin implements Listener {
             Bukkit.getScheduler().cancelTask(getTaskBlockSpawn(p));
             getTaskBlockSpawnRemove(p);
         }
-        if(listPlayer.get(p.getName()) != null){
+        if (listPlayer.get(p.getName()) != null) {
             getListPlayerRemove(p.getName());
         }
 
@@ -254,8 +287,9 @@ public class Main extends JavaPlugin implements Listener {
     public Integer getTaskRegisterTime(Player p) {
         return listTacheRegister.get(p.getName());
     }
+
     public void getTaskRegisterTimeRemove(Player p) {
-        listTacheRegister.remove(p.getName());        
+        listTacheRegister.remove(p.getName());
     }
 
     public void setTaskRegisterTime(Player p) {
@@ -289,8 +323,9 @@ public class Main extends JavaPlugin implements Listener {
     public Integer getTaskLoginTime(Player p) {
         return listTacheLogin.get(p.getName());
     }
+
     public void getTaskLoginTimeRemove(Player p) {
-        listTacheLogin.remove(p.getName());        
+        listTacheLogin.remove(p.getName());
     }
 
     public void setTaskLoginTime(Player p) {
@@ -326,7 +361,7 @@ public class Main extends JavaPlugin implements Listener {
     }
 
     public void getTaskBlockSpawnRemove(Player p) {
-        listTacheSpawnBlock.remove(p.getName());        
+        listTacheSpawnBlock.remove(p.getName());
     }
 
     public void setTaskBlockSpawn(Player p) {
@@ -355,18 +390,17 @@ public class Main extends JavaPlugin implements Listener {
     }
 
     public String getHash(String password) throws NoSuchAlgorithmException {
-        String pass = ConfigMessage.getSel()+password;
+        String pass = ConfigMessage.getSel() + password;
 
-       //System.out.println(pass);
+        // System.out.println(pass);
 
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         byte[] digest = md.digest(pass.getBytes(StandardCharsets.UTF_8));
         String sha256 = DatatypeConverter.printHexBinary(digest).toLowerCase();
- 
-        //System.out.println(sha256);
+
+        // System.out.println(sha256);
 
         return sha256;
     }
-    
 
 }
