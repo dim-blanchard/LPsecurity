@@ -31,6 +31,7 @@ import fr.loirelique.lpsecurity.Command.CommandRegister;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.ConfigMessage;
 
+
 /**
  * Information sur la class!LPSECURITY
  *
@@ -38,7 +39,14 @@ import fr.loirelique.lpsecurity.String.ConfigMessage;
 
 public class Main extends JavaPlugin implements Listener {
 
+    
+
+
     public static Main plugin;
+    private HashMap<String, Integer> listTacheRegister = new HashMap<String, Integer>();
+    private HashMap<String, Integer> listTacheLogin = new HashMap<String, Integer>();
+    private HashMap<String, Integer> listTacheSpawnBlock = new HashMap<String, Integer>();
+    private HashMap<String, Player> listPlayer = new HashMap<String, Player>();
 
     @Override
     public void onEnable() {
@@ -53,26 +61,30 @@ public class Main extends JavaPlugin implements Listener {
         CommandExecutor commandBanish = new CommandBanish();
         getCommand("banish").setExecutor(commandBanish);
 
-/*         try (Connection connection_update = DriverManager.getConnection(
-                ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort()
-                        + "/"
-                        + ConfigBdd.getDatabase1()
-                        + "?characterEncoding=latin1&useConfigs=maxPerformance",
-                ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-
-            // UPDATE pf8kr9g9players SET online=0 , ip=0 WHERE pseudo="LoiRelique";
-            // -2 Fait une ou plusieure requete connection au jeux
-            String requet_Select_sql2 = "UPDATE " + ConfigBdd.getTable1() + " SET online=? WHERE uuid=?";
-            try (PreparedStatement statement2_select = connection_update.prepareStatement(requet_Select_sql2)) {
-                statement2_select.setInt(1, 0);
-                statement2_select.setString(2, uuid);
-                statement2_select.executeUpdate();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
- */
+        /*
+         * try (Connection connection_update = DriverManager.getConnection(
+         * ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
+         * ConfigBdd.getPort()
+         * + "/"
+         * + ConfigBdd.getDatabase1()
+         * + "?characterEncoding=latin1&useConfigs=maxPerformance",
+         * ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
+         * 
+         * // UPDATE pf8kr9g9players SET online=0 , ip=0 WHERE pseudo="LoiRelique";
+         * // -2 Fait une ou plusieure requete connection au jeux
+         * String requet_Select_sql2 = "UPDATE " + ConfigBdd.getTable1() +
+         * " SET online=? WHERE uuid=?";
+         * try (PreparedStatement statement2_select =
+         * connection_update.prepareStatement(requet_Select_sql2)) {
+         * statement2_select.setInt(1, 0);
+         * statement2_select.setString(2, uuid);
+         * statement2_select.executeUpdate();
+         * }
+         * 
+         * } catch (Exception e) {
+         * e.printStackTrace();
+         * }
+         */
         System.out.println("Chargement plugin LPsecurity... ===> OK");
     }
 
@@ -92,6 +104,9 @@ public class Main extends JavaPlugin implements Listener {
         int online = 0;
         int ban = 0;
         String uuid = p_event.getUniqueId().toString();
+
+        long startTime = System.nanoTime();
+
         try (Connection connection_register = DriverManager.getConnection(
                 ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
                         + ConfigBdd.getDatabase1()
@@ -107,7 +122,7 @@ public class Main extends JavaPlugin implements Listener {
                 try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                     while (resultat_requete_select.next()) {
                         online = resultat_requete_select.getInt(6);
-                        ban = resultat_requete_select.getInt(7);
+                        ban = resultat_requete_select.getInt("ban");
                     }
                 }
             }
@@ -124,28 +139,23 @@ public class Main extends JavaPlugin implements Listener {
                     ConfigMessage.getKickBan());
         }
 
+        long endTime = System.nanoTime();
+        System.out.println("Test de vitesse before : " + (endTime - startTime) * Math.pow(10, -6) + " ms");
+
     }
 
     /**
      * EVENT PLAYER JOIN EVENT
      */
-    private HashMap<String, Player> listPlayer = new HashMap<String, Player>();
-
-    public void getListPlayerRemove(String pseudo) {
-        listPlayer.remove(pseudo);
-    }
-
-    public Player getListPlayer(String pseudo) {
-        return listPlayer.get(pseudo);
-    }
 
     @EventHandler
     public void playerJoinServer(PlayerJoinEvent p_event) {
         final Player p = p_event.getPlayer();
         String uuid = p.getUniqueId().toString();
         String uuidfrombdd = "";
-        listPlayer.put(p.getName(), p);
 
+        long startTime = System.nanoTime();
+        listPlayer.put(p.getName(), p);
         try (Connection connection_register = DriverManager.getConnection(
                 ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
                         + ConfigBdd.getDatabase1()
@@ -200,14 +210,15 @@ public class Main extends JavaPlugin implements Listener {
             setTaskRegisterTime(p);
             ConfigMessage.sendRegister(p);
         }
-
+        long endTime = System.nanoTime();
+        System.out.println("Test de vitesse Join : " + (endTime - startTime) * Math.pow(10, -6) + " ms");
     }
 
     @EventHandler
     public void playerQuitServer(PlayerQuitEvent p_event) {
         final Player p = p_event.getPlayer();
         String uuid = p.getUniqueId().toString();
-
+        long startTime = System.nanoTime();
         try (Connection connection_update = DriverManager.getConnection(
                 ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort()
                         + "/"
@@ -228,35 +239,39 @@ public class Main extends JavaPlugin implements Listener {
             e.printStackTrace();
         }
 
-/*         try (Connection connection_update = DriverManager.getConnection(
-                ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort()
-                        + "/"
-                        + ConfigBdd.getDatabase1()
-                        + "?characterEncoding=latin1&useConfigs=maxPerformance",
-                ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-            // -2 Fait une ou plusieure requete connection au jeux
-            String requet_Select_sql2 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
-            try (PreparedStatement statement2_select = connection_update.prepareStatement(requet_Select_sql2)) {
-                uuid = p.getUniqueId().toString();
-                statement2_select.setString(1, uuid);
-                //
-                try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
-                    if (resultat_requete_select.next()) {
-                        String requet_Update_sql3 = "UPDATE " + ConfigBdd.getTable1() + " SET online=0  WHERE uuid=?";
-                        try (PreparedStatement statement3_update = connection_update
-                                .prepareStatement(requet_Update_sql3)) {
-                            statement3_update.setString(1, resultat_requete_select.getString("uuid"));
-                            statement3_update.executeUpdate();
-                        }
-                    }
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
- */
-
+        /*
+         * try (Connection connection_update = DriverManager.getConnection(
+         * ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
+         * ConfigBdd.getPort()
+         * + "/"
+         * + ConfigBdd.getDatabase1()
+         * + "?characterEncoding=latin1&useConfigs=maxPerformance",
+         * ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
+         * // -2 Fait une ou plusieure requete connection au jeux
+         * String requet_Select_sql2 = "SELECT * FROM " + ConfigBdd.getTable1() +
+         * " WHERE uuid=?";
+         * try (PreparedStatement statement2_select =
+         * connection_update.prepareStatement(requet_Select_sql2)) {
+         * uuid = p.getUniqueId().toString();
+         * statement2_select.setString(1, uuid);
+         * //
+         * try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
+         * if (resultat_requete_select.next()) {
+         * String requet_Update_sql3 = "UPDATE " + ConfigBdd.getTable1() +
+         * " SET online=0  WHERE uuid=?";
+         * try (PreparedStatement statement3_update = connection_update
+         * .prepareStatement(requet_Update_sql3)) {
+         * statement3_update.setString(1, resultat_requete_select.getString("uuid"));
+         * statement3_update.executeUpdate();
+         * }
+         * }
+         * }
+         * }
+         * 
+         * } catch (Exception e) {
+         * e.printStackTrace();
+         * }
+         */
 
         if (listTacheRegister.get(p.getName()) != null) {
             Bukkit.getScheduler().cancelTask(getTaskRegisterTime(p));
@@ -275,14 +290,13 @@ public class Main extends JavaPlugin implements Listener {
             getListPlayerRemove(p.getName());
         }
 
+        long endTime = System.nanoTime();
+        System.out.println("Test de vitesse quit : " + (endTime - startTime) * Math.pow(10, -6) + " ms");
     }
 
     /**
      * GETTER ET SETTER DE TACHE
      */
-    private HashMap<String, Integer> listTacheRegister = new HashMap<String, Integer>();
-    private HashMap<String, Integer> listTacheLogin = new HashMap<String, Integer>();
-    private HashMap<String, Integer> listTacheSpawnBlock = new HashMap<String, Integer>();
 
     public Integer getTaskRegisterTime(Player p) {
         return listTacheRegister.get(p.getName());
@@ -319,7 +333,6 @@ public class Main extends JavaPlugin implements Listener {
 
     }
 
-    //////////////////////////////////////////////////
     public Integer getTaskLoginTime(Player p) {
         return listTacheLogin.get(p.getName());
     }
@@ -355,7 +368,6 @@ public class Main extends JavaPlugin implements Listener {
 
     }
 
-    ////////////////////////////////////////////
     public Integer getTaskBlockSpawn(Player p) {
         return listTacheSpawnBlock.get(p.getName());
     }
@@ -391,16 +403,18 @@ public class Main extends JavaPlugin implements Listener {
 
     public String getHash(String password) throws NoSuchAlgorithmException {
         String pass = ConfigMessage.getSel() + password;
-
-        // System.out.println(pass);
-
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         byte[] digest = md.digest(pass.getBytes(StandardCharsets.UTF_8));
         String sha256 = DatatypeConverter.printHexBinary(digest).toLowerCase();
 
-        // System.out.println(sha256);
-
         return sha256;
     }
 
+    public void getListPlayerRemove(String pseudo) {
+        listPlayer.remove(pseudo);
+    }
+
+    public Player getListPlayer(String pseudo) {
+        return listPlayer.get(pseudo);
+    }
 }
