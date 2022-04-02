@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.xml.bind.DatatypeConverter;
@@ -31,16 +32,12 @@ import fr.loirelique.lpsecurity.Command.CommandRegister;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.ConfigMessage;
 
-
 /**
  * Information sur la class!LPSECURITY
  *
  */
 
 public class Main extends JavaPlugin implements Listener {
-
-    
-
 
     public static Main plugin;
     private HashMap<String, Integer> listTacheRegister = new HashMap<String, Integer>();
@@ -61,30 +58,6 @@ public class Main extends JavaPlugin implements Listener {
         CommandExecutor commandBanish = new CommandBanish();
         getCommand("banish").setExecutor(commandBanish);
 
-        /*
-         * try (Connection connection_update = DriverManager.getConnection(
-         * ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
-         * ConfigBdd.getPort()
-         * + "/"
-         * + ConfigBdd.getDatabase1()
-         * + "?characterEncoding=latin1&useConfigs=maxPerformance",
-         * ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-         * 
-         * // UPDATE pf8kr9g9players SET online=0 , ip=0 WHERE pseudo="LoiRelique";
-         * // -2 Fait une ou plusieure requete connection au jeux
-         * String requet_Select_sql2 = "UPDATE " + ConfigBdd.getTable1() +
-         * " SET online=? WHERE uuid=?";
-         * try (PreparedStatement statement2_select =
-         * connection_update.prepareStatement(requet_Select_sql2)) {
-         * statement2_select.setInt(1, 0);
-         * statement2_select.setString(2, uuid);
-         * statement2_select.executeUpdate();
-         * }
-         * 
-         * } catch (Exception e) {
-         * e.printStackTrace();
-         * }
-         */
         System.out.println("Chargement plugin LPsecurity... ===> OK");
     }
 
@@ -93,13 +66,26 @@ public class Main extends JavaPlugin implements Listener {
         System.out.println("Arret du plugin LPsecurity... ===> OK");
     }
 
+
+    
+    public static HashMap<String,ArrayList<String>> listArrays=new HashMap<String,ArrayList<String>>();
+    
+    public static void getIpOfPlayerBeforeLogin(String ip , String name){
+        if(listArrays.get(ip)!= null){
+            (listArrays.get(ip)).add(name);
+      
+        }else{
+            listArrays.put(ip,new ArrayList<String>());
+            (listArrays.get(ip)).add(name);
+        }   
+    }
+
     @EventHandler
     public void playerBeforeJoinServer(AsyncPlayerPreLoginEvent p_event) {
 
         // SELECT count(ip) FROM pf8kr9g9players WHERE ip="127.0.0.1";
 
-        InetAddress ip = p_event.getAddress();
-        ip.getHostName();
+        //getIpOfPlayerBeforeLogin(p_event.getAddress().getHostName(), p_event.getName());
 
         int online = 0;
         int ban = 0;
