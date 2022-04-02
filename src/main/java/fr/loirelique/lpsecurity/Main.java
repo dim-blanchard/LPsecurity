@@ -1,6 +1,5 @@
 package fr.loirelique.lpsecurity;
 
-import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
