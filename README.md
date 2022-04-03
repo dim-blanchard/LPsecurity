@@ -2,16 +2,47 @@
 Réalisaion d'un **plugin de sécurité/sanction** pour **Minecraft** sous version 1.8.8 avec un **Proxy** et base de données.
 
 # LPsecurity ?
+Est **un plugin** (sous java 8) qui a pour bute de **sécurisé** un serveur Minecraft en version 1.8.8 relier à un proxy et de **sanctioner** les utilisateur mal intentionner  en **récupérent** les données des utilisateurs et les **enregistrer** dans une base de donnée et les réutiliser pour plustard.
+> Proxy ([BungeeCord](https://www.spigotmc.org/wiki/bungeecord/))
+, Serveur Minecraft ([Spigot 1.8.8](https://www.spigotmc.org))
 
-**Le plugin** a pour bute de **sécurisé** un serveur Minecraft en version 1.8.8 relier à un proxy en **récupérent** les données joueurs et les **enregistrer** dans une base de donnée.
-> Exemple proxy ([BungeeCord](https://www.spigotmc.org/wiki/bungeecord/))
-, serveur Minecraft ([Spigot 1.8.8](https://www.spigotmc.org))
 
-| Aligné à gauche  | Centré          | Aligné à droite |
-| :--------------- |:---------------:| -----:|
-| Aligné à gauche  |   ce texte        |  Aligné à droite |
-| Aligné à gauche  | est             |   Aligné à droite |
-| Aligné à gauche  | centré          |    Aligné à droite |
+## Commande securiter.
+| Nom              | Type            | Donnée(s) par default| Description |
+| :---------------:|:---------------:| :--------------:     | :---------------:  |
+| id  |int(Auto increment)|n+1|Clef primaire de relation entre les tables.		| 
+| uuid  |varchar(37)|null|Uuid du joueur recupérer automatique via LPsecurity.		|
+| ip| varchar(60)|null|Adresse IP du joueur recupérer automatique via LPsecurity.		|
+| pseudo|varchar(255)|null|Pseudo du joueur recupérer automatique via LPsecurity.		| 
+| password|varchar(64)|null|Password du joueur recupérer gace à saisie de la commande "register" et hacher tout via LPsecurity.|		 
+| ban|int(1)|0|Bannisement vraie ou faux en fonction du nom du joueur. 0 ou 1		| 
+| online|int(1)|0| Si le joueur est en ligne ou non 0 ou 1|
+| warn|int(1)|0| ? | 
+| historique|longtexte|null|Information des sanctions sur un joueur|
+
+## Commande securiter ( serra amener à changer dans le temps).
+
+| Nomenclature | Nom |Option| Arguments |Permission| Description| 
+| :---------------:|:---------------:| :--------------:     | :---------------:  |  :---------------:  | :---------------:| 
+|/|banish|null|'nom joueur' 0 ou 1|LP.security.ban| Bannir ou debannir (0/1)| 
+|/|login|null|'password'|LP.security.login|Identifier le joueur à la connection.| 
+|/|register|null|'password' 'password'|LP.security.register|Enregistre le joueur à sa première connection.| 
+
+## Commande sanction ( serra amener à changer dans le temps).
+
+| Nomenclature | Nom |Option| Arguments |Permission| Description| 
+|:---------------:|:---------------:| :--------------:| :---------------:  | :---------------:  | :---------------:| 
+|/|ban|null|'nom joueur' 'raison !=null'|LP.sanction.ban|Bannir un joueur avec raison obligatoire.| 
+|/|unban|null|'nom joueur''raison !=null'|LP.sanction.ban|Pardonner un joueur avec raison obligatoire.| 
+|/|warn|null|'nom joueur''raison !=null'|LP.sanction.warn|Avertissement sur un joueur avec raison obligatoire.|
+|/|kick|null|'nom joueur''raison !=null'|LP.sanction.kick|Exclue le joueur avec une raison obligatoire.| 
+|/|mute|null|'nom joueur''raison !=null'|LP.sanction.mute|Met sous silence un joueur dans le chat avec raison  obligatoire.| 
+|/|unmute|null|'nom joueur''raison !=null'|LP.sanction.mute|Donner la parole à un joueur préalablement "mute" avec raison obligatoire.|
+|/|tempban|null|'nom joueur''raison !=null'|LP.sanction.ban|Bannir un joueur pour un temp donner avec raison obligatoire| 
+|/|tempmute|null|'nom joueur''raison !=null'|LP.sanction.mute|Mute un joueur pour un temp donner avec raison obligatoire.| 
+|/|historique|null|'nom joueur''raison !=null'|LP.sanction.h|Affiche toutes les sanctions du joueur.|
+|/|resethistorique|null|'nom joueur''raison !=null'|LP.sanction.rh|Supprime l'historique des sanctions du joueur.|
+
 
 # Infrastructure d'une machine hôte.
 
