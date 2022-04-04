@@ -29,7 +29,7 @@ public class CommandRegister implements CommandExecutor {
                 }
 
                 if (args.length == 2) {
-                    String uuid = p.getUniqueId().toString();
+                    String uuid = Main.plugin.getUuidHash(p);
                     String uuidfrombdd = "";
 
                     try (Connection connection_register = DriverManager.getConnection(
@@ -40,13 +40,13 @@ public class CommandRegister implements CommandExecutor {
                         // -2 Fait une ou plusieure requete connection au jeux
 
                         String requet_Select_sql2 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
-                        try (PreparedStatement statement2_select = connection_register
+                        try (PreparedStatement statement3_select = connection_register
                                 .prepareStatement(requet_Select_sql2)) {
-                            statement2_select.setObject(1, uuid);
+                            statement3_select.setObject(1, uuid);
 
-                            try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
+                            try (ResultSet resultat_requete_select = statement3_select.executeQuery()) {
                                 while (resultat_requete_select.next()) {
-                                    uuidfrombdd = resultat_requete_select.getString(2);
+                                    uuidfrombdd = resultat_requete_select.getString("uuid");
 
                                 }
                             }
@@ -68,25 +68,17 @@ public class CommandRegister implements CommandExecutor {
                                             + ConfigBdd.getDatabase1()
                                             + "?characterEncoding=latin1&useConfigs=maxPerformance",
                                     ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-                                // -2 Fait une ou plusieure requete connection au jeux
 
-                                String requet_insert_sql2 = "INSERT INTO " + ConfigBdd.getTable1()
-                                        + " (uuid,pseudo,ip,password) VALUES(?,?,?,?)";
-                                try (PreparedStatement statement2_insert = connection_addPlayer
-                                        .prepareStatement(requet_insert_sql2)) {
-                                    uuid = p.getUniqueId().toString();
+                                String requet_insert_sql1 = "INSERT INTO " + ConfigBdd.getTable1()
+                                        + " (uuid,pseudo,password) VALUES(?,?,?)";
+                                try (PreparedStatement statement1_insert = connection_addPlayer
+                                        .prepareStatement(requet_insert_sql1)) {
                                     String pseudo = p.getName();
-                                    String iptest = p.getAddress().getHostString();
-                                        
-
                                     String pass = Main.plugin.getHash(args0);
-
-                                    statement2_insert.setString(1, uuid);
-                                    statement2_insert.setString(2, pseudo);
-                                    statement2_insert.setString(3, iptest);
-                                    statement2_insert.setString(4,pass);
-                                    statement2_insert.executeUpdate();
-                                    //
+                                    statement1_insert.setString(1, uuid);
+                                    statement1_insert.setString(2, pseudo);
+                                    statement1_insert.setString(3,pass);
+                                    statement1_insert.executeUpdate();
                                 }
 
                             } catch (Exception e) {

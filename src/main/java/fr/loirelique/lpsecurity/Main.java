@@ -2,7 +2,6 @@ package fr.loirelique.lpsecurity;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -70,40 +69,24 @@ public class Main extends JavaPlugin implements Listener {
 
     @EventHandler
     public void playerBeforeJoinServer(AsyncPlayerPreLoginEvent p_event) {
-        //int online = 0;
-        int ban = 0;
-        String uuid = p_event.getUniqueId().toString();
+
+        String uuid = getHash(p_event.getName());
+
         String ip = p_event.getAddress().getHostAddress();
-        System.out.println(ip);
-   
+
+        int ban = 0;
 
         long startTime = System.nanoTime();
-         try {
-          
-            getIpOfPlayerLoginAndTestIp(ip,uuid,p_event);
-            System.out.println("before");
-            System.out.println(listIpPlayer.get(ip));
-            System.out.println(getSizeOfListIpPlayer(ip));
-            System.out.println("before");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            getOnlineOfPlayerLoginAndTestOnline(uuid,p_event);
-            System.out.println("before");
-            System.out.println(listOnlinePlayer.get(uuid));
-            System.out.println("before");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-         
+
+        getIpOfPlayerLoginAndTestIp(ip, uuid, p_event);
+
+        getPlayerIsOnline(uuid, p_event);
+
         try (Connection connection_register = DriverManager.getConnection(
                 ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
                         + ConfigBdd.getDatabase1()
                         + "?characterEncoding=latin1&useConfigs=maxPerformance",
                 ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-            // -2 Fait une ou plusieure requete connection au jeux
-
             String requet_Select_sql2 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
             try (PreparedStatement statement2_select = connection_register
                     .prepareStatement(requet_Select_sql2)) {
@@ -111,7 +94,6 @@ public class Main extends JavaPlugin implements Listener {
 
                 try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                     while (resultat_requete_select.next()) {
-                        //online = resultat_requete_select.getInt(6);
                         ban = resultat_requete_select.getInt("ban");
                     }
                 }
@@ -137,28 +119,28 @@ public class Main extends JavaPlugin implements Listener {
     public void playerJoinServer(PlayerJoinEvent p_event) {
         final Player p = p_event.getPlayer();
 
-        String uuid = p.getUniqueId().toString();
+        String uuid = getUuidHash(p);
         String uuidfrombdd = "";
-    
-        String ip = p.getAddress().getHostString();
-        long startTime = System.nanoTime();
-        listPlayer.put(p.getName(), p);
 
-        try (Connection connection_register = DriverManager.getConnection(
+        long startTime = System.nanoTime();
+
+        addListPlayer(uuid, p);
+
+        try (Connection connection_select = DriverManager.getConnection(
                 ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
                         + ConfigBdd.getDatabase1()
                         + "?characterEncoding=latin1&useConfigs=maxPerformance",
                 ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
             // -2 Fait une ou plusieure requete connection au jeux
 
-            String requet_Select_sql2 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
-            try (PreparedStatement statement2_select = connection_register
-                    .prepareStatement(requet_Select_sql2)) {
-                statement2_select.setObject(1, uuid);
+            String requet_Select_sql1 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
+            try (PreparedStatement statement1_select = connection_select
+                    .prepareStatement(requet_Select_sql1)) {
+                statement1_select.setObject(1, uuid);
 
-                try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
+                try (ResultSet resultat_requete_select = statement1_select.executeQuery()) {
                     while (resultat_requete_select.next()) {
-                        uuidfrombdd = resultat_requete_select.getString(2);
+                        uuidfrombdd = resultat_requete_select.getString("uuid");
 
                     }
                 }
@@ -177,11 +159,10 @@ public class Main extends JavaPlugin implements Listener {
                             + ConfigBdd.getDatabase1()
                             + "?characterEncoding=latin1&useConfigs=maxPerformance",
                     ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-                String requet_Select_sql2 = "UPDATE " + ConfigBdd.getTable1() + " SET online=? , ip=? WHERE uuid=?";
-                try (PreparedStatement statement2_select = connection_update.prepareStatement(requet_Select_sql2)) {
+                String requet_Update_sql1 = "UPDATE " + ConfigBdd.getTable1() + " SET online=? WHERE uuid=?";
+                try (PreparedStatement statement2_select = connection_update.prepareStatement(requet_Update_sql1)) {
                     statement2_select.setInt(1, 1);
-                    statement2_select.setString(2, ip);
-                    statement2_select.setString(3, uuid);
+                    statement2_select.setString(2, uuid);
                     statement2_select.executeUpdate();
                 }
 
@@ -201,7 +182,7 @@ public class Main extends JavaPlugin implements Listener {
     @EventHandler
     public void playerQuitServer(PlayerQuitEvent p_event) {
         final Player p = p_event.getPlayer();
-        String uuid = p.getUniqueId().toString();
+        String uuid = getUuidHash(p);
         long startTime = System.nanoTime();
         try (Connection connection_update = DriverManager.getConnection(
                 ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort()
@@ -209,8 +190,8 @@ public class Main extends JavaPlugin implements Listener {
                         + ConfigBdd.getDatabase1()
                         + "?characterEncoding=latin1&useConfigs=maxPerformance",
                 ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-            String requet_Select_sql2 = "UPDATE " + ConfigBdd.getTable1() + " SET online=? WHERE uuid=?";
-            try (PreparedStatement statement2_select = connection_update.prepareStatement(requet_Select_sql2)) {
+            String requet_Update_sql2 = "UPDATE " + ConfigBdd.getTable1() + " SET online=? WHERE uuid=?";
+            try (PreparedStatement statement2_select = connection_update.prepareStatement(requet_Update_sql2)) {
                 statement2_select.setInt(1, 0);
                 statement2_select.setString(2, uuid);
                 statement2_select.executeUpdate();
@@ -220,23 +201,23 @@ public class Main extends JavaPlugin implements Listener {
             e.printStackTrace();
         }
 
-        if (listTacheRegister.get(p.getName()) != null) {
+        if (listTacheRegister.get(getUuidHash(p)) != null) {
             Bukkit.getScheduler().cancelTask(getTaskRegisterTime(p));
             getTaskRegisterTimeRemove(p);
 
         }
-        if (listTacheLogin.get(p.getName()) != null) {
+        if (listTacheLogin.get(getUuidHash(p)) != null) {
             Bukkit.getScheduler().cancelTask(getTaskLoginTime(p));
             getTaskLoginTimeRemove(p);
         }
-        if (listTacheSpawnBlock.get(p.getName()) != null) {
+        if (listTacheSpawnBlock.get(getUuidHash(p)) != null) {
             Bukkit.getScheduler().cancelTask(getTaskBlockSpawn(p));
             getTaskBlockSpawnRemove(p);
         }
-        if (listPlayer.get(p.getName()) != null) {
-            getListPlayerRemove(p.getName());
+        if (listPlayer.get(getUuidHash(p)) != null) {
+            getListPlayerRemove(getUuidHash(p));
         }
-        getListIpPlayerRemove(p.getAddress().getHostString(),uuid);
+        getListIpPlayerRemove(p.getAddress().getHostString(), uuid);
         getListOnlinePlayerRemove(uuid);
 
         long endTime = System.nanoTime();
@@ -248,16 +229,23 @@ public class Main extends JavaPlugin implements Listener {
      */
 
     public static void getIpOfPlayerLoginAndTestIp(String ip, String uuid, AsyncPlayerPreLoginEvent p_event) {
-        if (listIpPlayer.get(ip) != null) {
-            if(getSizeOfListIpPlayer(ip) == 2){
-                p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                    "TROP IP");
-            }else{(listIpPlayer.get(ip)).add(uuid);}
+        try {
+            if (listIpPlayer.get(ip) != null) {
+                if (getSizeOfListIpPlayer(ip) == 2) {
+                    p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
+                            "TROP IP");
+                } else {
+                    (listIpPlayer.get(ip)).add(uuid);
+                }
 
-        }else{
-            listIpPlayer.put(ip, new ArrayList<String>());
-            (listIpPlayer.get(ip)).add(uuid);
+            } else {
+                listIpPlayer.put(ip, new ArrayList<String>());
+                (listIpPlayer.get(ip)).add(uuid);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 
     public static int getSizeOfListIpPlayer(String ip) {
@@ -270,16 +258,17 @@ public class Main extends JavaPlugin implements Listener {
         listIpPlayer.get(ip).remove(uuid);
     }
 
-
-    public static void getOnlineOfPlayerLoginAndTestOnline(String uuid, AsyncPlayerPreLoginEvent p_event) {
-       
-      if(listOnlinePlayer.get(uuid) != null)
-      {
-        p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-        ConfigMessage.getKickOnline());
-      }else{
-        listOnlinePlayer.put(uuid, 1);
-      }
+    public static void getPlayerIsOnline(String uuid, AsyncPlayerPreLoginEvent p_event) {
+        try {
+            if (listOnlinePlayer.get(uuid) != null) {
+                p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
+                        ConfigMessage.getKickOnline());
+            } else {
+                listOnlinePlayer.put(uuid, 1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -288,11 +277,11 @@ public class Main extends JavaPlugin implements Listener {
     }
 
     public Integer getTaskRegisterTime(Player p) {
-        return listTacheRegister.get(p.getName());
+        return listTacheRegister.get(getUuidHash(p));
     }
 
     public void getTaskRegisterTimeRemove(Player p) {
-        listTacheRegister.remove(p.getName());
+        listTacheRegister.remove(getUuidHash(p));
     }
 
     public void setTaskRegisterTime(Player p) {
@@ -318,16 +307,16 @@ public class Main extends JavaPlugin implements Listener {
 
         int idtache = tache.getTaskId();
 
-        listTacheRegister.put(p.getName(), idtache);
+        listTacheRegister.put(getUuidHash(p), idtache);
 
     }
 
     public Integer getTaskLoginTime(Player p) {
-        return listTacheLogin.get(p.getName());
+        return listTacheLogin.get(getUuidHash(p));
     }
 
     public void getTaskLoginTimeRemove(Player p) {
-        listTacheLogin.remove(p.getName());
+        listTacheLogin.remove(getUuidHash(p));
     }
 
     public void setTaskLoginTime(Player p) {
@@ -353,16 +342,16 @@ public class Main extends JavaPlugin implements Listener {
 
         int idtache = tache.getTaskId();
 
-        listTacheLogin.put(p.getName(), idtache);
+        listTacheLogin.put(getUuidHash(p), idtache);
 
     }
 
     public Integer getTaskBlockSpawn(Player p) {
-        return listTacheSpawnBlock.get(p.getName());
+        return listTacheSpawnBlock.get(getUuidHash(p));
     }
 
     public void getTaskBlockSpawnRemove(Player p) {
-        listTacheSpawnBlock.remove(p.getName());
+        listTacheSpawnBlock.remove(getUuidHash(p));
     }
 
     public void setTaskBlockSpawn(Player p) {
@@ -386,24 +375,38 @@ public class Main extends JavaPlugin implements Listener {
 
         int idtache = tache.getTaskId();
 
-        listTacheSpawnBlock.put(p.getName(), idtache);
+        listTacheSpawnBlock.put(getUuidHash(p), idtache);
 
     }
 
-    public String getHash(String password) throws NoSuchAlgorithmException {
-        String pass = ConfigMessage.getSel() + password;
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        byte[] digest = md.digest(pass.getBytes(StandardCharsets.UTF_8));
-        String sha256 = DatatypeConverter.printHexBinary(digest).toLowerCase();
+    public String getHash(String mot) {
+        String motSha256 = "";
+        try {
+            String selMot = ConfigMessage.getSel() + mot;
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] digest = md.digest(selMot.getBytes(StandardCharsets.UTF_8));
+            motSha256 = DatatypeConverter.printHexBinary(digest).toLowerCase();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        return sha256;
+        return motSha256;
     }
 
-    public void getListPlayerRemove(String pseudo) {
-        listPlayer.remove(pseudo);
+    public void getListPlayerRemove(String uuid) {
+        listPlayer.remove(uuid);
     }
 
-    public Player getListPlayer(String pseudo) {
-        return listPlayer.get(pseudo);
+    public Player getListPlayer(String uuid) {
+        return listPlayer.get(uuid);
+    }
+
+    public void addListPlayer(String uuid, Player p){
+        listPlayer.put(uuid, p);
+    }
+
+    public String getUuidHash(Player p){
+        String uuid = getHash(p.getName());
+        return uuid;
     }
 }

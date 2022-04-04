@@ -31,24 +31,24 @@ public class CommandLogin implements CommandExecutor {
                 }
 
                 if (args.length == 1) {
-                    String uuid = p.getUniqueId().toString();
+                    String uuid = Main.plugin.getUuidHash(p);
                     String uuidfrombdd = "";
 
-                    try (Connection connection_register = DriverManager.getConnection(
+                    try (Connection connection_login = DriverManager.getConnection(
                             ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
                                     + ConfigBdd.getDatabase1()
                                     + "?characterEncoding=latin1&useConfigs=maxPerformance",
                             ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
                         // -2 Fait une ou plusieure requete connection au jeux
 
-                        String requet_Select_sql2 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
-                        try (PreparedStatement statement2_select = connection_register
-                                .prepareStatement(requet_Select_sql2)) {
-                            statement2_select.setObject(1, uuid);
+                        String requet_Select_sql3 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
+                        try (PreparedStatement statement2_select = connection_login
+                                .prepareStatement(requet_Select_sql3)) {
+                            statement2_select.setString(1, uuid);
 
                             try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                                 while (resultat_requete_select.next()) {
-                                    uuidfrombdd = resultat_requete_select.getString(2);
+                                    uuidfrombdd = resultat_requete_select.getString("uuid");
 
                                 }
                             }
@@ -60,13 +60,7 @@ public class CommandLogin implements CommandExecutor {
                     if (uuid.equals(uuidfrombdd)) {
                         String args0 = args[0];
                         String password = "";
-                        String argsPass = "";
-                        try {
-                            argsPass = Main.plugin.getHash(args0);
-                        } catch (NoSuchAlgorithmException e1) {
-                            // TODO Auto-generated catch block
-                            e1.printStackTrace();
-                        }
+                        String argsPass = Main.plugin.getHash(args0);
 
                         try (Connection connection_register = DriverManager.getConnection(
                                 ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort()

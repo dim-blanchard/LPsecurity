@@ -31,6 +31,8 @@ public class CommandBanish implements CommandExecutor {
 
                 if (args.length == 2) {
                     String pseudo = args[0];
+                    String uuid_testeur = Main.plugin.getHash(pseudo);
+
                     int ban_1_0 = Integer.parseInt(args[1]);
 
                     try (Connection connection_update = DriverManager.getConnection(
@@ -40,19 +42,19 @@ public class CommandBanish implements CommandExecutor {
                             ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
                         // -2 Fait une ou plusieure requete connection au jeux
 
-                        String requet_Select_sql2 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE pseudo=?";
+                        String requet_Select_sql2 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
                         try (PreparedStatement statement2_select = connection_update
                                 .prepareStatement(requet_Select_sql2)) {
-                            statement2_select.setString(1, pseudo);
+                            statement2_select.setString(1, uuid_testeur);
 
                             try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                                 if (resultat_requete_select.next()) {
                                     String requet_Update_sql3 = "UPDATE " + ConfigBdd.getTable1()
-                                            + " SET ban=? WHERE pseudo=?";
+                                            + " SET ban=? WHERE uuid=?";
                                     try (PreparedStatement statement3_update = connection_update
                                             .prepareStatement(requet_Update_sql3)) {
                                         statement3_update.setInt(1, ban_1_0);
-                                        statement3_update.setString(2, pseudo);
+                                        statement3_update.setString(2, uuid_testeur);
                                         statement3_update.executeUpdate();
                                     }
                                 }
@@ -73,7 +75,7 @@ public class CommandBanish implements CommandExecutor {
                     if(ban_1_0 == 1)
                     {
                         p.sendMessage(pseudo+" a étais bannie.");
-                        Player player = Main.plugin.getListPlayer(pseudo);
+                        Player player = Main.plugin.getListPlayer(uuid_testeur);
                         player.kickPlayer("Tu viens d'être bannie");
                     }
                 }
