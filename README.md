@@ -21,7 +21,7 @@ Est **un plugin** (sous java 8) qui a pour bute de **sécurisé** un serveur Min
 | historique|longtexte|null|Information des sanctions sur un joueur|
 
 # La partie sécurité intègre:
-## Commande securiter ( serra amener à changer dans le temps).
+## Commande securiter (Sera amené à changer dans le temps).
 
 | Nomenclature | Nom |Option| Arguments |Permission| Description| 
 | :---------------:|:---------------:| :--------------:     | :---------------:  |  :---------------:  | :---------------:| 
@@ -29,11 +29,11 @@ Est **un plugin** (sous java 8) qui a pour bute de **sécurisé** un serveur Min
 |/|login|null|'password'|LP.security.login|Identifier le joueur à la connection.| 
 |/|register|null|'password' 'password'|LP.security.register|Enregistre le joueur à sa première connection.| 
 
-> La données "password" est soumise à une fonction de hachage ici la SHA 256 avec un préfixe de salage.
-Elle intègre un côte passif, géré dans le code. Lorsque un joueur est déja en ligne celui ci ne peut être déconnecter via un lanceur non officiel gâce à son pseudonyme.
-Une joueur mal intentionné ne peut pas connecter plus de 1 à N (un nombres N au choix.) compte avec la même adresse IP(Internet Protocol) ainsi que pour les joueurs enregistrés.
+> La donnée "password" est soumise à une fonction de hachage: ici la SHA 256 avec un préfixe de salage.
+Elle intègre un côte passif, géré dans le code. Lorsque un joueur est déja en ligne celui-ci ne peut être déconnecté via un lanceur non officiel grâce à son pseudonyme.
+Un joueur mal intentionné ne peut pas connecter plus de 1 à N (Un nombre N au choix.) comptes avec la même adresse IP (Internet Protocol) ainsi que pour les joueurs enregistrés.
 
-## Commande sanction ( serra amener à changer dans le temps).
+## Commande sanction (Sera amené à changer dans le temps).
 
 | Nomenclature | Nom |Option| Arguments |Permission| Description| 
 |:---------------:|:---------------:| :--------------:| :---------------:  | :---------------:  | :---------------:| 
