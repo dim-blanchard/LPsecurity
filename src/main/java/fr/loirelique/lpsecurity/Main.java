@@ -1,6 +1,5 @@
 package fr.loirelique.lpsecurity;
 
-import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -43,7 +42,10 @@ public class Main extends JavaPlugin implements Listener {
     private HashMap<String, Integer> listTacheRegister = new HashMap<String, Integer>();
     private HashMap<String, Integer> listTacheLogin = new HashMap<String, Integer>();
     private HashMap<String, Integer> listTacheSpawnBlock = new HashMap<String, Integer>();
+
     private HashMap<String, Player> listPlayer = new HashMap<String, Player>();
+    private static HashMap<String, ArrayList<String>> listIpPlayer = new HashMap<String, ArrayList<String>>();
+    private static HashMap<String, Integer> listOnlinePlayer = new HashMap<String, Integer>();
 
     @Override
     public void onEnable() {
@@ -64,49 +66,6 @@ public class Main extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         System.out.println("Arret du plugin LPsecurity... ===> OK");
-    }
-
-    public static HashMap<String, ArrayList<String>> listIpPlayer = new HashMap<String, ArrayList<String>>();
-    public static HashMap<String, Integer> listOnlinePlayer = new HashMap<String, Integer>();
-
-    public static void getIpOfPlayerLoginAndTestIp(String ip, String uuid, AsyncPlayerPreLoginEvent p_event) {
-        if (listIpPlayer.get(ip) != null) {
-            if(getSizeOfListIpPlayer(ip) == 2){
-                p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                    "TROP IP");
-            }else{(listIpPlayer.get(ip)).add(uuid);}
-
-        }else{
-            listIpPlayer.put(ip, new ArrayList<String>());
-            (listIpPlayer.get(ip)).add(uuid);
-        }
-    }
-
-    public static int getSizeOfListIpPlayer(String ip) {
-
-        int taille = listIpPlayer.get(ip).size();
-        return taille;
-    }
-
-    public static void getListIpPlayerRemove(String ip, String uuid) {
-        listIpPlayer.get(ip).remove(uuid);
-    }
-
-
-    public static void getOnlineOfPlayerLoginAndTestOnline(String uuid, AsyncPlayerPreLoginEvent p_event) {
-       
-      if(listOnlinePlayer.get(uuid) != null)
-      {
-        p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-        ConfigMessage.getKickOnline());
-      }else{
-        listOnlinePlayer.put(uuid, 1);
-      }
-
-    }
-
-    public static void getListOnlinePlayerRemove(String uuid) {
-        listOnlinePlayer.remove(uuid);
     }
 
     @EventHandler
@@ -148,7 +107,7 @@ public class Main extends JavaPlugin implements Listener {
             String requet_Select_sql2 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
             try (PreparedStatement statement2_select = connection_register
                     .prepareStatement(requet_Select_sql2)) {
-                statement2_select.setObject(1, uuid);
+                statement2_select.setString(1, uuid);
 
                 try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                     while (resultat_requete_select.next()) {
@@ -160,11 +119,6 @@ public class Main extends JavaPlugin implements Listener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-/*         if (online == 1) {
-            p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                    ConfigMessage.getKickOnline());
-        } */
         if (ban == 1) {
             p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
                     ConfigMessage.getKickBan());
@@ -292,6 +246,46 @@ public class Main extends JavaPlugin implements Listener {
     /**
      * GETTER ET SETTER DE TACHE
      */
+
+    public static void getIpOfPlayerLoginAndTestIp(String ip, String uuid, AsyncPlayerPreLoginEvent p_event) {
+        if (listIpPlayer.get(ip) != null) {
+            if(getSizeOfListIpPlayer(ip) == 2){
+                p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
+                    "TROP IP");
+            }else{(listIpPlayer.get(ip)).add(uuid);}
+
+        }else{
+            listIpPlayer.put(ip, new ArrayList<String>());
+            (listIpPlayer.get(ip)).add(uuid);
+        }
+    }
+
+    public static int getSizeOfListIpPlayer(String ip) {
+
+        int taille = listIpPlayer.get(ip).size();
+        return taille;
+    }
+
+    public static void getListIpPlayerRemove(String ip, String uuid) {
+        listIpPlayer.get(ip).remove(uuid);
+    }
+
+
+    public static void getOnlineOfPlayerLoginAndTestOnline(String uuid, AsyncPlayerPreLoginEvent p_event) {
+       
+      if(listOnlinePlayer.get(uuid) != null)
+      {
+        p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
+        ConfigMessage.getKickOnline());
+      }else{
+        listOnlinePlayer.put(uuid, 1);
+      }
+
+    }
+
+    public static void getListOnlinePlayerRemove(String uuid) {
+        listOnlinePlayer.remove(uuid);
+    }
 
     public Integer getTaskRegisterTime(Player p) {
         return listTacheRegister.get(p.getName());

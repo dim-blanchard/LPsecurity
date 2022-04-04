@@ -43,7 +43,7 @@ public class CommandBanish implements CommandExecutor {
                         String requet_Select_sql2 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE pseudo=?";
                         try (PreparedStatement statement2_select = connection_update
                                 .prepareStatement(requet_Select_sql2)) {
-                            statement2_select.setObject(1, pseudo);
+                            statement2_select.setString(1, pseudo);
 
                             try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                                 if (resultat_requete_select.next()) {
