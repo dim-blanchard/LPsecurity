@@ -33,6 +33,7 @@ Est **un plugin** (sous java 8) qui a pour bute de **sécurisé** un serveur Min
 Elle intègre un côte passif, géré dans le code. Lorsque un joueur est déja en ligne celui-ci ne peut être déconnecté via un lanceur non officiel grâce à son pseudonyme.
 Un joueur mal intentionné ne peut pas connecter plus de 1 à N (Un nombre N au choix.) comptes avec la même adresse IP (Internet Protocol) ainsi que pour les joueurs enregistrés.
 
+# La partie sanction intègre:
 ## Commande sanction (Sera amené à changer dans le temps).
 
 | Nomenclature | Nom |Option| Arguments |Permission| Description| 
@@ -48,7 +49,7 @@ Un joueur mal intentionné ne peut pas connecter plus de 1 à N (Un nombre N au 
 |/|historique|null|'nom joueur''raison !=null'|LP.sanction.h|Affiche toutes les sanctions du joueur.|
 |/|resethistorique|null|'nom joueur''raison !=null'|LP.sanction.rh|Supprime l'historique des sanctions du joueur.|
 
-
+Toutes les données sont stocker sur la base de donné en fonction de 'l'UUID' du joueurs pour permettre un suivie de leur infraction.
 # Infrastructure d'une machine hôte.
 
 ![Diagramme de l'infrastructure hôte](doc/DiagInfrastructure.drawio.png)
