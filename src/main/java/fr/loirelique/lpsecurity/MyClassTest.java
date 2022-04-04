@@ -39,6 +39,11 @@ public class MyClassTest {
       System.out.println(listArrays.get("1"));
       System.out.println(listArrays.get("1").size());
 
+      listArrays.get("1").remove("j3");
+    
+      System.out.println(listArrays.get("1").size());
+
+      System.out.println(listArrays.get("1"));
        // stop stopwatch
       long endTime = System.nanoTime();
       

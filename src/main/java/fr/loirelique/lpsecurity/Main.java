@@ -1,5 +1,6 @@
 package fr.loirelique.lpsecurity;
 
+import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -65,33 +66,78 @@ public class Main extends JavaPlugin implements Listener {
         System.out.println("Arret du plugin LPsecurity... ===> OK");
     }
 
+    public static HashMap<String, ArrayList<String>> listIpPlayer = new HashMap<String, ArrayList<String>>();
+    public static HashMap<String, Integer> listOnlinePlayer = new HashMap<String, Integer>();
 
-    
-    public static HashMap<String,ArrayList<String>> listArrays=new HashMap<String,ArrayList<String>>();
-    
-    public static void getIpOfPlayerBeforeLogin(String ip , String name){
-        if(listArrays.get(ip)!= null){
-            (listArrays.get(ip)).add(name);
-      
+    public static void getIpOfPlayerLoginAndTestIp(String ip, String uuid, AsyncPlayerPreLoginEvent p_event) {
+        if (listIpPlayer.get(ip) != null) {
+            if(getSizeOfListIpPlayer(ip) == 2){
+                p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
+                    "TROP IP");
+            }else{(listIpPlayer.get(ip)).add(uuid);}
+
         }else{
-            listArrays.put(ip,new ArrayList<String>());
-            (listArrays.get(ip)).add(name);
-        }   
+            listIpPlayer.put(ip, new ArrayList<String>());
+            (listIpPlayer.get(ip)).add(uuid);
+        }
+    }
+
+    public static int getSizeOfListIpPlayer(String ip) {
+
+        int taille = listIpPlayer.get(ip).size();
+        return taille;
+    }
+
+    public static void getListIpPlayerRemove(String ip, String uuid) {
+        listIpPlayer.get(ip).remove(uuid);
+    }
+
+
+    public static void getOnlineOfPlayerLoginAndTestOnline(String uuid, AsyncPlayerPreLoginEvent p_event) {
+       
+      if(listOnlinePlayer.get(uuid) != null)
+      {
+        p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
+        ConfigMessage.getKickOnline());
+      }else{
+        listOnlinePlayer.put(uuid, 1);
+      }
+
+    }
+
+    public static void getListOnlinePlayerRemove(String uuid) {
+        listOnlinePlayer.remove(uuid);
     }
 
     @EventHandler
     public void playerBeforeJoinServer(AsyncPlayerPreLoginEvent p_event) {
-
-        // SELECT count(ip) FROM pf8kr9g9players WHERE ip="127.0.0.1";
-
-        //getIpOfPlayerBeforeLogin(p_event.getAddress().getHostName(), p_event.getName());
-
-        int online = 0;
+        //int online = 0;
         int ban = 0;
         String uuid = p_event.getUniqueId().toString();
+        String ip = p_event.getAddress().getHostAddress();
+        System.out.println(ip);
+   
 
         long startTime = System.nanoTime();
-
+         try {
+          
+            getIpOfPlayerLoginAndTestIp(ip,uuid,p_event);
+            System.out.println("before");
+            System.out.println(listIpPlayer.get(ip));
+            System.out.println(getSizeOfListIpPlayer(ip));
+            System.out.println("before");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            getOnlineOfPlayerLoginAndTestOnline(uuid,p_event);
+            System.out.println("before");
+            System.out.println(listOnlinePlayer.get(uuid));
+            System.out.println("before");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+         
         try (Connection connection_register = DriverManager.getConnection(
                 ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
                         + ConfigBdd.getDatabase1()
@@ -106,7 +152,7 @@ public class Main extends JavaPlugin implements Listener {
 
                 try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                     while (resultat_requete_select.next()) {
-                        online = resultat_requete_select.getInt(6);
+                        //online = resultat_requete_select.getInt(6);
                         ban = resultat_requete_select.getInt("ban");
                     }
                 }
@@ -115,10 +161,10 @@ public class Main extends JavaPlugin implements Listener {
             e.printStackTrace();
         }
 
-        if (online == 1) {
+/*         if (online == 1) {
             p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
                     ConfigMessage.getKickOnline());
-        }
+        } */
         if (ban == 1) {
             p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
                     ConfigMessage.getKickBan());
@@ -136,11 +182,14 @@ public class Main extends JavaPlugin implements Listener {
     @EventHandler
     public void playerJoinServer(PlayerJoinEvent p_event) {
         final Player p = p_event.getPlayer();
+
         String uuid = p.getUniqueId().toString();
         String uuidfrombdd = "";
-
+    
+        String ip = p.getAddress().getHostString();
         long startTime = System.nanoTime();
         listPlayer.put(p.getName(), p);
+
         try (Connection connection_register = DriverManager.getConnection(
                 ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
                         + ConfigBdd.getDatabase1()
@@ -164,7 +213,6 @@ public class Main extends JavaPlugin implements Listener {
             e.printStackTrace();
         }
         if (uuid.equals(uuidfrombdd)) {
-            // System.out.println("Le joueur est dans la bdd.");
             setTaskBlockSpawn(p);
             setTaskLoginTime(p);
             ConfigMessage.sendLogin(p);
@@ -175,13 +223,10 @@ public class Main extends JavaPlugin implements Listener {
                             + ConfigBdd.getDatabase1()
                             + "?characterEncoding=latin1&useConfigs=maxPerformance",
                     ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-
-                // UPDATE pf8kr9g9players SET online=0 , ip=0 WHERE pseudo="LoiRelique";
-                // -2 Fait une ou plusieure requete connection au jeux
                 String requet_Select_sql2 = "UPDATE " + ConfigBdd.getTable1() + " SET online=? , ip=? WHERE uuid=?";
                 try (PreparedStatement statement2_select = connection_update.prepareStatement(requet_Select_sql2)) {
                     statement2_select.setInt(1, 1);
-                    statement2_select.setString(2, p.getAddress().getHostName().toString());
+                    statement2_select.setString(2, ip);
                     statement2_select.setString(3, uuid);
                     statement2_select.executeUpdate();
                 }
@@ -210,9 +255,6 @@ public class Main extends JavaPlugin implements Listener {
                         + ConfigBdd.getDatabase1()
                         + "?characterEncoding=latin1&useConfigs=maxPerformance",
                 ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-
-            // UPDATE pf8kr9g9players SET online=0 , ip=0 WHERE pseudo="LoiRelique";
-            // -2 Fait une ou plusieure requete connection au jeux
             String requet_Select_sql2 = "UPDATE " + ConfigBdd.getTable1() + " SET online=? WHERE uuid=?";
             try (PreparedStatement statement2_select = connection_update.prepareStatement(requet_Select_sql2)) {
                 statement2_select.setInt(1, 0);
@@ -223,40 +265,6 @@ public class Main extends JavaPlugin implements Listener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        /*
-         * try (Connection connection_update = DriverManager.getConnection(
-         * ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
-         * ConfigBdd.getPort()
-         * + "/"
-         * + ConfigBdd.getDatabase1()
-         * + "?characterEncoding=latin1&useConfigs=maxPerformance",
-         * ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-         * // -2 Fait une ou plusieure requete connection au jeux
-         * String requet_Select_sql2 = "SELECT * FROM " + ConfigBdd.getTable1() +
-         * " WHERE uuid=?";
-         * try (PreparedStatement statement2_select =
-         * connection_update.prepareStatement(requet_Select_sql2)) {
-         * uuid = p.getUniqueId().toString();
-         * statement2_select.setString(1, uuid);
-         * //
-         * try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
-         * if (resultat_requete_select.next()) {
-         * String requet_Update_sql3 = "UPDATE " + ConfigBdd.getTable1() +
-         * " SET online=0  WHERE uuid=?";
-         * try (PreparedStatement statement3_update = connection_update
-         * .prepareStatement(requet_Update_sql3)) {
-         * statement3_update.setString(1, resultat_requete_select.getString("uuid"));
-         * statement3_update.executeUpdate();
-         * }
-         * }
-         * }
-         * }
-         * 
-         * } catch (Exception e) {
-         * e.printStackTrace();
-         * }
-         */
 
         if (listTacheRegister.get(p.getName()) != null) {
             Bukkit.getScheduler().cancelTask(getTaskRegisterTime(p));
@@ -274,6 +282,8 @@ public class Main extends JavaPlugin implements Listener {
         if (listPlayer.get(p.getName()) != null) {
             getListPlayerRemove(p.getName());
         }
+        getListIpPlayerRemove(p.getAddress().getHostString(),uuid);
+        getListOnlinePlayerRemove(uuid);
 
         long endTime = System.nanoTime();
         System.out.println("Test de vitesse quit : " + (endTime - startTime) * Math.pow(10, -6) + " ms");

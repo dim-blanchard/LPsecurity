@@ -1,7 +1,5 @@
 package fr.loirelique.lpsecurity.Command;
 
-
-import java.net.InetSocketAddress;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -78,14 +76,14 @@ public class CommandRegister implements CommandExecutor {
                                         .prepareStatement(requet_insert_sql2)) {
                                     uuid = p.getUniqueId().toString();
                                     String pseudo = p.getName();
-                                    InetSocketAddress iptest = p.getAddress();
+                                    String iptest = p.getAddress().getHostString();
                                         
 
                                     String pass = Main.plugin.getHash(args0);
 
                                     statement2_insert.setString(1, uuid);
                                     statement2_insert.setString(2, pseudo);
-                                    statement2_insert.setString(3, iptest.getHostName());
+                                    statement2_insert.setString(3, iptest);
                                     statement2_insert.setString(4,pass);
                                     statement2_insert.executeUpdate();
                                     //
