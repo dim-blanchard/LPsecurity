@@ -6,6 +6,14 @@ Est **un plugin** (sous java 8) qui a pour bute de **sécurisé** un serveur Min
 > Proxy ([BungeeCord](https://www.spigotmc.org/wiki/bungeecord/))
 , Serveur Minecraft ([Spigot 1.8.8](https://www.spigotmc.org))
 
+# Infrastructure d'une machine hôte.
+
+![Diagramme de l'infrastructure hôte](doc/DiagInfrastructure.drawio.png)
+
+**La machine hote** execute les différents processus. 
+- Nous avons en exemple trois **serveur Minecraft** (ou plus) relier à un serveur **proxy** qui gère la connection entre les différents serveur Minecraft et  un serveur **mysql**.
+- Afin de **sécurisé les connections des joueurs** nous avons besoin d'un **plugin**. Ceci évitera les voles de compte permetra une gestion de ses utilisateur grace à une base de données le tout sur la même machine.
+
 
 ## Infrastructure de la Base de donnée.(Les données conserver.)
 | Nom              | Type            | Donnée(s) par default| Description |
@@ -50,13 +58,6 @@ Un joueur mal intentionné ne peut pas connecter plus de 1 à N (Un nombre N au 
 |/|resethistorique|null|'nom joueur''raison !=null'|LP.sanction.rh|Supprime l'historique des sanctions du joueur.|
 
 Toutes les données sont stocker sur la base de donné en fonction de 'l'UUID' du joueurs pour permettre un suivie de leur infraction.
-# Infrastructure d'une machine hôte.
-
-![Diagramme de l'infrastructure hôte](doc/DiagInfrastructure.drawio.png)
-
-**La machine hote** execute les différents processus. 
-- Nous avons en exemple trois **serveur Minecraft** (ou plus) relier à un serveur **proxy** qui gère la connection entre les différents serveur Minecraft et  un serveur **mysql**.
-- Afin de **sécurisé les connections des joueurs** nous avons besoin d'un **plugin**. Ceci évitera les voles de compte permetra une gestion de ses utilisateur grace à une base de données le tout sur la même machine.
 
 
 # Diagramme de cas d'utilisation
