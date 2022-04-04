@@ -1,13 +1,13 @@
 # LPsecurity 
-Réalisaion d'un **plugin de sécurité/sanction** pour **Minecraft** sous version 1.8.8 avec un **Proxy** et base de données.
+Réalisaion d'un **plugin de sécurité/sanction** pour **Minecraft** sous version 1.8.8 avec un **Proxy** et une base de données.
 
 # LPsecurity ?
-Est **un plugin** (sous java 8) qui a pour bute de **sécurisé** un serveur Minecraft en version 1.8.8 relier à un proxy et de **sanctioner** les utilisateur mal intentionner  en **récupérent** les données des utilisateurs et les **enregistrer** dans une base de donnée et les réutiliser pour plustard.
+Est **un plugin** (sous java 8) qui a pour bute de **sécurisé** un serveur Minecraft en version 1.8.8 relier à un proxy et de **sanctioner** les utilisateur mal intentionner  en **récupérent** les données des utilisateurs et en les **enregistrant** dans une base de donnée pour les réutiliser. Il bénéficie de commande utile à la sécurité et la sanction.
 > Proxy ([BungeeCord](https://www.spigotmc.org/wiki/bungeecord/))
 , Serveur Minecraft ([Spigot 1.8.8](https://www.spigotmc.org))
 
 
-## Commande securiter.
+## Infrastructure de la Base de donnée.(Les données conserver.)
 | Nom              | Type            | Donnée(s) par default| Description |
 | :---------------:|:---------------:| :--------------:     | :---------------:  |
 | id  |int(Auto increment)|n+1|Clef primaire de relation entre les tables.		| 
@@ -20,6 +20,7 @@ Est **un plugin** (sous java 8) qui a pour bute de **sécurisé** un serveur Min
 | warn|int(1)|0| ? | 
 | historique|longtexte|null|Information des sanctions sur un joueur|
 
+# La partie sécurité intègre:
 ## Commande securiter ( serra amener à changer dans le temps).
 
 | Nomenclature | Nom |Option| Arguments |Permission| Description| 
@@ -27,6 +28,10 @@ Est **un plugin** (sous java 8) qui a pour bute de **sécurisé** un serveur Min
 |/|banish|null|'nom joueur' 0 ou 1|LP.security.ban| Bannir ou debannir (0/1)| 
 |/|login|null|'password'|LP.security.login|Identifier le joueur à la connection.| 
 |/|register|null|'password' 'password'|LP.security.register|Enregistre le joueur à sa première connection.| 
+
+> La données "password" est soumise à une fonction de hachage ici la SHA 256 avec un préfixe de salage.
+Elle intègre un côte passif, géré dans le code. Lorsque un joueur est déja en ligne celui ci ne peut être déconnecter via un lanceur non officiel gâce à son pseudonyme.
+Une joueur mal intentionné ne peut pas connecter plus de 1 à N (un nombres N au choix.) compte avec la même adresse IP(Internet Protocol) ainsi que pour les joueurs enregistrés.
 
 ## Commande sanction ( serra amener à changer dans le temps).
 
@@ -91,4 +96,7 @@ Est **un plugin** (sous java 8) qui a pour bute de **sécurisé** un serveur Min
 > Liens ([Plannig LPsecurity](https://docs.google.com/spreadsheets/d/1M6eF-qHVqqDWeEFvFPF7m3PK6LDU6fDgVOAws3adxWI/edit?usp=sharing))
 , ([Dictionnaire des données](https://docs.google.com/spreadsheets/d/100Dfm-IlbA1CwI49hHGxUlPoba_JcX5GFmZyjgF3IZk/edit?usp=sharing))
 
-# Lien utiles au test du projet
+# Lien utiles au test réaliser sur le projet
+> La Base de donnée.
+
+> Le code java.
