@@ -57,7 +57,7 @@ Un joueur mal intentionné ne peut pas connecter plus de 1 à N (Un nombre N au 
 |/|historique|null|'nom joueur''raison !=null'|LP.sanction.h|Affiche toutes les sanctions du joueur.|
 |/|resethistorique|null|'nom joueur''raison !=null'|LP.sanction.rh|Supprime l'historique des sanctions du joueur.|
 
-Toutes les données sont stocker sur la base de donné en fonction de 'l'UUID' du joueurs pour permettre un suivie de leur infraction.
+Toutes les données sont stockées sur la base de donné en fonction de 'l'UUID' du joueur pour permettre un suivi de leurs infractions.
 
 
 # Diagramme de cas d'utilisation
