@@ -153,7 +153,7 @@ public class Main extends JavaPlugin implements Listener {
             setTaskLoginTime(p);
             ConfigMessage.sendLogin(p);
 
-            try (Connection connection_update = DriverManager.getConnection(
+           /*  try (Connection connection_update = DriverManager.getConnection(
                     ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort()
                             + "/"
                             + ConfigBdd.getDatabase1()
@@ -168,7 +168,7 @@ public class Main extends JavaPlugin implements Listener {
 
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+            } */
 
         } else {
             setTaskBlockSpawn(p);
@@ -184,7 +184,7 @@ public class Main extends JavaPlugin implements Listener {
         final Player p = p_event.getPlayer();
         String uuid = getUuidHash(p);
         long startTime = System.nanoTime();
-        try (Connection connection_update = DriverManager.getConnection(
+       /*  try (Connection connection_update = DriverManager.getConnection(
                 ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort()
                         + "/"
                         + ConfigBdd.getDatabase1()
@@ -200,22 +200,22 @@ public class Main extends JavaPlugin implements Listener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        if (listTacheRegister.get(getUuidHash(p)) != null) {
+ */
+        if (listTacheRegister.get(uuid) != null) {
             Bukkit.getScheduler().cancelTask(getTaskRegisterTime(p));
             getTaskRegisterTimeRemove(p);
 
         }
-        if (listTacheLogin.get(getUuidHash(p)) != null) {
+        if (listTacheLogin.get(uuid) != null) {
             Bukkit.getScheduler().cancelTask(getTaskLoginTime(p));
             getTaskLoginTimeRemove(p);
         }
-        if (listTacheSpawnBlock.get(getUuidHash(p)) != null) {
+        if (listTacheSpawnBlock.get(uuid) != null) {
             Bukkit.getScheduler().cancelTask(getTaskBlockSpawn(p));
             getTaskBlockSpawnRemove(p);
         }
-        if (listPlayer.get(getUuidHash(p)) != null) {
-            getListPlayerRemove(getUuidHash(p));
+        if (listPlayer.get(uuid) != null) {
+            getListPlayerRemove(uuid);
         }
         getListIpPlayerRemove(p.getAddress().getHostString(), uuid);
         getListOnlinePlayerRemove(uuid);
