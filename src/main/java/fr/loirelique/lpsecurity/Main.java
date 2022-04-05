@@ -231,7 +231,7 @@ public class Main extends JavaPlugin implements Listener {
     public static void getIpOfPlayerLoginAndTestIp(String ip, String uuid, AsyncPlayerPreLoginEvent p_event) {
         try {
             if (listIpPlayer.get(ip) != null) {
-                if (getSizeOfListIpPlayer(ip) == 2) {
+                if (listIpPlayer.size() == 2) {
                     p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
                             "TROP IP");
                 } else {
@@ -246,12 +246,6 @@ public class Main extends JavaPlugin implements Listener {
             e.printStackTrace();
         }
 
-    }
-
-    public static int getSizeOfListIpPlayer(String ip) {
-
-        int taille = listIpPlayer.get(ip).size();
-        return taille;
     }
 
     public static void getListIpPlayerRemove(String ip, String uuid) {
