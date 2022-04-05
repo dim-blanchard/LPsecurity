@@ -19,12 +19,10 @@ Est **un plugin** (sous java 8) qui a pour bute de **sécurisé** un serveur Min
 | Nom              | Type            | Donnée(s) par default| Description |
 | :---------------:|:---------------:| :--------------:     | :---------------:  |
 | id  |int(Auto increment)|n+1|Clef primaire de relation entre les tables.		| 
-| uuid  |varchar(37)|null|Uuid du joueur recupérer automatique via LPsecurity.		|
-| ip| varchar(60)|null|Adresse IP du joueur recupérer automatique via LPsecurity.		|
+| uuid  |varchar(32)|null|Uuid du joueur recupérer automatique via LPsecurity.		|
 | pseudo|varchar(255)|null|Pseudo du joueur recupérer automatique via LPsecurity.		| 
 | password|varchar(64)|null|Password du joueur recupérer gace à saisie de la commande "register" et hacher tout via LPsecurity.|		 
 | ban|int(1)|0|Bannisement vraie ou faux en fonction du nom du joueur. 0 ou 1		| 
-| online|int(1)|0| Si le joueur est en ligne ou non 0 ou 1|
 | warn|int(1)|0| ? | 
 | historique|longtexte|null|Information des sanctions sur un joueur|
 
