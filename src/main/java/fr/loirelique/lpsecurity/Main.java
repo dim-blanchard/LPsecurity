@@ -70,7 +70,7 @@ public class Main extends JavaPlugin implements Listener {
     @EventHandler
     public void playerBeforeJoinServer(AsyncPlayerPreLoginEvent p_event) {
 
-        String uuid = getUuidHash(p_event.getName());
+        String uuid = getUuidHash(p_event);
 
         String ip = p_event.getAddress().getHostAddress();
 
@@ -82,7 +82,7 @@ public class Main extends JavaPlugin implements Listener {
             if (listIpPlayer.get(ip) != null) {
                 if (listIpPlayer.size() == 2) {
                     p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                            "TROP IP");
+                            ConfigMessage.getKickIp());
                 } else {
                     (listIpPlayer.get(ip)).add(uuid);
                 }
@@ -139,25 +139,24 @@ public class Main extends JavaPlugin implements Listener {
     /**
      * EVENT PLAYER JOIN EVENT
      */
-
     @EventHandler
     public void playerJoinServer(PlayerJoinEvent p_event) {
+        //Variable utile
         final Player p = p_event.getPlayer();
-
-        String uuid = getUuidHash(p.getName());
+        String uuid = getUuidHash(p);
         String uuidfrombdd = "";
 
+        //Début test de vitesse
         long startTime = System.nanoTime();
-
+        //Ajoue Player à la listePlayer  
         listPlayer.put(uuid, p);
 
+        //Test de joueur dans la basse de donnée
         try (Connection connection_select = DriverManager.getConnection(
                 ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
                         + ConfigBdd.getDatabase1()
                         + "?characterEncoding=latin1&useConfigs=maxPerformance",
                 ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-            // -2 Fait une ou plusieure requete connection au jeux
-
             String requet_Select_sql1 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
             try (PreparedStatement statement1_select = connection_select
                     .prepareStatement(requet_Select_sql1)) {
@@ -182,19 +181,28 @@ public class Main extends JavaPlugin implements Listener {
             setTaskRegisterTime(p);
             ConfigMessage.sendRegister(p);
         }
+        //Fin test de vitesse
         long endTime = System.nanoTime();
         System.out.println("Test de vitesse Join : " + (endTime - startTime) * Math.pow(10, -6) + " ms");
     }
 
+    /**
+     * Player Quit Evnet
+     */
+
     @EventHandler
     public void playerQuitServer(PlayerQuitEvent p_event) {
+        //Variable utile
         final Player p = p_event.getPlayer();
-        String uuid = getUuidHash(p.getName());
+        String uuid = getUuidHash(p); 
+        String ip = p.getAddress().getHostString();
+        //Début test de vitesse
         long startTime = System.nanoTime();
+
+        //Permet de supprimer les entrées Liste des différents joueurs du serveur.
         if (listTacheRegister.get(uuid) != null) {
             Bukkit.getScheduler().cancelTask(getTaskRegisterTime(p));
             getTaskRegisterTimeRemove(p);
-
         }
         if (listTacheLogin.get(uuid) != null) {
             Bukkit.getScheduler().cancelTask(getTaskLoginTime(p));
@@ -207,67 +215,31 @@ public class Main extends JavaPlugin implements Listener {
         if (listPlayer.get(uuid) != null) {
             getListPlayerRemove(uuid);
         }
-        getListIpPlayerRemove(p.getAddress().getHostString(), uuid);
-        getListOnlinePlayerRemove(uuid);
-
+        if (listIpPlayer.get(ip) != null) {
+            listIpPlayer.get(ip).remove(uuid);
+        }
+        if (listOnlinePlayer.get(uuid) != null){           
+            listOnlinePlayer.remove(uuid);    
+        }
+        //Fin test de vitesse
         long endTime = System.nanoTime();
         System.out.println("Test de vitesse quit : " + (endTime - startTime) * Math.pow(10, -6) + " ms");
     }
-
     /**
-     * GETTER ET SETTER DE TACHE
+     * Getter de tache register.
      */
-
-    public static void getIpOfPlayerLoginAndTestIp(String ip, String uuid, AsyncPlayerPreLoginEvent p_event) {
-        try {
-            if (listIpPlayer.get(ip) != null) {
-                if (listIpPlayer.size() == 2) {
-                    p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                            "TROP IP");
-                } else {
-                    (listIpPlayer.get(ip)).add(uuid);
-                }
-
-            } else {
-                listIpPlayer.put(ip, new ArrayList<String>());
-                (listIpPlayer.get(ip)).add(uuid);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public static void getListIpPlayerRemove(String ip, String uuid) {
-        listIpPlayer.get(ip).remove(uuid);
-    }
-
-    public static void getPlayerIsOnline(String uuid, AsyncPlayerPreLoginEvent p_event) {
-        try {
-            if (listOnlinePlayer.get(uuid) != null) {
-                p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                        ConfigMessage.getKickOnline());
-            } else {
-                listOnlinePlayer.put(uuid, 1);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public static void getListOnlinePlayerRemove(String uuid) {
-        listOnlinePlayer.remove(uuid);
-    }
-
     public Integer getTaskRegisterTime(Player p) {
         return listTacheRegister.get(getUuidHash(p));
     }
-
+    /**
+     * Methode de tache register.
+     */
     public void getTaskRegisterTimeRemove(Player p) {
         listTacheRegister.remove(getUuidHash(p));
     }
-
+    /**
+     * Methode de tache register.
+     */
     public void setTaskRegisterTime(Player p) {
 
         BukkitTask tache = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
@@ -294,15 +266,21 @@ public class Main extends JavaPlugin implements Listener {
         listTacheRegister.put(getUuidHash(p), idtache);
 
     }
-/////////////////////////////////////////////////////////
+    /**
+     * Getter de tache Login.
+     */
     public Integer getTaskLoginTime(Player p) {
         return listTacheLogin.get(getUuidHash(p));
     }
-
+    /**
+     * Methode de tache Login.
+     */
     public void getTaskLoginTimeRemove(Player p) {
         listTacheLogin.remove(getUuidHash(p));
     }
-
+    /**
+     * Methode de tache Login.
+     */
     public void setTaskLoginTime(Player p) {
 
         BukkitTask tache = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
@@ -329,15 +307,21 @@ public class Main extends JavaPlugin implements Listener {
         listTacheLogin.put(getUuidHash(p), idtache);
 
     }
-/////////////////////////////////////////////////////////
+    /**
+     * Getter de tache spawn.
+     */
     public Integer getTaskBlockSpawn(Player p) {
         return listTacheSpawnBlock.get(getUuidHash(p));
     }
-
+    /**
+     * Methode de tache spawn.
+     */
     public void getTaskBlockSpawnRemove(Player p) {
-        listTacheSpawnBlock.remove(getUuidHash(p.getName()));
+        listTacheSpawnBlock.remove(getUuidHash(p));
     }
-
+    /**
+     * Methode de tache spawn.
+     */
     public void setTaskBlockSpawn(Player p) {
 
         BukkitTask tache = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
@@ -359,19 +343,27 @@ public class Main extends JavaPlugin implements Listener {
 
         int idtache = tache.getTaskId();
 
-        listTacheSpawnBlock.put(getUuidHash(p.getName()), idtache);
+        listTacheSpawnBlock.put(getUuidHash(p), idtache);
 
     }
-///////////////////////////////////////////////////////
-    public void getListPlayerRemove(String uuid) {
-        listPlayer.remove(uuid);
-    }
-
+    /**
+     * Getter ajout Player à la listePlayer en fonction du l'UUID.
+     */
     public Player getListPlayer(String uuid) {
         return listPlayer.get(uuid);
     }
-/////////////////////////////////////////////////////////
-    public String getUuidHash(String pseudo){
+    /**
+     * Methode de suppression Player à la listePlayer en fonction du l'UUID.
+     */
+    public void getListPlayerRemove(String uuid) {
+        listPlayer.remove(uuid);
+    }
+    /**
+     * Getter création d'un UUID Player.
+     */
+    public String getUuidHash(Player p){
+        String pseudo = p.getName();
+        pseudo = pseudo.replaceAll("\\s", "");
         String pseudoMD5 = "";
         try {
             String selMot = ConfigMessage.getSel() + pseudo;
@@ -386,7 +378,29 @@ public class Main extends JavaPlugin implements Listener {
 
      return pseudoMD5;
     }
+    /**
+     * Getter création d'un UUID AsyncPlayerPreLoginEvent.
+     */
+    public String getUuidHash(AsyncPlayerPreLoginEvent p){
+        String pseudo = p.getName();
+        pseudo = pseudo.replaceAll("\\s", "");
+        String pseudoMD5 = "";
+        try {
+            String selMot = ConfigMessage.getSel() + pseudo;
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] digest = md.digest(selMot.getBytes(StandardCharsets.UTF_8));
+            pseudoMD5 = DatatypeConverter.printHexBinary(digest).toLowerCase();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+        
+
+     return pseudoMD5;
+    }
+    /**
+     * Getter création d'un mot de passe hash en sha256 avec un sel.
+     */
     public String getHash(String mot) {
         String motSha256 = "";
         try {

@@ -68,6 +68,13 @@ public class ConfigMessage {
 
         return kickOnline;
     }
+
+    public static String getKickIp() {
+        String kickIp = Main.plugin.getConfig().getString("string_kick.Ip");
+
+        return kickIp;
+    }
+
     public static String getKickBan() {
         String kickBan = Main.plugin.getConfig().getString("string_kick.ban");
 

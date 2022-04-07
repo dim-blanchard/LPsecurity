@@ -24,6 +24,7 @@ security:
 #Message d'exclusion du serveur.
 string_kick:
   #Avant la connection d'un joueur.
+  ip: Ip trop de fois similaire pour plusiseurs personne.
   online: Joueur deja en ligne.
   ban: Tu es Bannie.
   #Pendant l'enregistrement ou l'identification d'un joueur.
