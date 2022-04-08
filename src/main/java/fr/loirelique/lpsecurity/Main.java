@@ -123,6 +123,7 @@ public class Main extends JavaPlugin implements Listener {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("error block ");
         }
 
         //On vérifie si le nombre d'ip similaire connecter ne depasse pas la configuration donner.

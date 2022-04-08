@@ -18,32 +18,32 @@ public class MyClassTest {
     }
 
     public static void main(String args[]) {
-        /*
-         * // start stopwatch
-         * //for(int i =0 ; i < 10 ; i++){
-         * long startTime = System.nanoTime();
-         * // Here is the code to measure
-         * getIpOfPlayerBeforeLogin("1","j1");
-         * getIpOfPlayerBeforeLogin("1","j2");
-         * getIpOfPlayerBeforeLogin("1","j3");
-         * getIpOfPlayerBeforeLogin("1","j4");
-         * getIpOfPlayerBeforeLogin("1","j5");
-         * getIpOfPlayerBeforeLogin("1","j6");
-         * 
-         * System.out.println(listArrays.get("1"));
-         * System.out.println(listArrays.get("1").size());
-         * 
-         * listArrays.get("1").remove("j3");
-         * 
-         * System.out.println(listArrays.get("1").size());
-         * 
-         * System.out.println(listArrays.get("1"));
-         * // stop stopwatch
-         * long endTime = System.nanoTime();
-         * 
-         * System.out.println("Test de vitesse : " + (endTime -
-         * startTime)*Math.pow(10,-6) + " ms");
-         */
+        
+          // start stopwatch
+          //for(int i =0 ; i < 10 ; i++){
+          long startTime = System.nanoTime();
+          // Here is the code to measure
+          getIpOfPlayerBeforeLogin("1","qsfseeeeeqzgzergzgrgrggggggzrgzrgzrgzergzrg");
+          getIpOfPlayerBeforeLogin("1","zgrzrgzgrzgggggrgrgrgrgrgqgrgqzrgtergqegzgg");
+          getIpOfPlayerBeforeLogin("1","zrgzzgqqqqegeqggbzrbqwiukkkkkkkkkkkukgukget");
+          getIpOfPlayerBeforeLogin("1","gergesbserbgsh'rjtgshey'j( y,cjc,cjc;j;,,,,");
+          getIpOfPlayerBeforeLogin("1","jgdergwdrgwdrgzer gb'tzbesgnjetgdxrnhnxhtnn");
+          getIpOfPlayerBeforeLogin("1","xnyte(kxtj,kxxynjhxhbrxbgxrxnjrwrthfhjytjyj");
+          
+          System.out.println(listArrays.get("1"));
+          System.out.println(listArrays.get("1").size());
+          
+          listArrays.get("1").remove("zrgzzgqqqqegeqggbzrbqwiukkkkkkkkkkkukgukget");
+          
+          System.out.println(listArrays.get("1").size());
+          
+          System.out.println(listArrays.get("1"));
+          // stop stopwatch
+          long endTime = System.nanoTime();
+          
+          System.out.println("Test de vitesse : " + (endTime -
+          startTime)*Math.pow(10,-6) + " ms");
+        
 
         // }
 
@@ -71,10 +71,10 @@ public class MyClassTest {
          * }
          */
 
-        String str = "Bonjour vous         allez                   bien";
+       /*  String str = "Bonjour vous         allez                   bien";
         System.out.println("Mot avec des espaces: " + str);
         str = str.replaceAll("\\s", "");
-        System.out.println("Mot sans des espaces: " + str);
+        System.out.println("Mot sans des espaces: " + str); */
 
     }
 }
