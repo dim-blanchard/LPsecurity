@@ -181,6 +181,7 @@ public class Main extends JavaPlugin implements Listener {
             setTaskRegisterTime(p);
             ConfigMessage.sendRegister(p);
         }
+
         //Fin test de vitesse
         long endTime = System.nanoTime();
         System.out.println("Test de vitesse Join : " + (endTime - startTime) * Math.pow(10, -6) + " ms");
@@ -192,6 +193,7 @@ public class Main extends JavaPlugin implements Listener {
 
     @EventHandler
     public void playerQuitServer(PlayerQuitEvent p_event) {
+        
         //Variable utile
         final Player p = p_event.getPlayer();
         String uuid = getUuidHash(p); 
@@ -221,6 +223,7 @@ public class Main extends JavaPlugin implements Listener {
         if (listOnlinePlayer.get(uuid) != null){           
             listOnlinePlayer.remove(uuid);    
         }
+
         //Fin test de vitesse
         long endTime = System.nanoTime();
         System.out.println("Test de vitesse quit : " + (endTime - startTime) * Math.pow(10, -6) + " ms");
