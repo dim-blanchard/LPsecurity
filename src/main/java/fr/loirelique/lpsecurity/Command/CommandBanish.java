@@ -31,17 +31,15 @@ public class CommandBanish implements CommandExecutor {
 
                 if (args.length == 2) {
                     String pseudo = args[0];
-                    String uuid_testeur = Main.plugin.getHash(pseudo);
+                    String uuid_testeur = Main.plugin.getUuidHash(pseudo);
 
-                    int ban_1_0 = Integer.parseInt(args[1]);
+                    int ban = Integer.parseInt(args[1]);
 
                     try (Connection connection_update = DriverManager.getConnection(
                             ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
                                     + ConfigBdd.getDatabase1()
                                     + "?characterEncoding=latin1&useConfigs=maxPerformance",
                             ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-                        // -2 Fait une ou plusieure requete connection au jeux
-
                         String requet_Select_sql2 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
                         try (PreparedStatement statement2_select = connection_update
                                 .prepareStatement(requet_Select_sql2)) {
@@ -53,7 +51,7 @@ public class CommandBanish implements CommandExecutor {
                                             + " SET ban=? WHERE uuid=?";
                                     try (PreparedStatement statement3_update = connection_update
                                             .prepareStatement(requet_Update_sql3)) {
-                                        statement3_update.setInt(1, ban_1_0);
+                                        statement3_update.setInt(1, ban);
                                         statement3_update.setString(2, uuid_testeur);
                                         statement3_update.executeUpdate();
                                     }
@@ -65,14 +63,14 @@ public class CommandBanish implements CommandExecutor {
                         e.printStackTrace();
                     }
                     
-                    if(ban_1_0 == 0)
+                    if(ban == 0)
                     {
                         p.sendMessage(pseudo+" a étais débannie.");
                     
                     }
 
                     
-                    if(ban_1_0 == 1)
+                    if(ban == 1)
                     {
                         p.sendMessage(pseudo+" a étais bannie.");
                         Player player = Main.plugin.getListPlayer(uuid_testeur);

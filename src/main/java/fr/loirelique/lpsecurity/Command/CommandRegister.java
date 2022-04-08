@@ -30,7 +30,7 @@ public class CommandRegister implements CommandExecutor {
 
                 if (args.length == 2) {
                     String uuid = Main.plugin.getUuidHash(p);
-                    String uuidfrombdd = "";
+                    String uuidRequet = "";
 
                     try (Connection connection_register = DriverManager.getConnection(
                             ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
@@ -46,7 +46,7 @@ public class CommandRegister implements CommandExecutor {
 
                             try (ResultSet resultat_requete_select = statement3_select.executeQuery()) {
                                 while (resultat_requete_select.next()) {
-                                    uuidfrombdd = resultat_requete_select.getString("uuid");
+                                    uuidRequet = resultat_requete_select.getString("uuid");
 
                                 }
                             }
@@ -55,7 +55,7 @@ public class CommandRegister implements CommandExecutor {
                         e.printStackTrace();
                     }
 
-                    if (uuid.equals(uuidfrombdd)) {
+                    if (uuid.equals(uuidRequet)) {
                         p.sendMessage(ConfigMessage.getErrorRegister());
                     } else {
                         String args0 = args[0];
@@ -74,6 +74,8 @@ public class CommandRegister implements CommandExecutor {
                                 try (PreparedStatement statement1_insert = connection_addPlayer
                                         .prepareStatement(requet_insert_sql1)) {
                                     String pseudo = p.getName();
+                                    pseudo = pseudo.toLowerCase();
+                                    pseudo = pseudo.replaceAll("\\s", "");
                                     String pass = Main.plugin.getHash(args0);
                                     statement1_insert.setString(1, uuid);
                                     statement1_insert.setString(2, pseudo);

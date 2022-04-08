@@ -17,7 +17,7 @@ bdd:
   user_select:
   pass_select:
 
-#Salage pour l'algorithme sha 256 à modifier au lancement du serveur et ne jamais le remodifier. Sinon corruption des mots de passe de la base de données.
+#Salage pour l'algorithme sha 256 et MD5 à modifier au lancement du serveur et ne jamais le remodifier. Sinon corruption des mots de passe de la base de données.
 security:
   sel: ec4wdw13
  

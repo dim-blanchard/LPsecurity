@@ -31,7 +31,7 @@ public class CommandLogin implements CommandExecutor {
 
                 if (args.length == 1) {
                     String uuid = Main.plugin.getUuidHash(p);
-                    String uuidfrombdd = "";
+                    String uuidRequet = "";
 
                     try (Connection connection_login = DriverManager.getConnection(
                             ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
@@ -47,7 +47,7 @@ public class CommandLogin implements CommandExecutor {
 
                             try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                                 while (resultat_requete_select.next()) {
-                                    uuidfrombdd = resultat_requete_select.getString("uuid");
+                                    uuidRequet = resultat_requete_select.getString("uuid");
 
                                 }
                             }
@@ -56,7 +56,7 @@ public class CommandLogin implements CommandExecutor {
                         e.printStackTrace();
                     }
 
-                    if (uuid.equals(uuidfrombdd)) {
+                    if (uuid.equals(uuidRequet)) {
                         String args0 = args[0];
                         String password = "";
                         String argsPass = Main.plugin.getHash(args0);
