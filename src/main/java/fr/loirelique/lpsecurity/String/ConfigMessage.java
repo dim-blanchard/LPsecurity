@@ -10,7 +10,7 @@ public class ConfigMessage {
 
 
     /**
-     * GETTER DE CONFIG MESSAGE
+     * Getter de message de configuration.
      */
     public static String getRegisterTitle() {
         String titre = Main.plugin.getConfig().getString("string.register_title");
