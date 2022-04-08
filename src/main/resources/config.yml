@@ -29,6 +29,8 @@ string_kick:
   ban: Tu es Bannie.
   #Pendant l'enregistrement ou l'identification d'un joueur.
   over_time: Tu as étais exclue pour inactivité.
+  #Nombre d'ip similaire connecter à la fois au serveur.
+  over_ip: 2
 
 #Message d'entré plus le temps avant enregistrement dans le serveur.
 string:

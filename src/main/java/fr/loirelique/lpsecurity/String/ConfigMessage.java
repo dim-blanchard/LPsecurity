@@ -82,6 +82,11 @@ public class ConfigMessage {
         String kickOvertime = Main.plugin.getConfig().getString("string_kick.over_time");
         return kickOvertime;
     } 
+
+    public static int getKickOverIp() {
+        int kickOverIp = Integer.parseInt(Main.plugin.getConfig().getString("string_kick.over_ip"));
+        return kickOverIp;
+    }
     
 
     public static String getAfterLoginTitle() {

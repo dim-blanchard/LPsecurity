@@ -38,14 +38,19 @@ import fr.loirelique.lpsecurity.String.ConfigMessage;
 public class Main extends JavaPlugin implements Listener {
 
     public static Main plugin;
+    // Liste des taches joueurs
     private HashMap<String, Integer> listTacheRegister = new HashMap<String, Integer>();
     private HashMap<String, Integer> listTacheLogin = new HashMap<String, Integer>();
     private HashMap<String, Integer> listTacheSpawnBlock = new HashMap<String, Integer>();
 
+    // Liste des joueurs. Liste d'ip similaire en fonction du joueur. Liste des joueurs en Ligne.
     private HashMap<String, Player> listPlayer = new HashMap<String, Player>();
     private static HashMap<String, ArrayList<String>> listIpPlayer = new HashMap<String, ArrayList<String>>();
     private static HashMap<String, Integer> listOnlinePlayer = new HashMap<String, Integer>();
 
+     /**
+     * EVENT ON ENBALBLE PLUGIN
+     */
     @Override
     public void onEnable() {
         plugin = this;
@@ -61,12 +66,16 @@ public class Main extends JavaPlugin implements Listener {
 
         System.out.println("Chargement plugin LPsecurity... ===> OK");
     }
-
+    /**
+     * EVENT ON DISABLE PLUGIN
+     */
     @Override
     public void onDisable() {
         System.out.println("Arret du plugin LPsecurity... ===> OK");
     }
-
+    /**
+     * EVENT PLAYER BEFORE JOIN EVENT
+     */
     @EventHandler
     public void playerBeforeJoinServer(AsyncPlayerPreLoginEvent p_event) {
 
@@ -78,35 +87,7 @@ public class Main extends JavaPlugin implements Listener {
 
         long startTime = System.nanoTime();
 
-        try {
-            if (listIpPlayer.get(ip) != null) {
-                if (listIpPlayer.size() == 2) {
-                    p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                            ConfigMessage.getKickIp());
-                } else {
-                    (listIpPlayer.get(ip)).add(uuid);
-                }
-
-            } else {
-                listIpPlayer.put(ip, new ArrayList<String>());
-                (listIpPlayer.get(ip)).add(uuid);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-        try {
-            if (listOnlinePlayer.get(uuid) != null) {
-                p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                        ConfigMessage.getKickOnline());
-            } else {
-                listOnlinePlayer.put(uuid, 1);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
+        // On fait une requet dans la base de donnée qui retourne la valeur de la colomne "ban" en fonction de la colomne "uuid".
         try (Connection connection_register = DriverManager.getConnection(
                 ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
                         + ConfigBdd.getDatabase1()
@@ -126,16 +107,46 @@ public class Main extends JavaPlugin implements Listener {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //Si le joueur est bannie on le kick.
         if (ban == 1) {
             p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
                     ConfigMessage.getKickBan());
+        }
+
+        //On test si le joueur et deja en ligne avec le même uuid(Générer avec le pseudo + un préfixe de salage en MD5).
+        try {
+            if (listOnlinePlayer.get(uuid) != null) {
+                p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
+                        ConfigMessage.getKickOnline());
+            } else {
+                listOnlinePlayer.put(uuid, 1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //On vérifie si le nombre d'ip similaire connecter ne depasse pas la configuration donner.
+        try {
+            if (listIpPlayer.get(ip) != null) {
+                if (listIpPlayer.size() == ConfigMessage.getKickOverIp()) {
+                    p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
+                            ConfigMessage.getKickIp());
+                } else {
+                    (listIpPlayer.get(ip)).add(uuid);
+                }
+
+            } else {
+                listIpPlayer.put(ip, new ArrayList<String>());
+                (listIpPlayer.get(ip)).add(uuid);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         long endTime = System.nanoTime();
         System.out.println("Test de vitesse before : " + (endTime - startTime) * Math.pow(10, -6) + " ms");
 
     }
-
     /**
      * EVENT PLAYER JOIN EVENT
      */
@@ -144,14 +155,14 @@ public class Main extends JavaPlugin implements Listener {
         //Variable utile
         final Player p = p_event.getPlayer();
         String uuid = getUuidHash(p);
-        String uuidfrombdd = "";
+        String uuidRequet = "";
 
         //Début test de vitesse
         long startTime = System.nanoTime();
         //Ajoue Player à la listePlayer  
         listPlayer.put(uuid, p);
 
-        //Test de joueur dans la basse de donnée
+        //On fait un requet qui récupère l'uuid du joueur et on le cherche dans la base de donnée.
         try (Connection connection_select = DriverManager.getConnection(
                 ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
                         + ConfigBdd.getDatabase1()
@@ -160,11 +171,11 @@ public class Main extends JavaPlugin implements Listener {
             String requet_Select_sql1 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
             try (PreparedStatement statement1_select = connection_select
                     .prepareStatement(requet_Select_sql1)) {
-                statement1_select.setObject(1, uuid);
+                statement1_select.setString(1, uuid);
 
                 try (ResultSet resultat_requete_select = statement1_select.executeQuery()) {
                     while (resultat_requete_select.next()) {
-                        uuidfrombdd = resultat_requete_select.getString("uuid");
+                        uuidRequet = resultat_requete_select.getString("uuid");
 
                     }
                 }
@@ -172,11 +183,14 @@ public class Main extends JavaPlugin implements Listener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (uuid.equals(uuidfrombdd)) {
+        //Si l'uuid du joueur est égale à un uuid deja enregistrer.
+        if (uuid.equals(uuidRequet)) {
             setTaskBlockSpawn(p);
             setTaskLoginTime(p);
             ConfigMessage.sendLogin(p);
-        } else {
+            
+        }//Si l'uuid du joueur n'est pas égale à un uuid deja enregistrer.
+        else {
             setTaskBlockSpawn(p);
             setTaskRegisterTime(p);
             ConfigMessage.sendRegister(p);
@@ -186,11 +200,9 @@ public class Main extends JavaPlugin implements Listener {
         long endTime = System.nanoTime();
         System.out.println("Test de vitesse Join : " + (endTime - startTime) * Math.pow(10, -6) + " ms");
     }
-
     /**
      * Player Quit Evnet
      */
-
     @EventHandler
     public void playerQuitServer(PlayerQuitEvent p_event) {
         
@@ -201,7 +213,7 @@ public class Main extends JavaPlugin implements Listener {
         //Début test de vitesse
         long startTime = System.nanoTime();
 
-        //Permet de supprimer les entrées Liste des différents joueurs du serveur.
+        //Permet de supprimer les entrées Liste des différents joueurs du serveur en fonction de l'uuid.
         if (listTacheRegister.get(uuid) != null) {
             Bukkit.getScheduler().cancelTask(getTaskRegisterTime(p));
             getTaskRegisterTimeRemove(p);
@@ -230,25 +242,28 @@ public class Main extends JavaPlugin implements Listener {
     }
     /**
      * Getter de tache register.
+     * On recupère l'id de la tache register en fonction de l'uuid du joueur.
      */
     public Integer getTaskRegisterTime(Player p) {
         return listTacheRegister.get(getUuidHash(p));
     }
     /**
      * Methode de tache register.
+     * On supprime le joueur de la list tache register et ca donnée.
      */
     public void getTaskRegisterTimeRemove(Player p) {
         listTacheRegister.remove(getUuidHash(p));
     }
     /**
      * Methode de tache register.
+     * Tache de temps d'enregistrement au serveur.
      */
     public void setTaskRegisterTime(Player p) {
 
         BukkitTask tache = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
-
+            //Au dela du delais donner dépasser le joueur est kick.
             int time_run1 = ConfigMessage.getRegisterTime();
-
+            
             @Override
             public void run() {
 
@@ -265,31 +280,34 @@ public class Main extends JavaPlugin implements Listener {
         }, 20, 20);
 
         int idtache = tache.getTaskId();
-
+        //On ajoute un joueur à la liste avec une id de tache.
         listTacheRegister.put(getUuidHash(p), idtache);
 
     }
     /**
      * Getter de tache Login.
+     * On recupère l'id de la tache login en fonction de l'uuid du joueur.
      */
     public Integer getTaskLoginTime(Player p) {
         return listTacheLogin.get(getUuidHash(p));
     }
     /**
      * Methode de tache Login.
+     * On supprime le joueur de la list tache login et ca donnée.
      */
     public void getTaskLoginTimeRemove(Player p) {
         listTacheLogin.remove(getUuidHash(p));
     }
     /**
      * Methode de tache Login.
+     * Tache de temps d'identification au serveur.
      */
     public void setTaskLoginTime(Player p) {
 
         BukkitTask tache = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
-
+            //Au dela du delais donner dépasser le joueur est kick.
             int time_run1 = ConfigMessage.getLoginTime();
-
+            
             @Override
             public void run() {
 
@@ -306,24 +324,27 @@ public class Main extends JavaPlugin implements Listener {
         }, 20, 20);
 
         int idtache = tache.getTaskId();
-
+        //On ajoute un joueur à la liste avec une id de tache.
         listTacheLogin.put(getUuidHash(p), idtache);
 
     }
     /**
      * Getter de tache spawn.
+     * On recupère l'id de la tache login en fonction de l'uuid du joueur.
      */
     public Integer getTaskBlockSpawn(Player p) {
         return listTacheSpawnBlock.get(getUuidHash(p));
     }
     /**
      * Methode de tache spawn.
+     * On supprime le joueur de la list tache spawn et ca donnée.
      */
     public void getTaskBlockSpawnRemove(Player p) {
         listTacheSpawnBlock.remove(getUuidHash(p));
     }
     /**
      * Methode de tache spawn.
+     * Tache de teleportation au spawn temps que des tache login ou register ne sont pas finie ou validé.
      */
     public void setTaskBlockSpawn(Player p) {
 
