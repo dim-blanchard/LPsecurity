@@ -19,7 +19,39 @@ public class MyClassTest {
 
     public static void main(String args[]) {
         
-          // start stopwatch
+        String[] argss = new String[3];
+
+        argss[0]="J'ai";
+        argss[1]="peut être fait";
+        argss[2]="une érreur.";
+
+
+
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < argss.length; i++) {
+            builder.append(argss[i]).append(" ");
+        }
+        String msg = builder.toString();
+        System.out.println(msg);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*           // start stopwatch
           //for(int i =0 ; i < 10 ; i++){
           long startTime = System.nanoTime();
           // Here is the code to measure
@@ -42,7 +74,7 @@ public class MyClassTest {
           long endTime = System.nanoTime();
           
           System.out.println("Test de vitesse : " + (endTime -
-          startTime)*Math.pow(10,-6) + " ms");
+          startTime)*Math.pow(10,-6) + " ms"); */
         
 
         // }

@@ -24,9 +24,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
-import fr.loirelique.lpsecurity.Command.CommandBanish;
+import fr.loirelique.lpsecurity.Command.CommandBan;
 import fr.loirelique.lpsecurity.Command.CommandLogin;
 import fr.loirelique.lpsecurity.Command.CommandRegister;
+import fr.loirelique.lpsecurity.Command.CommandTempban;
+import fr.loirelique.lpsecurity.Command.CommandUnban;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.ConfigMessage;
 
@@ -60,10 +62,18 @@ public class Main extends JavaPlugin implements Listener {
         // Commandes
         CommandExecutor commandRegister = new CommandRegister();
         getCommand("register").setExecutor(commandRegister);
+
         CommandExecutor commandLogin = new CommandLogin();
         getCommand("login").setExecutor(commandLogin);
-        CommandExecutor commandBanish = new CommandBanish();
-        getCommand("banish").setExecutor(commandBanish);
+
+        CommandExecutor commandBan = new CommandBan();
+        getCommand("ban").setExecutor(commandBan);
+
+        CommandExecutor commandUnban = new CommandUnban();
+        getCommand("unban").setExecutor(commandUnban);
+
+        CommandExecutor commandTempban = new CommandTempban();
+        getCommand("tempban").setExecutor(commandTempban);
 
         System.out.println("Chargement plugin LPsecurity... ===> OK");
     }

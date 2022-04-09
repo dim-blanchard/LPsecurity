@@ -22,6 +22,16 @@ commands:
     usage: /banish [Nom du joueur] [1|0]
     permission: LP.security.ban
 
+  ban:
+    description: Description de la commande.
+    usage: /ban [Nom du joueur] [Raison] (LPsecurity)
+    permission: LP.security.ban
+  
+  unban:
+    description: Description de la commande.
+    usage: /unban [Nom du joueur] [Raison] (LPsecurity)
+    permission: LP.security.ban
+
 permissions:
   LP.security.login:
     description: permet d'utiliser la commande login.
