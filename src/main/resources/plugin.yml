@@ -26,6 +26,11 @@ commands:
     description: Description de la commande.
     usage: /ban [Nom du joueur] [Raison] (LPsecurity)
     permission: LP.security.ban
+
+  tempban:
+    description: Description de la commande.
+    usage: /tempban [Nom du joueur] [Temps] [Raison] (LPsecurity)
+    permission: LP.security.ban  
   
   unban:
     description: Description de la commande.

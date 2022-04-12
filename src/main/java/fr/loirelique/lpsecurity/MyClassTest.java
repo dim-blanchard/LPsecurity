@@ -2,6 +2,8 @@ package fr.loirelique.lpsecurity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.text.Normalizer;
+import java.util.regex.Pattern;
 
 public class MyClassTest {
 
@@ -17,6 +19,14 @@ public class MyClassTest {
         }
     }
 
+    public static String sansAccent(String s) 
+    {
+   
+          String strTemp = Normalizer.normalize(s, Normalizer.Form.NFD);
+          Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+          return pattern.matcher(strTemp).replaceAll("");
+    }
+
     public static void main(String args[]) {
         
         String[] argss = new String[3];
@@ -26,10 +36,20 @@ public class MyClassTest {
         argss[2]="une érreur.";
 
 
+            // Chaîne avec accent
+    String test="Marché public, école, j'ai programmé, chaîne de caractère";
+ 
+    // Effacer les accents de la chaîne de caractère 'test'
+    String str_sans_accent=sansAccent(test);
+ 
+    //Afficher le résultat
+    System.out.println(str_sans_accent);    
+
 
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < argss.length; i++) {
-            builder.append(argss[i]).append(" ");
+            String ar = sansAccent(argss[i]);
+            builder.append(ar).append(" ");
         }
         String msg = builder.toString();
         System.out.println(msg);

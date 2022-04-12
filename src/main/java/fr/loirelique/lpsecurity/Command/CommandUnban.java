@@ -44,7 +44,7 @@ public class CommandUnban implements CommandExecutor {
                         try (PreparedStatement statement2_select = connection_update
                                 .prepareStatement(requet_Update_sql2)) {
                             statement2_select.setInt(1,0);
-                            statement2_select.setString(2,"Unban: "+msg);
+                            statement2_select.setString(2,"Unban: "+msg );
                             statement2_select.setString(3, uuid);
                             statement2_select.executeUpdate();
                         }

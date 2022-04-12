@@ -9,7 +9,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.xml.bind.DatatypeConverter;
+import javax.xml.bind.DatatypeConverter;import java.text.Normalizer;
+import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -31,6 +32,7 @@ import fr.loirelique.lpsecurity.Command.CommandTempban;
 import fr.loirelique.lpsecurity.Command.CommandUnban;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.ConfigMessage;
+
 
 /**
  * Information sur la class!LPSECURITY
@@ -501,5 +503,12 @@ public class Main extends JavaPlugin implements Listener {
         }
 
         return motSha256;
+    }
+
+    public String sansAccent(String s) 
+    {
+          String strTemp = Normalizer.normalize(s, Normalizer.Form.NFD);
+          Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+          return pattern.matcher(strTemp).replaceAll("");
     }
 }
