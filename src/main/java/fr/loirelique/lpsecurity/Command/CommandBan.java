@@ -25,7 +25,7 @@ public class CommandBan implements CommandExecutor {
                 if (args.length >= 2) {
                     String pseudo = args[0];
                     String uuid = Main.plugin.getUuidHash(pseudo);
-                    String historique = "Value default";
+                    String historique ="";
                     int ban = 0;
 
                     try (Connection connection_register = DriverManager.getConnection(
@@ -78,12 +78,13 @@ public class CommandBan implements CommandExecutor {
                             e.printStackTrace();
                         }
 
-                        p.sendMessage(pseudo + " a étais bannie.");
+                        p.sendMessage("[" + pseudo + "] " + " a étais bannie.");
+                        if(Main.plugin.getListOnlinePlayer(uuid) == "1"){
                         Player player = Main.plugin.getListPlayer(uuid);
-                        player.kickPlayer("Tu viens d'être bannie");
+                        player.kickPlayer("Tu viens d'être bannie");}
                     }
                     if (ban == 1) {
-                        p.sendMessage("|" + pseudo + "|" + "joueur déja bannie.");
+                        p.sendMessage("[" + pseudo + "] " + "joueur déja bannie.");
                     }
                 }
 
