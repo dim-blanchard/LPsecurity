@@ -61,16 +61,7 @@ public class MyClassTest {
           },}'); */
 
 
- /*        '{"motif_ban": "null",
-    "motif_tempban": "null",
-    "motif_unban": "null",
-    "motif_mute": "null",
-    "motif_tempmute": "null",
-	"motif_unmute": "null",
-	"motif_warn": "null",
-	"motif_kick": "null",
-    "temp_ban": "null",
-    "temp_mute": "null"}' */
+ /* '{"motif_ban": "null","motif_tempban": "null","motif_unban": "null","motif_mute": "null","motif_tempmute": "null","motif_unmute": "null","motif_warn": "null","motif_kick": "null","temp_ban": "null","temp_mute": "null"}' */
 
 
  /*        
