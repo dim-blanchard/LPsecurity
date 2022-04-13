@@ -8,44 +8,47 @@ author: LoiRelique
 
 commands:
   register:
-    description: Permet d'enregister son mdp à la premiere connection.
+    description: Permet d'enregister son mdp à la premiere connection.(LPsecurity)
     usage: /register [pass] [pass]
     permission: LP.security.register
 
   login:
-    description: Permet de s'identifer au serveur.
+    description: Permet de s'identifer au serveur.(LPsecurity)
     usage: /login [pass]
     permission: LP.security.login
 
-  banish:
-    description: Description de la commande.
-    usage: /banish [Nom du joueur] [1|0]
-    permission: LP.security.ban
-
   ban:
-    description: Description de la commande.
-    usage: /ban [Nom du joueur] [Raison] (LPsecurity)
+    description: Description de la commande.(LPsecurity)
+    usage: /ban [Nom du joueur] [Raison]
     permission: LP.security.ban
 
   tempban:
-    description: Description de la commande.
-    usage: /tempban [Nom du joueur] [Temps] [Raison] (LPsecurity)
-    permission: LP.security.ban  
+    description: Description de la commande.(LPsecurity)
+    usage: /tempban [Nom du joueur] [Temps] [Raison]
+    permission: LP.security.tempban  
   
   unban:
-    description: Description de la commande.
-    usage: /unban [Nom du joueur] [Raison] (LPsecurity)
-    permission: LP.security.ban
+    description: Description de la commande.(LPsecurity)
+    usage: /unban [Nom du joueur] [Raison]
+    permission: LP.security.unban
 
 permissions:
   LP.security.login:
-    description: permet d'utiliser la commande login.
+    description: permet d'utiliser la commande login.(LPsecurity)
     default: true
 
   LP.security.register:
-    description: permet d'utiliser la commande register.
+    description: permet d'utiliser la commande register.(LPsecurity)
     default: true
 
   LP.security.ban:
-    description: permet d'utiliser les commande banish.
+    description: permet d'utiliser les commande ban.(LPsecurity)
+    default: true
+
+  LP.security.tempban:
+    description: permet d'utiliser les commande tempban.(LPsecurity)
+    default: true
+
+  LP.security.unban:
+    description: permet d'utiliser les commande unban.(LPsecurity)
     default: true

@@ -3,6 +3,9 @@ package fr.loirelique.lpsecurity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.text.Normalizer;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Pattern;
 
 public class MyClassTest {
@@ -28,7 +31,40 @@ public class MyClassTest {
     }
 
     public static void main(String args[]) {
+
+        DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("yy/MM/dd HH:mm:ss");
+        System.out.println("yy/MM/dd HH:mm:ss-> "+dtf2.format(ZonedDateTime.now(ZoneId.of("Europe/Paris"))));
+
+/*         INSERT INTO pf8kr9g9players (historique_sanctions) VALUES ('{"motifs_sanction": {
+            "ban": "",
+            "tempban": "",
+            "unban": "",
+            "mute": "",
+            "tempmute": "",
+            "unmute": "",
+            "warn":"",
+            "kick": ""
+          },
         
+          "temp_sanction": {
+            "ban": "",
+            "mute": ""
+          },}'); */
+
+
+ /*        '{"motif_ban": "null",
+    "motif_tempban": "null",
+    "motif_unban": "null",
+    "motif_mute": "null",
+    "motif_tempmute": "null",
+	"motif_unmute": "null",
+	"motif_warn": "null",
+	"motif_kick": "null",
+    "temp_ban": "null",
+    "temp_mute": "null"}' */
+
+
+ /*        
         String[] argss = new String[3];
 
         argss[0]="J'ai";
@@ -52,23 +88,7 @@ public class MyClassTest {
             builder.append(ar).append(" ");
         }
         String msg = builder.toString();
-        System.out.println(msg);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        System.out.println(msg); */
 
 
 /*           // start stopwatch
