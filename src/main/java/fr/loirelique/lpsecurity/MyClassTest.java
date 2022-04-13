@@ -35,6 +35,15 @@ public class MyClassTest {
         DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("yy/MM/dd HH:mm:ss");
         System.out.println("yy/MM/dd HH:mm:ss-> "+dtf2.format(ZonedDateTime.now(ZoneId.of("Europe/Paris"))));
 
+        /* SELECT historique_sanctions->'$.motifs_sanctions.ban' FROM pf8kr9g9players ; */
+        /* UPDATE pf8kr9g9players SET historique_sanctions = JSON_SET(historique_sanctions, '$.motifs_sanction.ban',2); */
+
+
+
+        /* {"motifs_sanction": {"ban": "","tempban": "","unban": "","mute": "","tempmute": "","unmute": "","warn":"","kick": ""},"temp_sanction": {"ban": "","mute": ""}} */
+
+
+
 /*         INSERT INTO pf8kr9g9players (historique_sanctions) VALUES ('{"motifs_sanction": {
             "ban": "",
             "tempban": "",
