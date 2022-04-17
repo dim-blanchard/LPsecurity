@@ -5,9 +5,16 @@ import java.util.HashMap;
 import java.text.Normalizer;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.chrono.ChronoLocalDateTime;
+import java.time.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+
+import org.checkerframework.checker.units.qual.h;
 
 public class MyClassTest {
 
@@ -31,17 +38,53 @@ public class MyClassTest {
     }
 
     public static void main(String args[]) {
+        String years = "2022";
+        int month = 04;
+        int dayOfMonth = 16;
+        int hour = 16;
+        int minute = 30;
+       
 
         try (Scanner sc = new Scanner(System.in)) {
-            System.out.println("Veuillez saisir une date(yy/MM/dd HH:mm:ss):");
-            String str = sc.nextLine();
-            System.out.println("Vous avez saisi : " + str);
+            System.out.println("Veuillez saisir une date(yyyy/MM/dd HH:mm:ss):");
+            years = sc.nextLine();
+            month = Integer.parseInt(sc.nextLine());
+            dayOfMonth = Integer.parseInt(sc.nextLine());
+            hour = Integer.parseInt(sc.nextLine());
+            minute = Integer.parseInt(sc.nextLine());
+            
+
+            int year = Integer.parseInt(years.replaceAll("\\s", ""));
+
+            LocalDateTime heurDateTime = LocalDateTime.of(year, month, dayOfMonth, hour, minute);
+            System.out.println(heurDateTime);
+    
+
+            ZonedDateTime dateTimeNow= ZonedDateTime.now(ZoneId.of("Europe/Paris"));
+            // ZonedDateTime.now(ZoneId.of("Europe/Paris"))
+
+            LocalDateTime dateTimeZone= dateTimeNow.toLocalDateTime();
+            System.out.println(dateTimeZone);
+    
+            DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("yy/MM/dd HH:mm");
+            System.out.println("yy/MM/dd HH:mm-> " + dtf2.format(heurDateTime));
+    
+            DateTimeFormatter dtf3 = DateTimeFormatter.ofPattern("yy/MM/dd HH:mm");
+            System.out.println("yy/MM/dd HH:mm-> " + dtf3.format(dateTimeNow));
+        
+            if(dateTimeZone.isAfter(heurDateTime)){
+                System.out.println("Date donner apres date de mtn donc joueur deban");
+            }else{
+                System.out.println("Toujour bannie");
+            }
+
+        }catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("La saisie de la date ou l'heure est incorrecte.");
         }
-        /*
-         * DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("yy/MM/dd HH:mm:ss");
-         * System.out.println("yy/MM/dd HH:mm:ss-> "+dtf2.format(ZonedDateTime.now(
-         * ZoneId.of("Europe/Paris"))));
-         */
+
+
+
 
         /*
          * SELECT historique_sanctions->'$.motifs_sanctions.ban' FROM pf8kr9g9players ;
