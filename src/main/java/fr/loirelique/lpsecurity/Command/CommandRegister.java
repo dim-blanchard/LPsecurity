@@ -70,16 +70,18 @@ public class CommandRegister implements CommandExecutor {
                                     ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
 
                                 String requet_insert_sql1 = "INSERT INTO " + ConfigBdd.getTable1()
-                                        + " (uuid,pseudo,password) VALUES(?,?,?)";
+                                        + " (uuid,pseudo,password,historique_sanctions) VALUES(?,?,?,?)";
                                 try (PreparedStatement statement1_insert = connection_addPlayer
                                         .prepareStatement(requet_insert_sql1)) {
                                     String pseudo = p.getName();
                                     pseudo = pseudo.toLowerCase();
                                     pseudo = pseudo.replaceAll("\\s", "");
                                     String pass = Main.plugin.getHash(args0);
+
                                     statement1_insert.setString(1, uuid);
                                     statement1_insert.setString(2, pseudo);
-                                    statement1_insert.setString(3,pass);
+                                    statement1_insert.setString(3, pass);
+                                    statement1_insert.setObject(4, Main.plugin.getHistoriqueDefault());
                                     statement1_insert.executeUpdate();
                                 }
 

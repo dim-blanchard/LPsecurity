@@ -9,7 +9,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.xml.bind.DatatypeConverter;import java.text.Normalizer;
+import javax.xml.bind.DatatypeConverter;
+import java.text.Normalizer;
 import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
@@ -24,6 +25,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
+import org.json.JSONObject;
 
 import fr.loirelique.lpsecurity.Command.CommandBan;
 import fr.loirelique.lpsecurity.Command.CommandLogin;
@@ -33,7 +35,6 @@ import fr.loirelique.lpsecurity.Command.CommandUnban;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.ConfigMessage;
 
-
 /**
  * Information sur la class!LPSECURITY
  *
@@ -42,6 +43,8 @@ import fr.loirelique.lpsecurity.String.ConfigMessage;
 public class Main extends JavaPlugin implements Listener {
 
     public static Main plugin;
+    // Liste historique des sanctions et des temps;
+    private HashMap<String, String> str = new HashMap<String, String>();
     // Liste des taches joueurs
     private HashMap<String, Integer> listTacheRegister = new HashMap<String, Integer>();
     private HashMap<String, Integer> listTacheLogin = new HashMap<String, Integer>();
@@ -77,6 +80,7 @@ public class Main extends JavaPlugin implements Listener {
         CommandExecutor commandTempban = new CommandTempban();
         getCommand("tempban").setExecutor(commandTempban);
 
+        
         System.out.println("Chargement plugin LPsecurity... ===> OK");
     }
 
@@ -468,6 +472,7 @@ public class Main extends JavaPlugin implements Listener {
 
         return pseudoMD5;
     }
+
     /**
      * Getter création d'un UUID en fonction du pseudo.
      */
@@ -505,23 +510,39 @@ public class Main extends JavaPlugin implements Listener {
         return motSha256;
     }
 
-    public String sansAccent(String s) 
-    {
-          String strTemp = Normalizer.normalize(s, Normalizer.Form.NFD);
-          Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-          return pattern.matcher(strTemp).replaceAll("");
+    public String sansAccent(String s) {
+        String strTemp = Normalizer.normalize(s, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(strTemp).replaceAll("");
     }
 
-    public String getListOnlinePlayer(String uuid) 
-    {
+    public String getListOnlinePlayer(String uuid) {
         String test = null;
-       
-        if (listOnlinePlayer.get(uuid) != null){
+
+        if (listOnlinePlayer.get(uuid) != null) {
             test = "1";
-        }
-        else{
+        } else {
             test = null;
         }
-          return test;
+        return test;
+    }
+
+    public JSONObject getHistoriqueDefault(){
+
+        str.put("temp_ban", "null");
+        str.put("temp_mute", "null");
+        str.put("motif_ban", "null");
+        str.put("motif_tempban", "null");
+        str.put("motif_unban", "null");
+
+        str.put("motif_mute", "null");
+        str.put("motif_unmute", "null");
+        str.put("motif_tempmute", "null");
+        str.put("motif_kick", "null");
+        str.put("motif_warn", "null");
+
+        JSONObject historique_sanctions = new JSONObject(str);
+        
+        return historique_sanctions;
     }
 }

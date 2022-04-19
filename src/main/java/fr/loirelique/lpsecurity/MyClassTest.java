@@ -10,6 +10,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import org.json.simple.JSONObject;
+
+
 
 public class MyClassTest {
 
@@ -33,12 +36,44 @@ public class MyClassTest {
     }
 
     public static void main(String args[]) {
+
+        
+       // String str ="{\"temp_ban\": \"null\", \"motif_ban\": \"null\", \"temp_mute\": \"null\", \"motif_kick\": \"null\", \"motif_mute\": \"null\", \"motif_warn\": \"null\", \"motif_unban\": \"null\", \"motif_unmute\": \"null\", \"motif_tempban\": \"null\", \"motif_tempmute\": \"null\"}";
+        
+        HashMap<String, String> str = new HashMap<String, String>();
+        str.put("temp_ban", "null");
+        str.put("temp_mute", "null");
+        str.put("motif_ban", "null");
+        str.put("motif_tempban", "null");
+        str.put("motif_unban", "null");
+
+        str.put("motif_mute", "null");
+        str.put("motif_unmute", "null");
+        str.put("motif_tempmute", "null");
+        str.put("motif_kick", "null");
+        str.put("motif_warn", "null");
+
+
+        try {
+            JSONObject joa = new JSONObject(str);
+            System.out.println(joa);
+      
+        } catch (Exception e) {
+            //TODO: handle exception
+        }
+        
+        //JSONObject jObject = new JSONObject(str);
+        //System.out.println(jObject);
+         
+        
+
+
+
         String years = "2022";
         int month = 04;
         int dayOfMonth = 16;
         int hour = 16;
         int minute = 30;
-       
 
         try (Scanner sc = new Scanner(System.in)) {
             System.out.println("Veuillez saisir une date(yyyy/MM/dd HH:mm:ss):");
@@ -47,39 +82,38 @@ public class MyClassTest {
             dayOfMonth = Integer.parseInt(sc.nextLine());
             hour = Integer.parseInt(sc.nextLine());
             minute = Integer.parseInt(sc.nextLine());
-            
 
             int year = Integer.parseInt(years.replaceAll("\\s", ""));
 
             LocalDateTime heurDateTime = LocalDateTime.of(year, month, dayOfMonth, hour, minute);
             System.out.println(heurDateTime);
-    
 
-            ZonedDateTime dateTimeNow= ZonedDateTime.now(ZoneId.of("Europe/Paris"));
+            ZonedDateTime dateTimeNow = ZonedDateTime.now(ZoneId.of("Europe/Paris"));
             // ZonedDateTime.now(ZoneId.of("Europe/Paris"))
 
-            LocalDateTime dateTimeZone= dateTimeNow.toLocalDateTime();
+            LocalDateTime dateTimeZone = dateTimeNow.toLocalDateTime();
             System.out.println(dateTimeZone);
-    
+
             DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("yy/MM/dd HH:mm");
             System.out.println("yy/MM/dd HH:mm-> " + dtf2.format(heurDateTime));
-    
+
             DateTimeFormatter dtf3 = DateTimeFormatter.ofPattern("yy/MM/dd HH:mm");
             System.out.println("yy/MM/dd HH:mm-> " + dtf3.format(dateTimeNow));
-        
-            if(dateTimeZone.isAfter(heurDateTime)){
+
+            if (dateTimeZone.isAfter(heurDateTime)) {
                 System.out.println("Date donner apres date de mtn donc joueur deban");
-            }else{
+            } else {
                 System.out.println("Toujour bannie");
             }
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println("La saisie de la date ou l'heure est incorrecte.");
         }
 
-
-
+        // {"temp_ban": "null", "motif_ban": "null", "temp_mute": "null", "motif_kick":
+        // "null", "motif_mute": "null", "motif_warn": "null", "motif_unban": "null",
+        // "motif_unmute": "null", "motif_tempban": "null", "motif_tempmute": "null"}
 
         /*
          * SELECT historique_sanctions->'$.motifs_sanctions.ban' FROM pf8kr9g9players ;
