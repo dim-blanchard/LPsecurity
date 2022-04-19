@@ -5,16 +5,11 @@ import java.util.HashMap;
 import java.text.Normalizer;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.chrono.ChronoLocalDateTime;
 import java.time.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-import org.checkerframework.checker.units.qual.h;
 
 public class MyClassTest {
 
