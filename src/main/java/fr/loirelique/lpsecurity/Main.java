@@ -44,7 +44,7 @@ public class Main extends JavaPlugin implements Listener {
 
     public static Main plugin;
     // Liste historique des sanctions et des temps;
-    private HashMap<String, String> str = new HashMap<String, String>();
+    /* private HashMap<String, String> str = new HashMap<String, String>(); */
     // Liste des taches joueurs
     private HashMap<String, Integer> listTacheRegister = new HashMap<String, Integer>();
     private HashMap<String, Integer> listTacheLogin = new HashMap<String, Integer>();
@@ -527,7 +527,7 @@ public class Main extends JavaPlugin implements Listener {
         return test;
     }
 
-    public JSONObject getHistoriqueDefault(){
+/*     public JSONObject getHistoriqueDefault(){
 
         str.put("temp_ban", "null");
         str.put("temp_mute", "null");
@@ -544,5 +544,5 @@ public class Main extends JavaPlugin implements Listener {
         JSONObject historique_sanctions = new JSONObject(str);
         
         return historique_sanctions;
-    }
+    } */
 }

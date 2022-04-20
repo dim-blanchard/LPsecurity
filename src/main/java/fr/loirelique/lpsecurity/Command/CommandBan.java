@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLType;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -65,12 +66,12 @@ public class CommandBan implements CommandExecutor {
                                         + "?characterEncoding=latin1&useConfigs=maxPerformance",
                                 ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
                             String requet_Update_sql2 = "UPDATE " + ConfigBdd.getTable1() +
-                                    " SET ban=?, historique=? WHERE uuid=?";
+                                    " SET ban=?, historique_sanctions=? WHERE uuid=?";
                             try (PreparedStatement statement2_select = connection_update
                                     .prepareStatement(requet_Update_sql2)) {
                                 statement2_select.setInt(1, 1);
-                                statement2_select.setString(2, "Ban: " + msg + " " + historique);
-                                statement2_select.setString(3, uuid);
+                                statement2_select.setString(2, "JSON_SET(historique_sanctions, '$.motif_ban' , 'test')");
+                                statement2_select.setString(3, uuid);                                              
                                 statement2_select.executeUpdate();
                             }
 
