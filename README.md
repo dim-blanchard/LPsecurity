@@ -24,14 +24,13 @@ Est **un plugin** (sous java 8) qui a pour bute de **sécurisé** un serveur Min
 | password|varchar(64)|null|Password du joueur recupérer gace à saisie de la commande "register" et hacher tout via LPsecurity.|		 
 | ban|int(1)|0|Bannisement vraie ou faux en fonction du nom du joueur. 0 ou 1		| 
 | warn|int(1)|0| ? | 
-| historique|longtexte|null|Information des sanctions sur un joueur|
+| historique_sanctions|JSON|null|Information les sanctions du joueur et le temps de ban.|
 
 # La partie sécurité intègre:
 ## Commande securiter (Sera amené à changer dans le temps).
 
 | Nomenclature | Nom |Option| Arguments |Permission| Description| 
 | :---------------:|:---------------:| :--------------:     | :---------------:  |  :---------------:  | :---------------:| 
-|/|banish|null|'nom joueur' 0 ou 1|LP.security.ban| Bannir ou debannir (0/1)| 
 |/|login|null|'password'|LP.security.login|Identifier le joueur à la connection.| 
 |/|register|null|'password' 'password'|LP.security.register|Enregistre le joueur à sa première connection.| 
 
@@ -50,8 +49,8 @@ Un joueur mal intentionné ne peut pas connecter plus de 1 à N (Un nombre N au 
 |/|kick|null|'nom joueur''raison !=null'|LP.sanction.kick|Exclue le joueur avec une raison obligatoire.| 
 |/|mute|null|'nom joueur''raison !=null'|LP.sanction.mute|Met sous silence un joueur dans le chat avec raison  obligatoire.| 
 |/|unmute|null|'nom joueur''raison !=null'|LP.sanction.mute|Donner la parole à un joueur préalablement "mute" avec raison obligatoire.|
-|/|tempban|null|'nom joueur''raison !=null'|LP.sanction.ban|Bannir un joueur pour un temp donner avec raison obligatoire| 
-|/|tempmute|null|'nom joueur''raison !=null'|LP.sanction.mute|Mute un joueur pour un temp donner avec raison obligatoire.| 
+|/|tempban|null|'nom joueur' 'temp !=null' 'raison !=null'|LP.sanction.ban|Bannir un joueur pour un temp donner avec raison obligatoire| 
+|/|tempmute|null|'nom joueur' 'temp !=null' 'raison !=null'|LP.sanction.mute|Mute un joueur pour un temp donner avec raison obligatoire.| 
 |/|historique|null|'nom joueur''raison !=null'|LP.sanction.h|Affiche toutes les sanctions du joueur.|
 |/|resethistorique|null|'nom joueur''raison !=null'|LP.sanction.rh|Supprime l'historique des sanctions du joueur.|
 
