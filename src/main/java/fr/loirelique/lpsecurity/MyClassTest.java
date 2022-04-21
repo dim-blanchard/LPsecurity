@@ -38,7 +38,7 @@ public class MyClassTest {
     public static void main(String args[]) {
 
         
-     String str ="{\"temp_ban\": \"null\", \"motif_ban\": \"null\", \"temp_mute\": \"null\", \"motif_kick\": \"null\", \"motif_mute\": \"null\", \"motif_warn\": \"null\", \"motif_unban\": \"null\", \"motif_unmute\": \"null\", \"motif_tempban\": \"null\", \"motif_tempmute\": \"null\"}";
+    // String str ="{\"temp_ban\": \"null\", \"motif_ban\": \"null\", \"temp_mute\": \"null\", \"motif_kick\": \"null\", \"motif_mute\": \"null\", \"motif_warn\": \"null\", \"motif_unban\": \"null\", \"motif_unmute\": \"null\", \"motif_tempban\": \"null\", \"motif_tempmute\": \"null\"}";
         
 /*         HashMap<String, String> str = new HashMap<String, String>();
         str.put("temp_ban", "null");
@@ -54,7 +54,7 @@ public class MyClassTest {
         str.put("motif_warn", "null"); */
 
 
-        System.out.println(str);
+     //   System.out.println(str);
 /* 
         try {
             JSONObject joa = new JSONObject(str);

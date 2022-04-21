@@ -26,11 +26,12 @@ public class CommandTempban implements CommandExecutor {
                     String uuid = Main.plugin.getUuidHash(pseudo);
 
                     StringBuilder builder = new StringBuilder();
-                    for (int i = 1; i < args.length; i++) {
-                        builder.append(args[i]).append(" ");
+                    for (int i = 2; i < args.length; i++) {
+
+                        String ar = Main.plugin.sansAccent(args[i].replace(" ' ", " \' "));
+                        builder.append(ar).append(" ");
                     }
                     String msg = builder.toString();
-                    // System.out.println(msg);
 
                     try (Connection connection_update = DriverManager.getConnection(
                             ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
@@ -40,12 +41,15 @@ public class CommandTempban implements CommandExecutor {
                                     + "?characterEncoding=latin1&useConfigs=maxPerformance",
                             ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
                         String requet_Update_sql2 = "UPDATE " + ConfigBdd.getTable1() +
-                                " SET ban=?, historique=? WHERE uuid=?";
+                        " SET ban=?, historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) , historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) WHERE uuid=?";
                         try (PreparedStatement statement2_select = connection_update
                                 .prepareStatement(requet_Update_sql2)) {
                             statement2_select.setInt(1,1);
-                            statement2_select.setString(2,"Tempban: "+msg);
-                            statement2_select.setString(3, uuid);
+                            statement2_select.setString(2,"temp_ban");
+                            statement2_select.setString(3,"TEMP DE BANNISEMENT");
+                            statement2_select.setString(4,"motif_tempban");
+                            statement2_select.setString(5, msg);
+                            statement2_select.setString(6, uuid);
                             statement2_select.executeUpdate();
                         }
 

@@ -27,11 +27,12 @@ public class CommandUnban implements CommandExecutor {
 
                     StringBuilder builder = new StringBuilder();
                     for (int i = 1; i < args.length; i++) {
-                        builder.append(args[i]).append(" ");
+
+                        String ar = Main.plugin.sansAccent(args[i].replace(" ' ", " \' "));
+                        builder.append(ar).append(" ");
                     }
                     String msg = builder.toString();
-                    // System.out.println(msg);
-
+                    
                     try (Connection connection_update = DriverManager.getConnection(
                             ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
                                     ConfigBdd.getPort()
@@ -40,12 +41,13 @@ public class CommandUnban implements CommandExecutor {
                                     + "?characterEncoding=latin1&useConfigs=maxPerformance",
                             ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
                         String requet_Update_sql2 = "UPDATE " + ConfigBdd.getTable1() +
-                                " SET ban=?, historique=? WHERE uuid=?";
+                        " SET ban=?, historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) WHERE uuid=?";
                         try (PreparedStatement statement2_select = connection_update
                                 .prepareStatement(requet_Update_sql2)) {
                             statement2_select.setInt(1,0);
-                            statement2_select.setString(2,"Unban: "+msg );
-                            statement2_select.setString(3, uuid);
+                            statement2_select.setString(2, "motif_unban");
+                            statement2_select.setString(3, msg);
+                            statement2_select.setString(4, uuid); 
                             statement2_select.executeUpdate();
                         }
 
