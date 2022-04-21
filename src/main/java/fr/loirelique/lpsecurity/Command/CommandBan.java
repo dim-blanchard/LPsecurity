@@ -66,12 +66,13 @@ public class CommandBan implements CommandExecutor {
                                         + "?characterEncoding=latin1&useConfigs=maxPerformance",
                                 ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
                             String requet_Update_sql2 = "UPDATE " + ConfigBdd.getTable1() +
-                                    " SET ban=?, historique_sanctions=? WHERE uuid=?";
+                                    " SET ban=?, historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) WHERE uuid=?";
                             try (PreparedStatement statement2_select = connection_update
                                     .prepareStatement(requet_Update_sql2)) {
                                 statement2_select.setInt(1, 1);
-                                statement2_select.setString(2, "JSON_SET(historique_sanctions, '$.motif_ban' , 'test')");
-                                statement2_select.setString(3, uuid);                                              
+                                statement2_select.setString(2, "motif_ban");
+                                statement2_select.setString(3, msg);
+                                statement2_select.setString(4, uuid);                                              
                                 statement2_select.executeUpdate();
                             }
 
