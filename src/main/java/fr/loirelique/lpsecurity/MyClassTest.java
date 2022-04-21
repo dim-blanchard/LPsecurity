@@ -67,25 +67,102 @@ public class MyClassTest {
         //JSONObject jObject = new JSONObject(str);
         //System.out.println(jObject);
          
-        
 
-
-
-        String years = "2022";
-        int month = 04;
-        int dayOfMonth = 16;
-        int hour = 16;
-        int minute = 30;
 
         try (Scanner sc = new Scanner(System.in)) {
             System.out.println("Veuillez saisir une date(yyyy/MM/dd HH:mm:ss):");
-            years = sc.nextLine();
-            month = Integer.parseInt(sc.nextLine());
-            dayOfMonth = Integer.parseInt(sc.nextLine());
-            hour = Integer.parseInt(sc.nextLine());
-            minute = Integer.parseInt(sc.nextLine());
+            String years = sc.nextLine();
+            String months = sc.nextLine();
+            String dayOfMonths = sc.nextLine();
+            String hours = sc.nextLine();
+            String minutes = sc.nextLine();
 
             int year = Integer.parseInt(years.replaceAll("\\s", ""));
+            int month = Integer.parseInt(months.replaceAll("\\s", ""));
+            int dayOfMonth = Integer.parseInt(dayOfMonths.replaceAll("\\s", ""));
+            int hour = Integer.parseInt(hours.replaceAll("\\s", ""));
+            int minute = Integer.parseInt(minutes.replaceAll("\\s", ""));
+
+            boolean bisextile = false;
+            boolean dateVerification = false;
+            boolean timeVerification = false;
+
+            if (year >= 2020 && year <= 2100) {
+                System.out.println("Années comprise entre 2020 et 2100.");
+                
+                if (year % 4 > 0) {
+                    System.out.println("Année non bisextile.");
+                    bisextile = false;
+
+                }else if(year % 4 == 0){
+                     System.out.println("Année bisextile.");
+                     bisextile = true;
+                     
+                }
+            }
+
+            if(month >= 1 && month <= 12)
+            {
+                System.out.println("Mois compris entre 1 et 12.");
+
+                if(month == 1 | month == 3 |month == 5 |month == 7 |month == 8 |month == 10 |month == 12){
+                    System.out.println("Mois entre 1 et 31.");
+                    if (dayOfMonth >=1 && dayOfMonth <= 31) {
+                        System.out.println("Jour entre 1 et 31.");
+                        dateVerification = true;
+                    }else{
+                        System.out.println("Jour entre 1 et 31 non respecter.");
+                        dateVerification = false;
+                    }
+                }
+
+                if(month == 4 | month == 6 |month == 9 |month == 11){
+                    System.out.println("Mois entre 1 et 30.");
+                    if (dayOfMonth >=1 && dayOfMonth <= 30) {
+                        System.out.println("Jour entre 1 et 30.");
+                        dateVerification = true;
+                    }else{
+                        System.out.println("Jour entre 1 et 30 non respecter.");
+                        dateVerification = false;
+                    }
+                }
+
+                if(month == 2 && bisextile == false){
+                    System.out.println("Mois entre 1 et 28.");
+                    if (dayOfMonth >=1 && dayOfMonth <= 28) {
+                        System.out.println("Jour entre 1 et 28.");
+                        dateVerification = true;
+                    }else{
+                        System.out.println("Jour entre 1 et 28 non respecter.");
+                        dateVerification = false;
+                    }
+                }
+
+                if(month == 2 && bisextile == true){
+                    System.out.println("Mois entre 1 et 29.");
+                    if (dayOfMonth >=1 && dayOfMonth <= 29) {
+                        System.out.println("Jour entre 1 et 29.");
+                        dateVerification = true;
+                    }else{
+                        System.out.println("Jour entre 1 et 29 non respecter.");
+                        dateVerification = false;
+                    }
+                }
+
+            }
+            else{
+                System.out.println("Erreur sur le mois donné.");
+                dateVerification = false;
+            }
+
+
+            if (dateVerification == true) {
+                System.out.println("On peut executer les requetes sql.");
+            }else if(dateVerification == false){
+                System.out.println("On a une érreur dans la date donné. yyyy/MM/dd -> "+year+"/"+month+"/"+dayOfMonth);
+            }
+
+
 
             LocalDateTime heurDateTime = LocalDateTime.of(year, month, dayOfMonth, hour, minute);
             System.out.println(heurDateTime);
