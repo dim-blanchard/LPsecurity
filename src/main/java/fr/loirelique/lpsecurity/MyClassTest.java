@@ -60,7 +60,7 @@ public class MyClassTest {
 
         
 
-        String chaine = "1234111111A";
+        String chaine = "0123456789A";
 
         for (int i = 0; i < chaine.length(); i++) {
             char chaineDeCaractere = chaine.charAt(i);
