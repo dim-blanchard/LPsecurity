@@ -24,7 +24,7 @@ commands:
 
   tempban:
     description: Description de la commande.(LPsecurity)
-    usage: /tempban [Nom du joueur] [Temps] [Raison]
+    usage: /tempban [Nom du joueur] [Temps <Année> <Mois> <Jours> <Heures> <Minutes>] [Raison]
     permission: LP.security.tempban  
   
   unban:
