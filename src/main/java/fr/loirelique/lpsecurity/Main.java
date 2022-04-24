@@ -25,7 +25,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
-import org.json.JSONObject;
 
 import fr.loirelique.lpsecurity.Command.CommandBan;
 import fr.loirelique.lpsecurity.Command.CommandLogin;
@@ -527,22 +526,4 @@ public class Main extends JavaPlugin implements Listener {
         return test;
     }
 
-/*     public JSONObject getHistoriqueDefault(){
-
-        str.put("temp_ban", "null");
-        str.put("temp_mute", "null");
-        str.put("motif_ban", "null");
-        str.put("motif_tempban", "null");
-        str.put("motif_unban", "null");
-
-        str.put("motif_mute", "null");
-        str.put("motif_unmute", "null");
-        str.put("motif_tempmute", "null");
-        str.put("motif_kick", "null");
-        str.put("motif_warn", "null");
-
-        JSONObject historique_sanctions = new JSONObject(str);
-        
-        return historique_sanctions;
-    } */
 }

@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
+import fr.loirelique.lpsecurity.Useful.DateAndTime;
 
 public class CommandTempban implements CommandExecutor {
 
@@ -32,8 +33,15 @@ public class CommandTempban implements CommandExecutor {
                         builder.append(ar).append(" ");
                     }
                     String msg = builder.toString();
+                    DateAndTime dateAndTime = new DateAndTime();
+                    String years = args[3];
+                    String months = args[4];
+                    String dayOfMonths = args[5];
+                    String hours = args[6];
+                    String minutes = args[7];
 
-                    try (Connection connection_update = DriverManager.getConnection(
+                    if (dateAndTime.testDateEtTime(years, months, dayOfMonths, hours, minutes) == true) {
+                        try (Connection connection_update = DriverManager.getConnection(
                             ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
                                     ConfigBdd.getPort()
                                     + "/"
@@ -60,6 +68,10 @@ public class CommandTempban implements CommandExecutor {
                     p.sendMessage(pseudo + " a étais bannie.");
                     Player player = Main.plugin.getListPlayer(uuid);
                     player.kickPlayer("Tu viens d'être bannie");
+                    
+                    }else if (dateAndTime.testDateEtTime(years, months, dayOfMonths, hours, minutes) == false) {
+                        System.out.println("La commande n'a pas été executer.");
+                    }     
                 }
 
             }
