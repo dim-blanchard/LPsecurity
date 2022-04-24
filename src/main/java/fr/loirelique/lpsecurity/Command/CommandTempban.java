@@ -49,41 +49,47 @@ public class CommandTempban implements CommandExecutor {
 
                     if (dateAndTime.testDateEtTime(years, months, dayOfMonths, hours, minutes) == true) {
 
-                        LocalDateTime heurDateTime = LocalDateTime.of(years, months, dayOfMonths, hours, minutes);
-                        System.out.println(heurDateTime);
+                        int year = Integer.parseInt(years.replaceAll("\\s", ""));
+                        int month = Integer.parseInt(months.replaceAll("\\s", ""));
+                        int dayOfMonth = Integer.parseInt(dayOfMonths.replaceAll("\\s", ""));
+                        int hour = Integer.parseInt(hours.replaceAll("\\s", ""));
+                        int minute = Integer.parseInt(minutes.replaceAll("\\s", ""));
 
+                        LocalDateTime heurDateTime = LocalDateTime.of(year, month, dayOfMonth, hour, minute);
+                        System.out.println(heurDateTime);
+                        String heureDateTime = heurDateTime.toString();
 
                         try (Connection connection_update = DriverManager.getConnection(
-                            ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
-                                    ConfigBdd.getPort()
-                                    + "/"
-                                    + ConfigBdd.getDatabase1()
-                                    + "?characterEncoding=latin1&useConfigs=maxPerformance",
-                            ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-                        String requet_Update_sql2 = "UPDATE " + ConfigBdd.getTable1() +
-                        " SET ban=?, historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) , historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) WHERE uuid=?";
-                        try (PreparedStatement statement2_select = connection_update
-                                .prepareStatement(requet_Update_sql2)) {
-                            statement2_select.setInt(1,1);
-                            statement2_select.setString(2,"temp_ban");
-                            statement2_select.setString(3,"TEMP DE BANNISEMENT");
-                            statement2_select.setString(4,"motif_tempban");
-                            statement2_select.setString(5, msg);
-                            statement2_select.setString(6, uuid);
-                            statement2_select.executeUpdate();
+                                ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
+                                        ConfigBdd.getPort()
+                                        + "/"
+                                        + ConfigBdd.getDatabase1()
+                                        + "?characterEncoding=latin1&useConfigs=maxPerformance",
+                                ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
+                            String requet_Update_sql2 = "UPDATE " + ConfigBdd.getTable1() +
+                                    " SET ban=?, historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) , historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) WHERE uuid=?";
+                            try (PreparedStatement statement2_select = connection_update
+                                    .prepareStatement(requet_Update_sql2)) {
+                                statement2_select.setInt(1, 1);
+                                statement2_select.setString(2, "temp_ban");
+                                statement2_select.setString(3, heureDateTime);
+                                statement2_select.setString(4, "motif_tempban");
+                                statement2_select.setString(5, msg);
+                                statement2_select.setString(6, uuid);
+                                statement2_select.executeUpdate();
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                        p.sendMessage(pseudo + " a étais bannie.");
+                        Player player = Main.plugin.getListPlayer(uuid);
+                        player.kickPlayer("Tu viens d'être bannie");
 
-                    p.sendMessage(pseudo + " a étais bannie.");
-                    Player player = Main.plugin.getListPlayer(uuid);
-                    player.kickPlayer("Tu viens d'être bannie");
-
-                    }else if (dateAndTime.testDateEtTime(years, months, dayOfMonths, hours, minutes) == false) {
+                    } else if (dateAndTime.testDateEtTime(years, months, dayOfMonths, hours, minutes) == false) {
                         System.out.println("La commande n'a pas été executer.");
-                    }     
+                    }
                 }
 
             }
