@@ -3,6 +3,7 @@ package fr.loirelique.lpsecurity.Command;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.time.LocalDateTime;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -25,22 +26,33 @@ public class CommandTempban implements CommandExecutor {
                 if (args.length >= 2) {
                     String pseudo = args[0];
                     String uuid = Main.plugin.getUuidHash(pseudo);
+                    System.out.println(args[0]);
+                    DateAndTime dateAndTime = new DateAndTime();
+                    String years = args[1];
+                    System.out.println(args[1]);
+                    String months = args[2];
+                    System.out.println(args[2]);
+                    String dayOfMonths = args[3];
+                    System.out.println(args[3]);
+                    String hours = args[4];
+                    System.out.println(args[4]);
+                    String minutes = args[5];
+                    System.out.println(args[5]);
 
                     StringBuilder builder = new StringBuilder();
-                    for (int i = 2; i < args.length; i++) {
+                    for (int i = 6; i < args.length; i++) {
 
                         String ar = Main.plugin.sansAccent(args[i].replace(" ' ", " \' "));
                         builder.append(ar).append(" ");
                     }
                     String msg = builder.toString();
-                    DateAndTime dateAndTime = new DateAndTime();
-                    String years = args[3];
-                    String months = args[4];
-                    String dayOfMonths = args[5];
-                    String hours = args[6];
-                    String minutes = args[7];
 
                     if (dateAndTime.testDateEtTime(years, months, dayOfMonths, hours, minutes) == true) {
+
+                        LocalDateTime heurDateTime = LocalDateTime.of(years, months, dayOfMonths, hours, minutes);
+                        System.out.println(heurDateTime);
+
+
                         try (Connection connection_update = DriverManager.getConnection(
                             ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
                                     ConfigBdd.getPort()
@@ -68,7 +80,7 @@ public class CommandTempban implements CommandExecutor {
                     p.sendMessage(pseudo + " a étais bannie.");
                     Player player = Main.plugin.getListPlayer(uuid);
                     player.kickPlayer("Tu viens d'être bannie");
-                    
+
                     }else if (dateAndTime.testDateEtTime(years, months, dayOfMonths, hours, minutes) == false) {
                         System.out.println("La commande n'a pas été executer.");
                     }     
