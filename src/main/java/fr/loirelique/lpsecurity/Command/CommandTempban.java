@@ -85,7 +85,7 @@ public class CommandTempban implements CommandExecutor {
 
                         p.sendMessage(pseudo + " a étais bannie.");
                         Player player = Main.plugin.getListPlayer(uuid);
-                        player.kickPlayer("Tu viens d'être bannie");
+                        player.kickPlayer(msg);
 
                     } else if (dateAndTime.testDateEtTime(years, months, dayOfMonths, hours, minutes) == false) {
                         System.out.println("La commande n'a pas été executer.");
