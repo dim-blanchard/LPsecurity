@@ -56,6 +56,10 @@ public class MyClassTest {
 
     public static void main(String args[]) {
 
+        LocalDateTime dateTime = LocalDateTime.parse("2018-05-05T11:50:55");
+        System.out.println(dateTime);
+
+
 /*         String years = "2022";
         String months = "06";
         String dayOfMonths = "23";

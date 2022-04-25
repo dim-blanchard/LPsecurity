@@ -11,6 +11,10 @@ import java.util.HashMap;
 
 import javax.xml.bind.DatatypeConverter;
 import java.text.Normalizer;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
@@ -79,7 +83,6 @@ public class Main extends JavaPlugin implements Listener {
         CommandExecutor commandTempban = new CommandTempban();
         getCommand("tempban").setExecutor(commandTempban);
 
-        
         System.out.println("Chargement plugin LPsecurity... ===> OK");
     }
 
@@ -98,13 +101,12 @@ public class Main extends JavaPlugin implements Listener {
     public void playerBeforeJoinServer(AsyncPlayerPreLoginEvent p_event) {
 
         String uuid = getUuidHash(p_event);
-
         String ip = p_event.getAddress().getHostAddress();
-
         int ban = 0;
-
+        String temp_ban = "";
+        String motif_tempban = "";
+        String motif_ban = "";
         long startTime = System.nanoTime();
-
         // On fait une requet dans la base de donnée qui retourne la valeur de la
         // colomne "ban" en fonction de la colomne "uuid".
         try (Connection connection_register = DriverManager.getConnection(
@@ -112,7 +114,8 @@ public class Main extends JavaPlugin implements Listener {
                         + ConfigBdd.getDatabase1()
                         + "?characterEncoding=latin1&useConfigs=maxPerformance",
                 ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-            String requet_Select_sql2 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
+            String requet_Select_sql2 = "SELECT uuid,ban, historique_sanctions->>'$.motif_tempban', historique_sanctions->>'$.temp_ban', historique_sanctions->>'$.motif_ban'  FROM "
+                    + ConfigBdd.getTable1() + " WHERE uuid=?";
             try (PreparedStatement statement2_select = connection_register
                     .prepareStatement(requet_Select_sql2)) {
                 statement2_select.setString(1, uuid);
@@ -120,6 +123,9 @@ public class Main extends JavaPlugin implements Listener {
                 try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                     while (resultat_requete_select.next()) {
                         ban = resultat_requete_select.getInt("ban");
+                        temp_ban = resultat_requete_select.getString("historique_sanctions->>'$.temp_ban'");
+                        motif_tempban = resultat_requete_select.getString("historique_sanctions->>'$.motif_tempban'");
+                        motif_ban = resultat_requete_select.getString("historique_sanctions->>'$.motif_ban'");
                     }
                 }
             }
@@ -127,11 +133,11 @@ public class Main extends JavaPlugin implements Listener {
             e.printStackTrace();
             System.out.println("error block ban ");
         }
-        // Si le joueur est bannie on le kick.
-        if (ban == 1) {
-            p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                    ConfigMessage.getKickBan());
-        } else if (ban == 0) {
+        System.out.println(temp_ban);
+        System.out.println(motif_ban);
+        System.out.println(motif_tempban);
+
+        if (ban == 0) {
             // On test si le joueur et deja en ligne avec le même uuid(Générer avec le
             // pseudo + un préfixe de salage en MD5).
 
@@ -167,6 +173,32 @@ public class Main extends JavaPlugin implements Listener {
                 System.out.println("error block online ");
             }
 
+        }
+
+        if (temp_ban.equals("null") == true && ban == 1) {
+            p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
+                    motif_ban);
+        } else if (temp_ban.equals("null") == false && ban == 1) {
+            LocalDateTime dateTime_temp_ban = LocalDateTime.parse(temp_ban);
+
+            ZonedDateTime dateTimeNow = ZonedDateTime.now(ZoneId.of("Europe/Paris"));
+
+            LocalDateTime dateTimeZone = dateTimeNow.toLocalDateTime();
+            System.out.println(dateTimeZone);
+
+            if (dateTimeZone.isAfter(dateTime_temp_ban)) {
+                System.out.println(
+                        "Faire une update de la bdd pour ,temp_ban null, ban 0, motif_ban null, motif_tempban null");
+            } else {
+
+                LocalDateTime dateTemp_ban = LocalDateTime.parse(temp_ban);
+
+                DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("yyyy/MM/dd à HH:mm");
+
+                p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
+                        "Bannie jusqu'au: " + dtf2.format(dateTemp_ban) + " Raison: " + motif_tempban);
+            }
+        
         }
 
         long endTime = System.nanoTime();
