@@ -187,8 +187,29 @@ public class Main extends JavaPlugin implements Listener {
             System.out.println(dateTimeZone);
 
             if (dateTimeZone.isAfter(dateTime_temp_ban)) {
-                System.out.println(
-                        "Faire une update de la bdd pour ,temp_ban null, ban 0, motif_ban null, motif_tempban null");
+                try (Connection connection_update = DriverManager.getConnection(
+                    ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
+                            ConfigBdd.getPort()
+                            + "/"
+                            + ConfigBdd.getDatabase1()
+                            + "?characterEncoding=latin1&useConfigs=maxPerformance",
+                    ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
+                String requet_Update_sql2 = "UPDATE " + ConfigBdd.getTable1() +
+                        " SET ban=?, historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')),historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) WHERE uuid=?";
+                try (PreparedStatement statement2_select = connection_update
+                        .prepareStatement(requet_Update_sql2)) {
+                    statement2_select.setInt(1, 0);
+                    statement2_select.setString(2, "motif_tempban");
+                    statement2_select.setString(3, "null");
+                    statement2_select.setString(4, "temp_ban");
+                    statement2_select.setString(5, "null");
+                    statement2_select.setString(6, uuid);                                              
+                    statement2_select.executeUpdate();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             } else {
 
                 LocalDateTime dateTemp_ban = LocalDateTime.parse(temp_ban);
