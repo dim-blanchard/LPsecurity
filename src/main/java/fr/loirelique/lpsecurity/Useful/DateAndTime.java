@@ -151,28 +151,6 @@ public class DateAndTime {
 
             if (dateVerification == true && timeVerification == true) {
                 System.out.println("On peut executer les requetes sql.");
-                
-                
-            /*  LocalDateTime heurDateTime = LocalDateTime.of(year, month, dayOfMonth, hour, minute);
-                System.out.println(heurDateTime);
-    
-                ZonedDateTime dateTimeNow = ZonedDateTime.now(ZoneId.of("Europe/Paris"));
-    
-                LocalDateTime dateTimeZone = dateTimeNow.toLocalDateTime();
-                System.out.println(dateTimeZone);
-    
-                DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("yy/MM/dd HH:mm");
-                System.out.println("yy/MM/dd HH:mm-> " + dtf2.format(heurDateTime));
-    
-                DateTimeFormatter dtf3 = DateTimeFormatter.ofPattern("yy/MM/dd HH:mm");
-                System.out.println("yy/MM/dd HH:mm-> " + dtf3.format(dateTimeNow)); */
-    
-               /*  if (dateTimeZone.isAfter(heurDateTime)) {
-                    System.out.println("Date donner apres date de mtn donc joueur deban");
-                } else {
-                    System.out.println("Toujour bannie");
-                } */
-
                 testDateEtTime = true;
 
             } else if (dateVerification == false && timeVerification == true) {
