@@ -1,4 +1,4 @@
-#Configuration de la base de données.
+#Partie 1:Configuration de la base de données.
 bdd:
   driver: jdbc:mysql
   host: localhost
@@ -20,8 +20,40 @@ bdd:
 #Salage pour l'algorithme sha 256 et MD5 à modifier au lancement du serveur et ne jamais le remodifier. Sinon corruption des mots de passe de la base de données.
 security:
   sel: ec4wdw13
+
+##########################################################################
+#Liste des codes couleur du tchat
+# §4 "dark_red"
+# §c "red"
+# §6 "gold"
+# §e "yellow"
+# §2 "dark_green"
+# §a "green"
+# §b "aqua"
+# §3 "dark_aqua"
+# §1 "dark_blue"
+# §9 "blue"
+# §d "light_purple"
+# §5 "dark_purple"
+# §f "white"
+# §7 "gray"
+# §8 "dark_gray"
+# §0 "black"
+# §r "reset" Réinitialise la couleur par défaut
+# §l "Gras"
+# §o "Italic"
+# §n "Souligné"
+# §m "Barré"
+
+# Exemple d'utilisation:
+# ip: §cIp trop de fois similaire pour plusiseurs personne.
+# On utilise §c devant le message et celui-ci sera en "rouge".
+
+########################################################################## 
+#Personnalisation des messages d'exclusion, d'enregistrement,
+#d'identification et des commandes ainsi que leurs configurations.
  
-#Message d'exclusion du serveur.
+#Partie 2:Message d'exclusion du serveur et configuration.
 string_kick:
   #Avant la connection d'un joueur.
   ip: Ip trop de fois similaire pour plusiseurs personne.
@@ -32,20 +64,31 @@ string_kick:
   #Nombre d'ip similaire connecter à la fois au serveur.
   over_ip: 2
 
-#Message d'entré plus le temps avant enregistrement dans le serveur.
+##########################################################################
+
+#Partie 3:Message d'entré plus le temps avant enregistrement dans le serveur.
 string:
   register_title: Bienvenue !
   register_subtitles: Enregistre toi -> /register !
   register_time: 120
-#Message d'entré plus le temps avant identification dans le serveur.
+
+##########################################################################
+
+#Partie 4:Message d'entré plus le temps avant identification dans le serveur.
   login_title: Salut !
   login_subtitles: Identifie toi -> /login  !
   login_time: 120
-#Message d'erreur des commande.
+
+##########################################################################
+
+#Partie 4:Message d'erreur des commande.
   error_register_pass: Le mot de passe dois faire au mini 8 caractère ou ce corresponde pas.
   error_register: Tu es déja enregister , utilise la commande /login [pass] pour d'identifier.
   error_login_pass: Le mot de passe est incorecte.
   error_login: Tu n'es pas enregistrer, utilise la commande /register pour t'enregistrer.
-#Message après identification durée de une seconde.
+
+##########################################################################
+
+#Partie 5: Message après identification durée de une seconde.
   after_login_title: Bienvenue !
   after_login_subtitles: Tu es bien identifier !
