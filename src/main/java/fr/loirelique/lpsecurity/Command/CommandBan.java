@@ -25,7 +25,6 @@ public class CommandBan implements CommandExecutor {
                 if (args.length >= 2) {
                     String pseudo = args[0];
                     String uuid = Main.plugin.getUuidHash(pseudo);
-                    String historique ="";
                     int ban = 0;
 
                     try (Connection connection_register = DriverManager.getConnection(
@@ -40,7 +39,6 @@ public class CommandBan implements CommandExecutor {
 
                             try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                                 while (resultat_requete_select.next()) {
-                                    historique = resultat_requete_select.getString("historique");
                                     ban = resultat_requete_select.getInt("ban");
                                 }
                             }
