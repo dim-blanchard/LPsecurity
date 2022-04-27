@@ -92,3 +92,9 @@ string:
 #Partie 5: Message après identification durée de une seconde.
   after_login_title: Bienvenue !
   after_login_subtitles: Tu es bien identifier !
+
+##########################################################################
+
+#Partie 6: Message commande unban.
+  bannie: §c
+  already: §c

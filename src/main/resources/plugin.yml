@@ -29,7 +29,7 @@ commands:
   
   unban:
     description: Description de la commande.(LPsecurity)
-    usage: /unban [Nom du joueur] [Raison]
+    usage: §c/unban [Nom du joueur] [Raison]
     permission: LP.security.unban
 
 permissions:

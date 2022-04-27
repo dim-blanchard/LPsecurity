@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
+import fr.loirelique.lpsecurity.String.MessageUnban;
 
 public class CommandUnban implements CommandExecutor {
 
@@ -80,10 +81,10 @@ public class CommandUnban implements CommandExecutor {
                             e.printStackTrace();
                         }
 
-                        p.sendMessage(pseudo + " a étais débannie.");
+                        p.sendMessage(MessageUnban.getUnban()+pseudo + " a étais débannie.");
                         errorCommande = true;
                     } else if (ban == 0) {
-                        p.sendMessage(pseudo + " Le joueur est deja débannie.");
+                        p.sendMessage(MessageUnban.getUnban()+pseudo + " Le joueur est deja débannie.");
                         errorCommande = true;
                     }
 
