@@ -60,6 +60,13 @@ public class MyClassTest {
         System.out.println(dateTime);
 
 
+/*         <resource>
+        <directory>${basedir}/</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>LICENSE.txt</include>
+        </includes>
+      </resource> */
 /*         String years = "2022";
         String months = "06";
         String dayOfMonths = "23";
