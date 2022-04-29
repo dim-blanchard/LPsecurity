@@ -95,6 +95,6 @@ string:
 
 ##########################################################################
 
-#Partie 6: Message commande unban.
-  bannie: §c
-  already: §c
+#Partie 6: Couleur message commande unban.
+  debannie: §5
+  already_debannie: §5

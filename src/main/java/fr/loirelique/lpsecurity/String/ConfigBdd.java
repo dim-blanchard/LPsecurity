@@ -43,6 +43,12 @@ public class ConfigBdd {
     }
 
 
+    public static String getSel() {
+        String sel = Main.plugin.getConfig().getString("security.sel");
+
+        return sel;
+    }
+
    
 
 }

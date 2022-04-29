@@ -13,7 +13,9 @@ import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
-import fr.loirelique.lpsecurity.String.ConfigMessage;
+import fr.loirelique.lpsecurity.String.MessageKick;
+import fr.loirelique.lpsecurity.String.MessageLogin;
+import fr.loirelique.lpsecurity.String.MessageRegister;
 
 public class CommandRegister implements CommandExecutor {
 
@@ -56,7 +58,7 @@ public class CommandRegister implements CommandExecutor {
                     }
 
                     if (uuid.equals(uuidRequet)) {
-                        p.sendMessage(ConfigMessage.getErrorRegister());
+                        p.sendMessage(MessageRegister.getErrorRegister());
                     } else {
                         String args0 = args[0];
                         String args1 = args[1];
@@ -92,10 +94,10 @@ public class CommandRegister implements CommandExecutor {
                             Bukkit.getScheduler().cancelTask(Main.plugin.getTaskRegisterTime(p));
                             Main.plugin.getTaskRegisterTimeRemove(p);
                             Main.plugin.setTaskLoginTime(p);
-                            ConfigMessage.sendLogin(p);
+                            MessageLogin.sendLogin(p);
 
                         } else {
-                            p.sendMessage(ConfigMessage.getErrorRegisterPass());
+                            p.sendMessage(MessageRegister.getErrorRegisterPass());
 
                         }
                     }

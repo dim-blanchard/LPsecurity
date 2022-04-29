@@ -36,7 +36,9 @@ import fr.loirelique.lpsecurity.Command.CommandRegister;
 import fr.loirelique.lpsecurity.Command.CommandTempban;
 import fr.loirelique.lpsecurity.Command.CommandUnban;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
-import fr.loirelique.lpsecurity.String.ConfigMessage;
+import fr.loirelique.lpsecurity.String.MessageKick;
+import fr.loirelique.lpsecurity.String.MessageLogin;
+import fr.loirelique.lpsecurity.String.MessageRegister;
 
 /**
  * Information sur la class!LPSECURITY
@@ -144,7 +146,7 @@ public class Main extends JavaPlugin implements Listener {
             try {
                 if (listOnlinePlayer.get(uuid) != null) {
                     p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                            ConfigMessage.getKickOnline());
+                            MessageKick.getKickOnline());
                 } else {
                     listOnlinePlayer.put(uuid, 1);
 
@@ -152,9 +154,9 @@ public class Main extends JavaPlugin implements Listener {
                     // configuration donner.
                     try {
                         if (listIpPlayer.get(ip) != null) {
-                            if (listIpPlayer.size() == ConfigMessage.getKickOverIp()) {
+                            if (listIpPlayer.size() == MessageKick.getKickOverIp()) {
                                 p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                                        ConfigMessage.getKickIp());
+                                        MessageKick.getKickIp());
                             } else {
                                 (listIpPlayer.get(ip)).add(uuid);
                             }
@@ -268,13 +270,13 @@ public class Main extends JavaPlugin implements Listener {
         if (uuid.equals(uuidRequet)) {
             setTaskBlockSpawn(p);
             setTaskLoginTime(p);
-            ConfigMessage.sendLogin(p);
+            MessageLogin.sendLogin(p);
 
         } // Si l'uuid du joueur n'est pas égale à un uuid deja enregistrer.
         else {
             setTaskBlockSpawn(p);
             setTaskRegisterTime(p);
-            ConfigMessage.sendRegister(p);
+            MessageRegister.sendRegister(p);
         }
 
         // Fin test de vitesse
@@ -355,7 +357,7 @@ public class Main extends JavaPlugin implements Listener {
 
         BukkitTask tache = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
             // Au dela du delais donner dépasser le joueur est kick.
-            int time_run1 = ConfigMessage.getRegisterTime();
+            int time_run1 = MessageRegister.getRegisterTime();
 
             @Override
             public void run() {
@@ -364,7 +366,7 @@ public class Main extends JavaPlugin implements Listener {
 
                 if (time_run1 == 0) {
 
-                    p.kickPlayer(ConfigMessage.getKickOvertime());
+                    p.kickPlayer(MessageKick.getKickOvertime());
 
                 }
                 time_run1--;
@@ -402,7 +404,7 @@ public class Main extends JavaPlugin implements Listener {
 
         BukkitTask tache = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
             // Au dela du delais donner dépasser le joueur est kick.
-            int time_run1 = ConfigMessage.getLoginTime();
+            int time_run1 = MessageLogin.getLoginTime();
 
             @Override
             public void run() {
@@ -411,7 +413,7 @@ public class Main extends JavaPlugin implements Listener {
 
                 if (time_run1 == 0) {
 
-                    p.kickPlayer(ConfigMessage.getKickOvertime());
+                    p.kickPlayer(MessageKick.getKickOvertime());
 
                 }
                 time_run1--;
@@ -494,7 +496,7 @@ public class Main extends JavaPlugin implements Listener {
         pseudo = pseudo.toLowerCase();
         String pseudoMD5 = "";
         try {
-            String selMot = ConfigMessage.getSel() + pseudo;
+            String selMot = ConfigBdd.getSel() + pseudo;
             MessageDigest md = MessageDigest.getInstance("MD5");
             byte[] digest = md.digest(selMot.getBytes(StandardCharsets.UTF_8));
             pseudoMD5 = DatatypeConverter.printHexBinary(digest).toLowerCase();
@@ -514,7 +516,7 @@ public class Main extends JavaPlugin implements Listener {
         pseudo = pseudo.toLowerCase();
         String pseudoMD5 = "";
         try {
-            String selMot = ConfigMessage.getSel() + pseudo;
+            String selMot = ConfigBdd.getSel() + pseudo;
             MessageDigest md = MessageDigest.getInstance("MD5");
             byte[] digest = md.digest(selMot.getBytes(StandardCharsets.UTF_8));
             pseudoMD5 = DatatypeConverter.printHexBinary(digest).toLowerCase();
@@ -534,7 +536,7 @@ public class Main extends JavaPlugin implements Listener {
         pseudo = pseudo.toLowerCase();
         String pseudoMD5 = "";
         try {
-            String selMot = ConfigMessage.getSel() + pseudo;
+            String selMot = ConfigBdd.getSel() + pseudo;
             MessageDigest md = MessageDigest.getInstance("MD5");
             byte[] digest = md.digest(selMot.getBytes(StandardCharsets.UTF_8));
             pseudoMD5 = DatatypeConverter.printHexBinary(digest).toLowerCase();
@@ -551,7 +553,7 @@ public class Main extends JavaPlugin implements Listener {
     public String getHash(String mot) {
         String motSha256 = "";
         try {
-            String selMot = ConfigMessage.getSel() + mot;
+            String selMot = ConfigBdd.getSel() + mot;
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] digest = md.digest(selMot.getBytes(StandardCharsets.UTF_8));
             motSha256 = DatatypeConverter.printHexBinary(digest).toLowerCase();

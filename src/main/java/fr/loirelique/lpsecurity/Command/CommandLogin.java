@@ -13,7 +13,8 @@ import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
-import fr.loirelique.lpsecurity.String.ConfigMessage;
+import fr.loirelique.lpsecurity.String.MessageKick;
+import fr.loirelique.lpsecurity.String.MessageLogin;
 
 public class CommandLogin implements CommandExecutor {
 
@@ -101,15 +102,15 @@ public class CommandLogin implements CommandExecutor {
                                 Main.plugin.getTaskBlockSpawnRemove(p);
                             }
 
-                            ConfigMessage.sendAfterLogin(p);
+                            MessageLogin.sendAfterLogin(p);
 
                         } else {
-                            p.sendMessage(ConfigMessage.getErrorLoginPass());
+                            p.sendMessage(MessageLogin.getErrorLoginPass());
 
                         }
 
                     } else {
-                        p.sendMessage(ConfigMessage.getErrorLogin());
+                        p.sendMessage(MessageLogin.getErrorLogin());
                     }
 
                 }

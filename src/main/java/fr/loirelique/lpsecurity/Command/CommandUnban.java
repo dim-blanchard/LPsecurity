@@ -81,10 +81,10 @@ public class CommandUnban implements CommandExecutor {
                             e.printStackTrace();
                         }
 
-                        p.sendMessage(MessageUnban.getUnban()+pseudo + " a étais débannie.");
+                        p.sendMessage(MessageUnban.getUnban()+pseudo + " a étais réintégrer à la communauté de serveur.");
                         errorCommande = true;
                     } else if (ban == 0) {
-                        p.sendMessage(MessageUnban.getUnban()+pseudo + " Le joueur est deja débannie.");
+                        p.sendMessage(MessageUnban.getAlreadyUnban()+pseudo + " Le joueur est déja réintégrer à la communauté de serveur.");
                         errorCommande = true;
                     }
 
