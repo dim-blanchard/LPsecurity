@@ -43,6 +43,36 @@ public class ConfigBdd {
     }
 
 
+    public static String getUserSelect() {
+        String user = Main.plugin.getConfig().getString("bdd.user_select");
+        return user;
+    }
+
+    public static String getPassSelect() {
+        String pass = Main.plugin.getConfig().getString("bdd.pass_select");
+        return pass;
+    }
+
+    public static String getUserSelectUpdate() {
+        String user = Main.plugin.getConfig().getString("bdd.user_select_update");
+        return user;
+    }
+
+    public static String getPassSelectUpdate() {
+        String pass = Main.plugin.getConfig().getString("bdd.pass_select_update");
+        return pass;
+    }
+
+    public static String getUserSelectInsert() {
+        String user = Main.plugin.getConfig().getString("bdd.uuser_select_insert");
+        return user;
+    }
+
+    public static String getPassSelectInsert() {
+        String pass = Main.plugin.getConfig().getString("bdd.pass_select_insert");
+        return pass;
+    }
+
     public static String getSel() {
         String sel = Main.plugin.getConfig().getString("security.sel");
 
