@@ -97,13 +97,27 @@ string:
 
 #Partie 6: Messages et couleur de commande.
 #Unban
-  couleur_debannie: §5
-  couleur_already_debannie: §5
+  color_unban: §5
+  color_already_unban: §5
   #Exemple: Couleur[Nom du joueur] a étais réintégrer à la communauté de serveur.
-  debannie: a étais réintégrer à la communauté de serveur.
-  already_debannie: Le joueur est déja réintégrer à la communauté de serveur.
+  unban: a étais réintégrer à la communauté de serveur.
+  already_unban: Le joueur est déja réintégrer à la communauté de serveur.
 #Tempban
-  
+  color_tempban: 
+  color_error_tempban:
+  color_already_tempban:
 
+  tempban: a étais exclue de la communauté de serveur.
+  error_tempban: La commande n'a pas été executer.
+  already_tempban: joueur déja exclue de la communauté.
+#ban
+  color_ban:
+  color_error_ban:
+  color_already_ban:
+
+  ban:
+  error_ban:
+  already_ban:
+  
 
 

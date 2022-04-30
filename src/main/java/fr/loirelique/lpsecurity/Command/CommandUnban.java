@@ -81,10 +81,10 @@ public class CommandUnban implements CommandExecutor {
                             e.printStackTrace();
                         }
 
-                        p.sendMessage(MessageUnban.setColorDebannie()+"["+pseudo + "] "+ MessageUnban.getUnban());
+                        p.sendMessage(MessageUnban.setColorUnban()+"["+pseudo + "] "+ MessageUnban.getUnban());
                         errorCommande = true;
                     } else if (ban == 0) {
-                        p.sendMessage(MessageUnban.setColorAlreadyDebannie()+"["+pseudo +"] "+MessageUnban.getAlreadyUnban());
+                        p.sendMessage(MessageUnban.setColorAlreadyUnban()+"["+pseudo +"] "+MessageUnban.getAlreadyUnban());
                         errorCommande = true;
                     }
 

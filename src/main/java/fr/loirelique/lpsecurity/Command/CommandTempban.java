@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
+import fr.loirelique.lpsecurity.String.MessageTempban;
 import fr.loirelique.lpsecurity.Useful.DateAndTime;
 
 public class CommandTempban implements CommandExecutor {
@@ -107,16 +108,16 @@ public class CommandTempban implements CommandExecutor {
                                 e.printStackTrace();
                             }
 
-                            p.sendMessage(pseudo + " a étais exclue de la communauté de serveur.");
+                            p.sendMessage(MessageTempban.setColorTempban()+"["+pseudo + "] "+MessageTempban.getTempban());
                             Player player = Main.plugin.getListPlayer(uuid);
                             player.kickPlayer(msg);
 
                         } else if (dateAndTime.testDateEtTime(years, months, dayOfMonths, hours, minutes) == false) {
-                                p.sendMessage("La commande n'a pas été executer.");
+                                p.sendMessage(MessageTempban.setColorErrorTempban()+MessageTempban.getErrorTempban());
                         }
 
                     } else if (ban == 1) {
-                        p.sendMessage("[" + pseudo + "] " + "joueur déja eclue de la communauté temporairement.");
+                        p.sendMessage(MessageTempban.setColoralreadyTempban()+"[" + pseudo + "] " + MessageTempban.getAlreadyTempban());
                     }
                 }
 
