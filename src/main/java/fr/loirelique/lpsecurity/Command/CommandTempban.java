@@ -107,16 +107,16 @@ public class CommandTempban implements CommandExecutor {
                                 e.printStackTrace();
                             }
 
-                            p.sendMessage(pseudo + " a étais bannie.");
+                            p.sendMessage(pseudo + " a étais exclue de la communauté de serveur.");
                             Player player = Main.plugin.getListPlayer(uuid);
                             player.kickPlayer(msg);
 
                         } else if (dateAndTime.testDateEtTime(years, months, dayOfMonths, hours, minutes) == false) {
-                            System.out.println("La commande n'a pas été executer.");
+                                p.sendMessage("La commande n'a pas été executer.");
                         }
 
                     } else if (ban == 1) {
-                        p.sendMessage("[" + pseudo + "] " + "joueur déja bannie temporairement.");
+                        p.sendMessage("[" + pseudo + "] " + "joueur déja eclue de la communauté temporairement.");
                     }
                 }
 

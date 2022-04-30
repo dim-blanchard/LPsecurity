@@ -15,5 +15,17 @@ public class MessageUnban {
 
         return unban;
     }
+
+    public static String setColorDebannie() {
+        String unban = Main.plugin.getConfig().getString("string.couleur_debannie");
+
+        return unban;
+    }
+
+    public static String setColorAlreadyDebannie() {
+        String unban = Main.plugin.getConfig().getString("string.couleur_already_debannie");
+
+        return unban;
+    }
     
 }

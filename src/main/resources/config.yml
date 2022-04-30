@@ -95,6 +95,15 @@ string:
 
 ##########################################################################
 
-#Partie 6: Couleur message commande unban.
-  debannie: §5
-  already_debannie: §5
+#Partie 6: Messages et couleur de commande.
+#Unban
+  couleur_debannie: §5
+  couleur_already_debannie: §5
+  #Exemple: Couleur[Nom du joueur] a étais réintégrer à la communauté de serveur.
+  debannie: a étais réintégrer à la communauté de serveur.
+  already_debannie: Le joueur est déja réintégrer à la communauté de serveur.
+#Tempban
+  
+
+
+
