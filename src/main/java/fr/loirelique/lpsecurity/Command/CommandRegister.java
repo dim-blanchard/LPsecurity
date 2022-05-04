@@ -28,7 +28,7 @@ public class CommandRegister implements CommandExecutor {
 
                 if (args.length == 2) {
                     String uuid = Main.plugin.getUuidHash(p);
-                    String uuidRequet = "";
+                    String bddUuid = "";
 
                     try (Connection connection_register = DriverManager.getConnection(
                             ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
@@ -44,7 +44,7 @@ public class CommandRegister implements CommandExecutor {
 
                             try (ResultSet resultat_requete_select = statement3_select.executeQuery()) {
                                 while (resultat_requete_select.next()) {
-                                    uuidRequet = resultat_requete_select.getString("uuid");
+                                    bddUuid = resultat_requete_select.getString("uuid");
 
                                 }
                             }
@@ -53,12 +53,10 @@ public class CommandRegister implements CommandExecutor {
                         e.printStackTrace();
                     }
 
-                    if (uuid.equals(uuidRequet)) {
+                    if (uuid.equals(bddUuid)) {
                         p.sendMessage(MessageRegister.getwrongRegister());
                     } else {
-                        String args0 = args[0];
-                        String args1 = args[1];
-                        if (args0.equals(args1) && args[0].length() >= 8 && args[1].length() >= 8) {
+                        if (args[0].equals(args[1]) && args[0].length() >= 8 && args[1].length() >= 8) {
 
                             try (Connection connection_addPlayer = DriverManager.getConnection(
                                     ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort()
@@ -74,12 +72,12 @@ public class CommandRegister implements CommandExecutor {
                                     String pseudo = p.getName();
                                     pseudo = pseudo.toLowerCase();
                                     pseudo = pseudo.replaceAll("\\s", "");
-                                    String pass = Main.plugin.getHash(args0);
-                                    String str = "{\"temp_ban\": \"null\", \"motif_ban\": \"null\", \"temp_mute\": \"null\", \"motif_kick\": \"null\", \"motif_mute\": \"null\", \"motif_warn\": \"null\", \"motif_unban\": \"null\", \"motif_unmute\": \"null\", \"motif_tempban\": \"null\", \"motif_tempmute\": \"null\"}";
+                                    String pass = Main.plugin.getHash(args[0]);
+                                    String historiqueSanctionDefault = "{\"temp_ban\": \"null\", \"motif_ban\": \"null\", \"temp_mute\": \"null\", \"motif_kick\": \"null\", \"motif_mute\": \"null\", \"motif_warn\": \"null\", \"motif_unban\": \"null\", \"motif_unmute\": \"null\", \"motif_tempban\": \"null\", \"motif_tempmute\": \"null\"}";
                                     statement1_insert.setString(1, uuid);
                                     statement1_insert.setString(2, pseudo);
                                     statement1_insert.setString(3, pass);
-                                    statement1_insert.setString(4, str);
+                                    statement1_insert.setString(4, historiqueSanctionDefault);
                                     statement1_insert.executeUpdate();
                                 }
 
@@ -87,11 +85,17 @@ public class CommandRegister implements CommandExecutor {
                                 e.printStackTrace();
                             }
 
-                            Bukkit.getScheduler().cancelTask(Main.plugin.getTaskRegisterTime(p));
-                            Main.plugin.getTaskRegisterTimeRemove(p);
-                            Main.plugin.setTaskLoginTime(p);
-                            MessageLogin.sendLogin(p);
-                            errorCommande = true;
+                            if(Main.plugin.getTaskRegisterTime(p) != null) {
+                                Bukkit.getScheduler().cancelTask(Main.plugin.getTaskRegisterTime(p));
+                                Main.plugin.getTaskRegisterTimeRemove(p);
+                                Main.plugin.setTaskLoginTime(p);
+                                MessageLogin.sendLogin(p);
+                                errorCommande = true;
+                            }else{
+                                p.sendMessage(MessageRegister.getErrorRegister());
+                                errorCommande = false;
+                            }
+                            
 
                         } else {
                             p.sendMessage(MessageRegister.getwrongRegisterPass());

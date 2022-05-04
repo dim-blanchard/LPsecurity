@@ -27,7 +27,7 @@ public class CommandLogin implements CommandExecutor {
 
                 if (args.length == 1) {
                     String uuid = Main.plugin.getUuidHash(p);
-                    String uuidRequet = "";
+                    String bddUuid = "";
 
                     try (Connection connection_login = DriverManager.getConnection(
                             ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
@@ -43,7 +43,7 @@ public class CommandLogin implements CommandExecutor {
 
                             try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                                 while (resultat_requete_select.next()) {
-                                    uuidRequet = resultat_requete_select.getString("uuid");
+                                    bddUuid = resultat_requete_select.getString("uuid");
 
                                 }
                             }
@@ -52,10 +52,9 @@ public class CommandLogin implements CommandExecutor {
                         e.printStackTrace();
                     }
 
-                    if (uuid.equals(uuidRequet)) {
-                        String args0 = args[0];
-                        String password = "";
-                        String argsPass = Main.plugin.getHash(args0);
+                    if (uuid.equals(bddUuid)) {
+                        String bddPassword = "";
+                        String password = Main.plugin.getHash(args[0]);
 
                         try (Connection connection_register = DriverManager.getConnection(
                                 ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort()
@@ -81,12 +80,11 @@ public class CommandLogin implements CommandExecutor {
                             e.printStackTrace();
                         }
 
-                        if (argsPass.equals(password)) {
+                        if (password.equals(bddPassword)) {
 
                             if (Main.plugin.getTaskRegisterTime(p) != null) {
                                 Bukkit.getScheduler().cancelTask(Main.plugin.getTaskRegisterTime(p));
                                 Main.plugin.getTaskRegisterTimeRemove(p);
-
                             }
                             if (Main.plugin.getTaskLoginTime(p) != null) {
                                 Bukkit.getScheduler().cancelTask(Main.plugin.getTaskLoginTime(p));
@@ -102,6 +100,7 @@ public class CommandLogin implements CommandExecutor {
                         } else {
                             p.sendMessage(MessageLogin.getWrongLoginPass());
                             errorCommande = true;
+
 
                         }
 
