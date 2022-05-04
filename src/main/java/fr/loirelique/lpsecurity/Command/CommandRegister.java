@@ -51,6 +51,8 @@ public class CommandRegister implements CommandExecutor {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
+                        Player player = Main.plugin.getListPlayer(uuid);
+                        player.kickPlayer("La base de donné n'est pas en ligne merci de reitérer.");
                     }
 
                     if (uuid.equals(bddUuid)) {

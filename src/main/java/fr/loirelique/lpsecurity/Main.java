@@ -102,7 +102,7 @@ public class Main extends JavaPlugin implements Listener {
 
         String uuid = getUuidHash(p_event);
         String ip = p_event.getAddress().getHostAddress();
-        int ban = 0;
+        int ban = 2;
         String temp_ban = "";
         String motif_tempban = "";
         String motif_ban = "";
@@ -131,7 +131,8 @@ public class Main extends JavaPlugin implements Listener {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("error block ban ");
+            p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
+            "La base de donné n'est pas en ligne merci de reitérer plus tard.");
         }
         System.out.println(temp_ban);
         System.out.println(motif_ban);

@@ -18,10 +18,14 @@ import fr.loirelique.lpsecurity.String.MessageLogin;
 
 public class CommandLogin implements CommandExecutor {
 
+    private static HashMap<String, Integer> wrongLoginPasswordTentative = new HashMap<String, Integer>();
+    private static int i = 1;
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         // C'est un joueur qui a effectué la commande
         boolean errorCommande = false;
+
         if (sender instanceof Player) {
             Player p = (Player) sender;// On récupère le joueur.
             if (cmd.getName().equalsIgnoreCase("login")) { // Si c'est la commande "login" qui a été tapée:
@@ -72,7 +76,7 @@ public class CommandLogin implements CommandExecutor {
 
                                 try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                                     while (resultat_requete_select.next()) {
-                                        password = resultat_requete_select.getString("password");
+                                        bddPassword = resultat_requete_select.getString("password");
 
                                     }
                                 }
@@ -97,23 +101,26 @@ public class CommandLogin implements CommandExecutor {
                             }
 
                             MessageLogin.sendAfterLogin(p);
+                            errorCommande = true;
 
                         } else {
-                            HashMap<String, Integer> wrongLoginPasswordTentative = new HashMap<String, Integer>();
+
+                            if (wrongLoginPasswordTentative.get(uuid) != null) {
+
+                                wrongLoginPasswordTentative.put(uuid, i++);
+                                System.out.println(wrongLoginPasswordTentative.get(uuid));
+                                if (wrongLoginPasswordTentative.get(uuid) >= 3) {
+                                    Player player = Main.plugin.getListPlayer(uuid);
+                                    player.kickPlayer("Trois tentative");
+                                    wrongLoginPasswordTentative.remove(uuid);
+                                }
+                            } else {
+                                wrongLoginPasswordTentative.put(uuid, i);
+                            }
+
                             p.sendMessage(MessageLogin.getWrongLoginPass());
                             errorCommande = true;
 
-                            if (wrongLoginPasswordTentative.get(uuid)!= null) {
-                                wrongLoginPasswordTentative.put(uuid,+1);
-                            }else{
-                                wrongLoginPasswordTentative.put(uuid,1);
-                            }
-
-                            if (wrongLoginPasswordTentative.get(uuid) >= 3) {
-                                Player player = Main.plugin.getListPlayer(uuid);
-                                player.kickPlayer("Trois tentative");
-                            }
-                            
                         }
 
                     } else {
@@ -122,7 +129,6 @@ public class CommandLogin implements CommandExecutor {
                     }
 
                 }
-                errorCommande = false;
 
             }
             if (errorCommande == true) {
