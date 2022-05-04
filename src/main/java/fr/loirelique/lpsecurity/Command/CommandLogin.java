@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -98,10 +99,21 @@ public class CommandLogin implements CommandExecutor {
                             MessageLogin.sendAfterLogin(p);
 
                         } else {
+                            HashMap<String, Integer> wrongLoginPasswordTentative = new HashMap<String, Integer>();
                             p.sendMessage(MessageLogin.getWrongLoginPass());
                             errorCommande = true;
 
+                            if (wrongLoginPasswordTentative.get(uuid)!= null) {
+                                wrongLoginPasswordTentative.put(uuid,+1);
+                            }else{
+                                wrongLoginPasswordTentative.put(uuid,1);
+                            }
 
+                            if (wrongLoginPasswordTentative.get(uuid) >= 3) {
+                                Player player = Main.plugin.getListPlayer(uuid);
+                                player.kickPlayer("Trois tentative");
+                            }
+                            
                         }
 
                     } else {

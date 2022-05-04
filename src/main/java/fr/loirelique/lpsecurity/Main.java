@@ -48,8 +48,6 @@ import fr.loirelique.lpsecurity.String.MessageRegister;
 public class Main extends JavaPlugin implements Listener {
 
     public static Main plugin;
-    // Liste historique des sanctions et des temps;
-    /* private HashMap<String, String> str = new HashMap<String, String>(); */
     // Liste des taches joueurs
     private HashMap<String, Integer> listTacheRegister = new HashMap<String, Integer>();
     private HashMap<String, Integer> listTacheLogin = new HashMap<String, Integer>();
