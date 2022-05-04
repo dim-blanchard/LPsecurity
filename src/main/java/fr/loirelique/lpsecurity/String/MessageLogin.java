@@ -7,28 +7,33 @@ import fr.loirelique.lpsecurity.Main;
 
 public class MessageLogin {
     public static String getLoginTitle() {
-        String titre = Main.plugin.getConfig().getString("string.login_title");
+        String titre = Main.plugin.getConfig().getString("string.title_login");
         return titre;
     }
 
     public static String getLoginSubtitles() {
-        String soustitre = Main.plugin.getConfig().getString("string.login_subtitles");
+        String soustitre = Main.plugin.getConfig().getString("string.subtitles_login");
         return soustitre;
     }
 
     public static int getLoginTime() {
-        int logintemps = Integer.parseInt(Main.plugin.getConfig().getString("string.login_time"));
+        int logintemps = Integer.parseInt(Main.plugin.getConfig().getString("string.time_login"));
         return logintemps;
     }
 
-    public static String getErrorLogin() {
-        String errorlogin = Main.plugin.getConfig().getString("string.error_login");
-        return errorlogin;
+    public static String getWrongLogin() {
+        String wronglogin = Main.plugin.getConfig().getString("string.wrong_login");
+        return wronglogin;
     }
 
-    public static String getErrorLoginPass() {
-        String errorLoginPass = Main.plugin.getConfig().getString("string.error_login_pass");
-        return errorLoginPass;
+    public static String getWrongLoginPass() {
+        String wrongLoginPass = Main.plugin.getConfig().getString("string.wrong_login_pass");
+        return wrongLoginPass;
+    }
+
+    public static String getErrorLogin() {
+        String errorLogin = Main.plugin.getConfig().getString("string.error_login");
+        return errorLogin;
     }
 
     public static String getAfterLoginTitle() {

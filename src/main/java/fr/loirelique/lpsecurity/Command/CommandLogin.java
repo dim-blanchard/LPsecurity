@@ -13,22 +13,17 @@ import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
-import fr.loirelique.lpsecurity.String.MessageKick;
 import fr.loirelique.lpsecurity.String.MessageLogin;
 
 public class CommandLogin implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-
         // C'est un joueur qui a effectué la commande
+        boolean errorCommande = false;
         if (sender instanceof Player) {
             Player p = (Player) sender;// On récupère le joueur.
             if (cmd.getName().equalsIgnoreCase("login")) { // Si c'est la commande "login" qui a été tapée:
-
-                if (args.length == 0) {
-
-                }
 
                 if (args.length == 1) {
                     String uuid = Main.plugin.getUuidHash(p);
@@ -105,20 +100,29 @@ public class CommandLogin implements CommandExecutor {
                             MessageLogin.sendAfterLogin(p);
 
                         } else {
-                            p.sendMessage(MessageLogin.getErrorLoginPass());
+                            p.sendMessage(MessageLogin.getWrongLoginPass());
+                            errorCommande = true;
 
                         }
 
                     } else {
-                        p.sendMessage(MessageLogin.getErrorLogin());
+                        p.sendMessage(MessageLogin.getWrongLogin());
+                        errorCommande = true;
                     }
 
                 }
+                errorCommande = false;
 
+            }
+            if (errorCommande == true) {
+                errorCommande = true;
+            } else if (errorCommande == false) {
+                errorCommande = false;
+                p.sendMessage(MessageLogin.getErrorLogin());
             }
         }
 
-        return false;
+        return errorCommande;
 
     }
 }

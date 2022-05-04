@@ -42,7 +42,6 @@ public class ConfigBdd {
         return table;
     }
 
-
     public static String getUserSelect() {
         String user = Main.plugin.getConfig().getString("bdd.user_select");
         return user;
@@ -78,7 +77,5 @@ public class ConfigBdd {
 
         return sel;
     }
-
-   
 
 }

@@ -22,7 +22,7 @@ public class CommandUnban implements CommandExecutor {
         boolean errorCommande = false;
         if (sender instanceof Player) {
             Player p = (Player) sender;// On récupère le joueur.
-            
+
             if (cmd.getName().equalsIgnoreCase("unban")) { // Si c'est la commande "banish" qui a été tapée:
 
                 if (args.length >= 2) {
@@ -81,20 +81,22 @@ public class CommandUnban implements CommandExecutor {
                             e.printStackTrace();
                         }
 
-                        p.sendMessage(MessageUnban.setColorUnban()+"["+pseudo + "] "+ MessageUnban.getUnban());
+                        p.sendMessage(MessageUnban.setColorUnban() + "[" + pseudo + "] " + MessageUnban.getUnban());
                         errorCommande = true;
                     } else if (ban == 0) {
-                        p.sendMessage(MessageUnban.setColorAlreadyUnban()+"["+pseudo +"] "+MessageUnban.getAlreadyUnban());
+                        p.sendMessage(MessageUnban.setColorAlreadyUnban() + "[" + pseudo + "] "
+                                + MessageUnban.getAlreadyUnban());
                         errorCommande = true;
                     }
 
                 }
-                if(errorCommande == true){
+                if (errorCommande == true) {
                     errorCommande = true;
-                }else if (errorCommande == false) {
+                } else if (errorCommande == false) {
                     errorCommande = false;
+                    p.sendMessage(MessageUnban.setColorErrorUnban() + MessageUnban.getErrorUnban());
                 }
-                
+
             }
         }
         return errorCommande;

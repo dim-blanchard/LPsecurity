@@ -50,74 +50,79 @@ security:
 # On utilise §c devant le message et celui-ci sera en "rouge".
 
 ########################################################################## 
-#Personnalisation des messages d'exclusion, d'enregistrement,
-#d'identification et des commandes ainsi que leurs configurations.
- 
-#Partie 2:Message d'exclusion du serveur et configuration.
-string_kick:
-  #Avant la connection d'un joueur.
-  ip: Ip trop de fois similaire pour plusiseurs personne.
-  online: Joueur deja en ligne.
-  ban: Tu es Bannie.
-  #Pendant l'enregistrement ou l'identification d'un joueur.
-  over_time: Tu as étais exclue pour inactivité.
-  #Nombre d'ip similaire connecter à la fois au serveur.
-  over_ip: 2
 
-##########################################################################
+#Partie 2: Messages et couleur de commande.
+  #Personnalisation des messages d'exclusion, d'enregistrement,
+  #d'identification et des commandes ainsi que leurs configurations.
 
-#Partie 3:Message d'entré plus le temps avant enregistrement dans le serveur.
+  #Exemple pour (Login;register;Kick) title_login: §cSalut!.
+  #On utilise §c devant le message et celui-ci sera en "rouge"
+
+  #Exemple pour (unban;ban;tempban)
+  #color_unban: §c  
+  #unban: a étais réintégrer à la communauté de serveur.
+  #Sortir dans le chat du jeux:
+  #Couleur[Nom du joueur] a étais réintégrer à la communauté de serveur.
+
 string:
-  register_title: Bienvenue !
-  register_subtitles: Enregistre toi -> /register !
-  register_time: 120
-
-##########################################################################
-
-#Partie 4:Message d'entré plus le temps avant identification dans le serveur.
-  login_title: Salut !
-  login_subtitles: Identifie toi -> /login  !
-  login_time: 120
-
-##########################################################################
-
-#Partie 4:Message d'erreur des commande.
-  error_register_pass: Le mot de passe dois faire au mini 8 caractère ou ce corresponde pas.
-  error_register: Tu es déja enregister , utilise la commande /login [pass] pour d'identifier.
-  error_login_pass: Le mot de passe est incorecte.
-  error_login: Tu n'es pas enregistrer, utilise la commande /register pour t'enregistrer.
-
-##########################################################################
-
-#Partie 5: Message après identification durée de une seconde.
+#Login
+  #Message d'entré plus le temps avant identification dans le serveur.
+  title_login: Salut !
+  subtitles_login: Identifie toi -> /login  !
+  time_login: 120
+  #Message d'erreurs de mot de passe ou utilisation de la commande non approprier.
+  wrong_login_pass: Le mot de passe est incorecte.
+  wrong_login: Tu n'es pas enregistrer, utilise la commande /register pour t'enregistrer.
+  #Message après identification durée de une seconde.
   after_login_title: Bienvenue !
   after_login_subtitles: Tu es bien identifier !
+  #Message d'erreur de la commande.
+  error_login: La commande n'a pas été executer.
 
-##########################################################################
-
-#Partie 6: Messages et couleur de commande.
+#Register
+  #Message d'entré plus le temps avant d'enregistrement dans le serveur.
+  title_register: Bienvenue !
+  subtitles_register: Enregistre toi -> /register !
+  time_register: 120
+  #Message d'erreurs de mot de passe ou utilisation de la commande non approprier.
+  wrong_register_pass: Le mot de passe dois faire au mini 8 caractère ou ce corresponde pas.
+  wrong_register: Tu es déja enregister , utilise la commande /login [pass] pour d'identifier.
+  #Message d'erreur de la commande.
+  error_register: La commande n'a pas été executer.
+#Kick
+  #Avant la connection d'un joueur.
+  kick_ip: Ip trop de fois similaire pour plusiseurs personne. 
+  kick_over_ip: 2 #Nombre d'ip similaire connecter à la fois au serveur.
+  kick_online: Joueur deja en ligne.
+  kick_ban: Tu es Bannie.
+  #Message d'inactiviter pour l'enregistrement ou l'identification d'un joueur.
+  kick_over_time: Tu as étais exclue pour inactivité.
+  
 #Unban
   color_unban: §5
+  color_error_unban: §5
   color_already_unban: §5
-  #Exemple: Couleur[Nom du joueur] a étais réintégrer à la communauté de serveur.
+  
   unban: a étais réintégrer à la communauté de serveur.
+  error_unban: La commande n'a pas été executer.
   already_unban: Le joueur est déja réintégrer à la communauté de serveur.
 #Tempban
-  color_tempban: 
-  color_error_tempban:
-  color_already_tempban:
+  color_tempban: §5
+  color_error_tempban: §5
+  color_already_tempban: §5
 
-  tempban: a étais exclue de la communauté de serveur.
+  tempban: a étais temporairement bannie de la communauté de serveur.
   error_tempban: La commande n'a pas été executer.
-  already_tempban: joueur déja exclue de la communauté.
-#ban
-  color_ban:
-  color_error_ban:
-  color_already_ban:
+  already_tempban: joueur déja temporairement bannie de la communauté.
+#Ban
+  color_ban: §5
+  color_error_ban: §5
+  color_already_ban: §5
 
-  ban:
-  error_ban:
-  already_ban:
-  
+  ban: a étais bannie de la communauté de serveur.
+  error_ban: La commande n'a pas été executer.
+  already_ban: joueur déja bannie de la communauté.
+
+
 
 

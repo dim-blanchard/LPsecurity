@@ -21,13 +21,10 @@ public class CommandRegister implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         // C'est un joueur qui a effectué la commande
+        boolean errorCommande = false;
         if (sender instanceof Player) {
             Player p = (Player) sender;// On récupère le joueur.
             if (cmd.getName().equalsIgnoreCase("register")) { // Si c'est la commande "register" qui a été tapée:
-
-                if (args.length == 0) {
-
-                }
 
                 if (args.length == 2) {
                     String uuid = Main.plugin.getUuidHash(p);
@@ -57,7 +54,7 @@ public class CommandRegister implements CommandExecutor {
                     }
 
                     if (uuid.equals(uuidRequet)) {
-                        p.sendMessage(MessageRegister.getErrorRegister());
+                        p.sendMessage(MessageRegister.getwrongRegister());
                     } else {
                         String args0 = args[0];
                         String args1 = args[1];
@@ -78,7 +75,7 @@ public class CommandRegister implements CommandExecutor {
                                     pseudo = pseudo.toLowerCase();
                                     pseudo = pseudo.replaceAll("\\s", "");
                                     String pass = Main.plugin.getHash(args0);
-                                    String str ="{\"temp_ban\": \"null\", \"motif_ban\": \"null\", \"temp_mute\": \"null\", \"motif_kick\": \"null\", \"motif_mute\": \"null\", \"motif_warn\": \"null\", \"motif_unban\": \"null\", \"motif_unmute\": \"null\", \"motif_tempban\": \"null\", \"motif_tempmute\": \"null\"}";
+                                    String str = "{\"temp_ban\": \"null\", \"motif_ban\": \"null\", \"temp_mute\": \"null\", \"motif_kick\": \"null\", \"motif_mute\": \"null\", \"motif_warn\": \"null\", \"motif_unban\": \"null\", \"motif_unmute\": \"null\", \"motif_tempban\": \"null\", \"motif_tempmute\": \"null\"}";
                                     statement1_insert.setString(1, uuid);
                                     statement1_insert.setString(2, pseudo);
                                     statement1_insert.setString(3, pass);
@@ -89,24 +86,31 @@ public class CommandRegister implements CommandExecutor {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                          
+
                             Bukkit.getScheduler().cancelTask(Main.plugin.getTaskRegisterTime(p));
                             Main.plugin.getTaskRegisterTimeRemove(p);
                             Main.plugin.setTaskLoginTime(p);
                             MessageLogin.sendLogin(p);
+                            errorCommande = true;
 
                         } else {
-                            p.sendMessage(MessageRegister.getErrorRegisterPass());
+                            p.sendMessage(MessageRegister.getwrongRegisterPass());
+                            errorCommande = true;
 
                         }
                     }
 
                 }
-
+                if (errorCommande == true) {
+                    errorCommande = true;
+                } else if (errorCommande == false) {
+                    errorCommande = false;
+                    p.sendMessage(MessageRegister.getErrorRegister());
+                }
             }
         }
 
-        return false;
+        return errorCommande;
     }
 
 }

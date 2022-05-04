@@ -21,6 +21,7 @@ public class CommandTempban implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         // C'est un joueur qui a effectué la commande
+        boolean errorCommande = false;
         if (sender instanceof Player) {
             Player p = (Player) sender;// On récupère le joueur.
             if (cmd.getName().equalsIgnoreCase("tempban")) { // Si c'est la commande "banish" qui a été tapée:
@@ -108,21 +109,31 @@ public class CommandTempban implements CommandExecutor {
                                 e.printStackTrace();
                             }
 
-                            p.sendMessage(MessageTempban.setColorTempban()+"["+pseudo + "] "+MessageTempban.getTempban());
+                            p.sendMessage(MessageTempban.setColorTempban() + "[" + pseudo + "] "
+                                    + MessageTempban.getTempban());
                             Player player = Main.plugin.getListPlayer(uuid);
                             player.kickPlayer(msg);
+                            errorCommande = true;
 
                         } else if (dateAndTime.testDateEtTime(years, months, dayOfMonths, hours, minutes) == false) {
-                                p.sendMessage(MessageTempban.setColorErrorTempban()+MessageTempban.getErrorTempban());
+                            errorCommande = false;
                         }
 
                     } else if (ban == 1) {
-                        p.sendMessage(MessageTempban.setColoralreadyTempban()+"[" + pseudo + "] " + MessageTempban.getAlreadyTempban());
+                        p.sendMessage(MessageTempban.setColoralreadyTempban() + "[" + pseudo + "] "
+                                + MessageTempban.getAlreadyTempban());
+                        errorCommande = true;
                     }
                 }
 
+                if (errorCommande == true) {
+                    errorCommande = true;
+                } else if (errorCommande == false) {
+                    errorCommande = false;
+                    p.sendMessage(MessageTempban.setColorErrorTempban() + MessageTempban.getErrorTempban());
+                }
             }
         }
-        return false;
+        return errorCommande;
     }
 }

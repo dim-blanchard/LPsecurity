@@ -3,30 +3,34 @@ package fr.loirelique.lpsecurity.String;
 import fr.loirelique.lpsecurity.Main;
 
 public class MessageBan {
-    
+
     public static String getBan() {
         String ban = Main.plugin.getConfig().getString("string.ban");
         return ban;
     }
+
     public static String getErrorBan() {
-        String ban = Main.plugin.getConfig().getString("string.error_ban");
-        return ban;
+        String errorBan = Main.plugin.getConfig().getString("string.error_ban");
+        return errorBan;
     }
+
     public static String getAlreadyBan() {
-        String ban = Main.plugin.getConfig().getString("string.already_ban");
-        return ban;
+        String alreadyBan = Main.plugin.getConfig().getString("string.already_ban");
+        return alreadyBan;
     }
 
     public static String setColorBan() {
-        String ban = Main.plugin.getConfig().getString("string.color_ban");
-        return ban;
+        String colorBan = Main.plugin.getConfig().getString("string.color_ban");
+        return colorBan;
     }
+
     public static String setColorErrorBan() {
-        String ban = Main.plugin.getConfig().getString("string.color_error_ban");
-        return ban;
+        String colorErrorBan = Main.plugin.getConfig().getString("string.color_error_ban");
+        return colorErrorBan;
     }
+
     public static String setColorAlreadyBan() {
-        String ban = Main.plugin.getConfig().getString("string.color_already_ban");
-        return ban;
+        String colorAlreadyBan = Main.plugin.getConfig().getString("string.color_already_ban");
+        return colorAlreadyBan;
     }
 }

@@ -7,17 +7,17 @@ import fr.loirelique.lpsecurity.Main;
 
 public class MessageRegister {
     public static String getRegisterTitle() {
-        String titre = Main.plugin.getConfig().getString("string.register_title");
+        String titre = Main.plugin.getConfig().getString("string.title_register");
         return titre;
     }
 
     public static String getRegisterSubtitles() {
-        String soustitre = Main.plugin.getConfig().getString("string.register_subtitles");
+        String soustitre = Main.plugin.getConfig().getString("string.subtitles_register");
         return soustitre;
     }
 
     public static int getRegisterTime() {
-        int registertemps = Integer.parseInt(Main.plugin.getConfig().getString("string.register_time"));
+        int registertemps = Integer.parseInt(Main.plugin.getConfig().getString("string.time_register"));
         return registertemps;
     }
 
@@ -28,9 +28,14 @@ public class MessageRegister {
         p.sendTitle(MessageRegister.getRegisterTitle(), MessageRegister.getRegisterSubtitles());
     }
 
-    public static String getErrorRegisterPass() {
-        String errorRegisterPass = Main.plugin.getConfig().getString("string.error_register_pass");
-        return errorRegisterPass;
+    public static String getwrongRegisterPass() {
+        String wrongRegisterPass = Main.plugin.getConfig().getString("string.wrong_register_pass");
+        return wrongRegisterPass;
+    }
+
+    public static String getwrongRegister() {
+        String wrongRegister = Main.plugin.getConfig().getString("string.wrong_register");
+        return wrongRegister;
     }
 
     public static String getErrorRegister() {
