@@ -31,6 +31,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import fr.loirelique.lpsecurity.Command.CommandBan;
+import fr.loirelique.lpsecurity.Command.CommandHistorique;
 import fr.loirelique.lpsecurity.Command.CommandLogin;
 import fr.loirelique.lpsecurity.Command.CommandRegister;
 import fr.loirelique.lpsecurity.Command.CommandTempban;
@@ -82,6 +83,9 @@ public class Main extends JavaPlugin implements Listener {
 
         CommandExecutor commandTempban = new CommandTempban();
         getCommand("tempban").setExecutor(commandTempban);
+
+        CommandExecutor commandHistorique = new CommandHistorique();
+        getCommand("historique").setExecutor(commandHistorique);
 
         System.out.println("Chargement plugin LPsecurity... ===> OK");
     }

@@ -39,7 +39,6 @@ commands:
 
   historique:
     description: Description de la commande.(LPsecurity)
-    usage: §c/historique [Nom du joueur]
     permission: LP.security.historique
 
 permissions:
@@ -53,20 +52,17 @@ permissions:
 
   LP.security.ban:
     description: permet d'utiliser les commande ban.(LPsecurity)
-    default: true
+    default: false
 
   LP.security.tempban:
     description: permet d'utiliser les commande tempban.(LPsecurity)
-    default: true
+    default: false
 
   LP.security.unban:
     description: permet d'utiliser les commande unban.(LPsecurity)
-    default: true
+    default: false
 
   LP.security.resethistorique:
     description: permet d'utiliser les commande resethistorique.(LPsecurity)
-    default: true
+    default: false
     
-  LP.security.historique:
-    description: permet d'utiliser les commande historique.(LPsecurity)
-    default: true
