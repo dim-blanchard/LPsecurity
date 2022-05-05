@@ -110,9 +110,10 @@ public class CommandLogin implements CommandExecutor {
                                 wrongLoginPasswordTentative.put(uuid, i++);
                                 System.out.println(wrongLoginPasswordTentative.get(uuid));
                                 if (wrongLoginPasswordTentative.get(uuid) >= 3) {
+                                    wrongLoginPasswordTentative.remove(uuid);
                                     Player player = Main.plugin.getListPlayer(uuid);
                                     player.kickPlayer("Trois tentative");
-                                    wrongLoginPasswordTentative.remove(uuid);
+
                                 }
                             } else {
                                 wrongLoginPasswordTentative.put(uuid, i);

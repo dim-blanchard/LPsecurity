@@ -32,6 +32,16 @@ commands:
     usage: §c/unban [Nom du joueur] [Raison]
     permission: LP.security.unban
 
+  resethistorique:
+    description: Description de la commande.(LPsecurity)
+    usage: §c/resethistorique [Nom du joueur]
+    permission: LP.security.resethistorique
+
+  historique:
+    description: Description de la commande.(LPsecurity)
+    usage: §c/historique [Nom du joueur]
+    permission: LP.security.historique
+
 permissions:
   LP.security.login:
     description: permet d'utiliser la commande login.(LPsecurity)
@@ -51,4 +61,12 @@ permissions:
 
   LP.security.unban:
     description: permet d'utiliser les commande unban.(LPsecurity)
+    default: true
+
+  LP.security.resethistorique:
+    description: permet d'utiliser les commande resethistorique.(LPsecurity)
+    default: true
+    
+  LP.security.historique:
+    description: permet d'utiliser les commande historique.(LPsecurity)
     default: true

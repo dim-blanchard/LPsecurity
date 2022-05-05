@@ -324,6 +324,7 @@ public class Main extends JavaPlugin implements Listener {
         if (listOnlinePlayer.get(uuid) != null) {
             listOnlinePlayer.remove(uuid);
         }
+        
 
         System.out.println(listPlayer.get(uuid) + " " + listIpPlayer.get(ip));
 
