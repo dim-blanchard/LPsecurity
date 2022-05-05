@@ -24,7 +24,7 @@ Est **un plugin** (sous java 8) qui a pour bute de **sécurisé** un serveur Min
 | password|varchar(64)|null|Password du joueur recupérer gace à saisie de la commande "register" et hacher tout via LPsecurity.|		 
 | ban|int(1)|0|Bannisement vraie ou faux en fonction du nom du joueur. 0 ou 1		| 
 | warn|int(1)|0| ? | 
-| historique_sanctions|JSON|null|Information les sanctions du joueur et le temps de ban.|
+| historique_sanctions|JSON|null|Information sur les sanctions d'un joueur.|
 
 # La partie sécurité intègre:
 ## Commande securiter (Sera amené à changer dans le temps).
