@@ -9,60 +9,65 @@ author: LoiRelique
 commands:
   register:
     description: Permet d'enregister son mdp à la premiere connection.(LPsecurity)
-    usage: /register [pass] [pass]
-    permission: LP.security.register
+    usage: §e/register [pass] [pass]
+    permission: lpsecurity.register
 
   login:
     description: Permet de s'identifer au serveur.(LPsecurity)
-    usage: /login [pass]
-    permission: LP.security.login
+    usage: §e/login [pass]
+    permission: lpsecurity.login
 
   ban:
     description: Description de la commande.(LPsecurity)
-    usage: /ban [Nom du joueur] [Raison]
-    permission: LP.security.ban
+    usage: §e/ban [Nom du joueur] [Raison]
+    permission: lpsecurity.ban
 
   tempban:
     description: Description de la commande.(LPsecurity)
-    usage: /tempban [Nom du joueur] [Temps <Année> <Mois> <Jours> <Heures> <Minutes>] [Raison]
-    permission: LP.security.tempban  
+    usage: §e/tempban [Nom du joueur] [Temps <Année> <Mois> <Jours> <Heures> <Minutes>] [Raison]
+    permission: lpsecurity.tempban  
   
   unban:
     description: Description de la commande.(LPsecurity)
-    usage: §c/unban [Nom du joueur] [Raison]
-    permission: LP.security.unban
+    usage: §§e/unban [Nom du joueur] [Raison]
+    permission: lpsecurity.unban
 
   resethistorique:
     description: Description de la commande.(LPsecurity)
-    usage: §c/resethistorique [Nom du joueur]
-    permission: LP.security.resethistorique
+    usage: §e/resethistorique [Nom du joueur]
+    permission: lpsecurity.resethistorique
 
   historique:
     description: Description de la commande.(LPsecurity)
-    permission: LP.security.historique
+    usage: §e/historique [Nom du joueur]
+    permission: lpsecurity.historique
 
 permissions:
-  LP.security.login:
+  lpsecurity.login:
     description: permet d'utiliser la commande login.(LPsecurity)
     default: true
 
-  LP.security.register:
+  lpsecurity.register:
     description: permet d'utiliser la commande register.(LPsecurity)
     default: true
 
-  LP.security.ban:
+  lpsecurity.ban:
     description: permet d'utiliser les commande ban.(LPsecurity)
-    default: false
+    default: true
 
-  LP.security.tempban:
+  lpsecurity.tempban:
     description: permet d'utiliser les commande tempban.(LPsecurity)
-    default: false
+    default: true
 
-  LP.security.unban:
+  lpsecurity.unban:
     description: permet d'utiliser les commande unban.(LPsecurity)
-    default: false
+    default: true
 
-  LP.security.resethistorique:
+  lpsecurity.resethistorique:
     description: permet d'utiliser les commande resethistorique.(LPsecurity)
-    default: false
+    default: true
+  
+  lpsecurity.historique:
+    description: permet d'utiliser les commande resethistorique.(LPsecurity)
+    default: true
     

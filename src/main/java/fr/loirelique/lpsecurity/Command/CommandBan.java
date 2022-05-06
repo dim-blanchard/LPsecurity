@@ -22,7 +22,7 @@ public class CommandBan implements CommandExecutor {
         boolean errorCommande = false;
         if (sender instanceof Player) {
             Player p = (Player) sender;// On récupère le joueur.
-            if (p.hasPermission("LP.security.ban")) {
+            if (p.hasPermission("lpsecurity.ban")) {
                 if (cmd.getName().equalsIgnoreCase("ban")) { // Si c'est la commande "banish" qui a été tapée:
 
                     if (args.length >= 2) {
