@@ -87,7 +87,11 @@ public class Main extends JavaPlugin implements Listener {
         CommandExecutor commandHistorique = new CommandHistorique();
         getCommand("historique").setExecutor(commandHistorique);
 
-        System.out.println("Chargement plugin LPsecurity... ===> OK");
+        Bukkit.getConsoleSender().sendMessage("     §4__   __");
+        Bukkit.getConsoleSender().sendMessage("§4|   |__) (    §l§2LPsecurity §l§4v1.0 §l§8(by LoiRelique)");
+        Bukkit.getConsoleSender().sendMessage("§4|__ |   __)   §l§8Running on Spigot 1.8.8");
+        Bukkit.getConsoleSender().sendMessage("");
+
     }
 
     /**
@@ -95,7 +99,7 @@ public class Main extends JavaPlugin implements Listener {
      */
     @Override
     public void onDisable() {
-        System.out.println("Arret du plugin LPsecurity... ===> OK");
+
     }
 
     /**
@@ -107,9 +111,9 @@ public class Main extends JavaPlugin implements Listener {
         String uuid = getUuidHash(p_event);
         String ip = p_event.getAddress().getHostAddress();
         int ban = 2;
-        String temp_ban = "";
-        String motif_tempban = "";
-        String motif_ban = "";
+        String temp_ban = "null";
+        String motif_tempban = "null";
+        String motif_ban = "null";
         long startTime = System.nanoTime();
         // On fait une requet dans la base de donnée qui retourne la valeur de la
         // colomne "ban" en fonction de la colomne "uuid".
@@ -136,11 +140,8 @@ public class Main extends JavaPlugin implements Listener {
         } catch (Exception e) {
             e.printStackTrace();
             p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-            "La base de donné n'est pas en ligne merci de reitérer plus tard.");
+                    "La base de donné n'est pas en ligne merci de reitérer plus tard.");
         }
-        System.out.println(temp_ban);
-        System.out.println(motif_ban);
-        System.out.println(motif_tempban);
 
         if (ban == 0) {
             // On test si le joueur et deja en ligne avec le même uuid(Générer avec le
@@ -193,28 +194,28 @@ public class Main extends JavaPlugin implements Listener {
 
             if (dateTimeZone.isAfter(dateTime_temp_ban)) {
                 try (Connection connection_update = DriverManager.getConnection(
-                    ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
-                            ConfigBdd.getPort()
-                            + "/"
-                            + ConfigBdd.getDatabase1()
-                            + "?characterEncoding=latin1&useConfigs=maxPerformance",
-                    ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-                String requet_Update_sql2 = "UPDATE " + ConfigBdd.getTable1() +
-                        " SET ban=?, historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')),historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) WHERE uuid=?";
-                try (PreparedStatement statement2_select = connection_update
-                        .prepareStatement(requet_Update_sql2)) {
-                    statement2_select.setInt(1, 0);
-                    statement2_select.setString(2, "motif_tempban");
-                    statement2_select.setString(3, "null");
-                    statement2_select.setString(4, "temp_ban");
-                    statement2_select.setString(5, "null");
-                    statement2_select.setString(6, uuid);                                              
-                    statement2_select.executeUpdate();
-                }
+                        ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
+                                ConfigBdd.getPort()
+                                + "/"
+                                + ConfigBdd.getDatabase1()
+                                + "?characterEncoding=latin1&useConfigs=maxPerformance",
+                        ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
+                    String requet_Update_sql2 = "UPDATE " + ConfigBdd.getTable1() +
+                            " SET ban=?, historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')),historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) WHERE uuid=?";
+                    try (PreparedStatement statement2_select = connection_update
+                            .prepareStatement(requet_Update_sql2)) {
+                        statement2_select.setInt(1, 0);
+                        statement2_select.setString(2, "motif_tempban");
+                        statement2_select.setString(3, "null");
+                        statement2_select.setString(4, "temp_ban");
+                        statement2_select.setString(5, "null");
+                        statement2_select.setString(6, uuid);
+                        statement2_select.executeUpdate();
+                    }
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else {
 
                 LocalDateTime dateTemp_ban = LocalDateTime.parse(temp_ban);
@@ -224,7 +225,7 @@ public class Main extends JavaPlugin implements Listener {
                 p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
                         "Bannie jusqu'au: " + dtf2.format(dateTemp_ban) + " Raison: " + motif_tempban);
             }
-        
+
         }
 
         long endTime = System.nanoTime();
@@ -328,7 +329,6 @@ public class Main extends JavaPlugin implements Listener {
         if (listOnlinePlayer.get(uuid) != null) {
             listOnlinePlayer.remove(uuid);
         }
-        
 
         System.out.println(listPlayer.get(uuid) + " " + listIpPlayer.get(ip));
 

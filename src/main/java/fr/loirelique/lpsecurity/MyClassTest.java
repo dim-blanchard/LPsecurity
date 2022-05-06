@@ -59,6 +59,9 @@ public class MyClassTest {
         LocalDateTime dateTime = LocalDateTime.parse("2018-05-05T11:50:55");
         System.out.println(dateTime);
 
+       
+        int i = 0 ;
+        System.out.println(i);
 
 
 
