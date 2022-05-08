@@ -28,7 +28,7 @@ public class CommandUnban implements CommandExecutor {
                 if (args.length >= 2) {
                     String pseudo = args[0];
                     String uuid = Main.plugin.getUuidHash(pseudo);
-                    int ban = 0;
+                    int ban = 2;
 
                     StringBuilder builder = new StringBuilder();
                     for (int i = 1; i < args.length; i++) {
@@ -43,14 +43,14 @@ public class CommandUnban implements CommandExecutor {
                                     + ConfigBdd.getDatabase1()
                                     + "?characterEncoding=latin1&useConfigs=maxPerformance",
                             ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-                        String requet_Select_sql2 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
+                        String requet_Select_sql2 = "SELECT historique_sanctions->>'$.ban' FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
                         try (PreparedStatement statement2_select = connection_register
                                 .prepareStatement(requet_Select_sql2)) {
                             statement2_select.setString(1, uuid);
 
                             try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                                 while (resultat_requete_select.next()) {
-                                    ban = resultat_requete_select.getInt("ban");
+                                    ban = resultat_requete_select.getInt("historique_sanctions->>'$.ban'");
                                 }
                             }
                         }
