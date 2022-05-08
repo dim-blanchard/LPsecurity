@@ -58,4 +58,15 @@ public class MessageLogin {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player_name + " times 10 20 10 ");
         p.sendTitle(MessageLogin.getAfterLoginTitle(), MessageLogin.getAfterLoginSubtitles());
     }
+
+    public static String getWrongPassTentativeKick(){
+        String wrongPassTentativekick = Main.plugin.getConfig().getString("string.kick_tentative_login");
+        return wrongPassTentativekick;
+        
+    }
+
+    public static int getWrongPassTentativeNumber() {
+        int tentativeNumber = Integer.parseInt(Main.plugin.getConfig().getString("string.number_tentative_login"));
+        return tentativeNumber;
+    }
 }

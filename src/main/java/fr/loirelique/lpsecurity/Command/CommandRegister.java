@@ -75,7 +75,7 @@ public class CommandRegister implements CommandExecutor {
                                     pseudo = pseudo.toLowerCase();
                                     pseudo = pseudo.replaceAll("\\s", "");
                                     String pass = Main.plugin.getHash(args[0]);
-                                    String historiqueSanctionDefault = "{\"temp_ban\": \"null\", \"motif_ban\": \"null\", \"temp_mute\": \"null\", \"motif_kick\": \"null\", \"motif_mute\": \"null\", \"motif_warn\": \"null\", \"motif_unban\": \"null\", \"motif_unmute\": \"null\", \"motif_tempban\": \"null\", \"motif_tempmute\": \"null\"}";
+                                    String historiqueSanctionDefault = "{\"warn\": \"0\",\"ban\": \"0\",\"temp_ban\": \"null\", \"motif_ban\": \"null\", \"temp_mute\": \"null\", \"motif_kick\": \"null\", \"motif_mute\": \"null\", \"motif_warn\": \"null\", \"motif_unban\": \"null\", \"motif_unmute\": \"null\", \"motif_tempban\": \"null\", \"motif_tempmute\": \"null\"}";
                                     statement1_insert.setString(1, uuid);
                                     statement1_insert.setString(2, pseudo);
                                     statement1_insert.setString(3, pass);

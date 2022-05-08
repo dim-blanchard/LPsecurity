@@ -67,13 +67,14 @@ public class CommandUnban implements CommandExecutor {
                                         + "?characterEncoding=latin1&useConfigs=maxPerformance",
                                 ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
                             String requet_Update_sql2 = "UPDATE " + ConfigBdd.getTable1() +
-                                    " SET ban=?, historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) WHERE uuid=?";
+                                    " SET historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')), historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) WHERE uuid=?";
                             try (PreparedStatement statement2_select = connection_update
                                     .prepareStatement(requet_Update_sql2)) {
-                                statement2_select.setInt(1, 0);
-                                statement2_select.setString(2, "motif_unban");
-                                statement2_select.setString(3, msg);
-                                statement2_select.setString(4, uuid);
+                                statement2_select.setString(1, "ban");
+                                statement2_select.setString(2, "0");
+                                statement2_select.setString(3, "motif_unban");
+                                statement2_select.setString(4, msg);
+                                statement2_select.setString(5, uuid);
                                 statement2_select.executeUpdate();
                             }
 

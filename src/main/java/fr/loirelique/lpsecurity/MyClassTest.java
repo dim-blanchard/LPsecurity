@@ -16,6 +16,8 @@ import java.util.regex.Pattern;
 
 public class MyClassTest {
 
+    private static HashMap<String, Integer> wrongLoginPasswordTentative = new HashMap<String, Integer>();
+
     public static HashMap<String, ArrayList<String>> listArrays = new HashMap<String, ArrayList<String>>();
 
     public static void getIpOfPlayerBeforeLogin(String ip, String name) {
@@ -33,6 +35,26 @@ public class MyClassTest {
         String strTemp = Normalizer.normalize(s, Normalizer.Form.NFD);
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
         return pattern.matcher(strTemp).replaceAll("");
+    }
+
+
+    public static void setNewPlayer(String uuid) {
+        wrongLoginPasswordTentative.put(uuid, 0);
+    }
+
+    public static void setRemovePlayer(String uuid) {
+        wrongLoginPasswordTentative.remove(uuid);
+    }
+
+    public static int getNumberTentativeOfPlayer(String uuid) {
+        int numberTentative = wrongLoginPasswordTentative.get(uuid);
+        return numberTentative;
+    }
+
+    public static void incrementNumberTentativeOfPlayer(String uuid){
+        int numberTentative = wrongLoginPasswordTentative.get(uuid);
+        numberTentative++;
+        wrongLoginPasswordTentative.put(uuid,numberTentative);
     }
 
     public static boolean testChaineNumber(String chaine) {
@@ -56,12 +78,34 @@ public class MyClassTest {
 
     public static void main(String args[]) {
 
-        LocalDateTime dateTime = LocalDateTime.parse("2018-05-05T11:50:55");
+/*         setNewPlayer("test");
+        System.out.println(getNumberTentativeOfPlayer("test"));
+        
+        //1 test 
+        incrementNumberTentativeOfPlayer("test");
+        //2 test 
+        incrementNumberTentativeOfPlayer("test");
+        //3 test 
+        incrementNumberTentativeOfPlayer("test");
+        System.out.println(getNumberTentativeOfPlayer("test"));
+
+        if (getNumberTentativeOfPlayer("test") >=3) {
+            System.out.println("KICK 3 TENTATIVE");
+            }
+
+
+        //quit
+        setRemovePlayer("test");
+        System.out.println(getNumberTentativeOfPlayer("test")); */
+
+
+
+/*         LocalDateTime dateTime = LocalDateTime.parse("2018-05-05T11:50:55");
         System.out.println(dateTime);
 
        
         int i = 0 ;
-        System.out.println(i);
+        System.out.println(i); */
 
 
 

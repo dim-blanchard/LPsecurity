@@ -15,11 +15,9 @@ import org.bukkit.entity.Player;
 import fr.loirelique.lpsecurity.Main;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageLogin;
+import fr.loirelique.lpsecurity.Useful.List.ListWrongPasswordTentative;
 
 public class CommandLogin implements CommandExecutor {
-
-    private static HashMap<String, Integer> wrongLoginPasswordTentative = new HashMap<String, Integer>();
-    private static int i = 1;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -101,29 +99,25 @@ public class CommandLogin implements CommandExecutor {
                             }
 
                             MessageLogin.sendAfterLogin(p);
+                            ListWrongPasswordTentative.setRemovePlayer(uuid);
+                            
                             errorCommande = true;
 
                         } else {
 
-                            if (wrongLoginPasswordTentative.get(uuid) != null) {
-
-                                wrongLoginPasswordTentative.put(uuid, i++);
-                                System.out.println(wrongLoginPasswordTentative.get(uuid));
-                                if (wrongLoginPasswordTentative.get(uuid) > 3) {
-                                    Player player = Main.plugin.getListPlayer(uuid);
-                                    player.kickPlayer("Trois tentative");
-
-                                }
-                            } else {
-                                wrongLoginPasswordTentative.put(uuid, i);
+                           
+                            System.out.println(ListWrongPasswordTentative.getNumberTentativeOfPlayer(uuid));
+                            ListWrongPasswordTentative.incrementNumberTentativeOfPlayer(uuid);
+                            if (ListWrongPasswordTentative.getNumberTentativeOfPlayer(uuid)>= MessageLogin.getWrongPassTentativeNumber()) {
+                                p.kickPlayer(MessageLogin.getWrongPassTentativeKick());
                             }
-
                             p.sendMessage(MessageLogin.getWrongLoginPass());
                             errorCommande = true;
 
                         }
 
                     } else {
+                       
                         p.sendMessage(MessageLogin.getWrongLogin());
                         errorCommande = true;
                     }

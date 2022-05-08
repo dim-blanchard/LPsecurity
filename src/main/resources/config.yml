@@ -73,6 +73,8 @@ string:
   #Message d'erreurs de mot de passe ou utilisation de la commande non approprier.
   wrong_login_pass: Le mot de passe est incorecte.
   wrong_login: Tu n'es pas enregistrer, utilise la commande /register pour t'enregistrer.
+  kick_tentative_login: Tu as essayer trop de fois un mauvais mdp.
+  number_tentative_login: 3 
   #Message après identification durée de une seconde.
   after_login_title: Bienvenue !
   after_login_subtitles: Tu es bien identifier !

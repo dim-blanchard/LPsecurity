@@ -34,12 +34,14 @@ import fr.loirelique.lpsecurity.Command.CommandBan;
 import fr.loirelique.lpsecurity.Command.CommandHistorique;
 import fr.loirelique.lpsecurity.Command.CommandLogin;
 import fr.loirelique.lpsecurity.Command.CommandRegister;
+import fr.loirelique.lpsecurity.Command.CommandResetHistorique;
 import fr.loirelique.lpsecurity.Command.CommandTempban;
 import fr.loirelique.lpsecurity.Command.CommandUnban;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageKick;
 import fr.loirelique.lpsecurity.String.MessageLogin;
 import fr.loirelique.lpsecurity.String.MessageRegister;
+import fr.loirelique.lpsecurity.Useful.List.ListWrongPasswordTentative;
 
 /**
  * Information sur la class!LPSECURITY
@@ -87,6 +89,9 @@ public class Main extends JavaPlugin implements Listener {
         CommandExecutor commandHistorique = new CommandHistorique();
         getCommand("historique").setExecutor(commandHistorique);
 
+        CommandExecutor commandResetHistorique = new CommandResetHistorique();
+        getCommand("resethistorique").setExecutor(commandResetHistorique);
+
         Bukkit.getConsoleSender().sendMessage("     §4__   __");
         Bukkit.getConsoleSender().sendMessage("§4|   |__) (    §l§2LPsecurity §l§4v1.0 §l§8(by LoiRelique)");
         Bukkit.getConsoleSender().sendMessage("§4|__ |   __)   §l§8Running on Spigot 1.8.8");
@@ -122,7 +127,7 @@ public class Main extends JavaPlugin implements Listener {
                         + ConfigBdd.getDatabase1()
                         + "?characterEncoding=latin1&useConfigs=maxPerformance",
                 ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-            String requet_Select_sql2 = "SELECT uuid,ban, historique_sanctions->>'$.motif_tempban', historique_sanctions->>'$.temp_ban', historique_sanctions->>'$.motif_ban'  FROM "
+            String requet_Select_sql2 = "SELECT uuid,historique_sanctions->>'$.ban', historique_sanctions->>'$.motif_tempban', historique_sanctions->>'$.temp_ban', historique_sanctions->>'$.motif_ban'  FROM "
                     + ConfigBdd.getTable1() + " WHERE uuid=?";
             try (PreparedStatement statement2_select = connection_register
                     .prepareStatement(requet_Select_sql2)) {
@@ -130,7 +135,7 @@ public class Main extends JavaPlugin implements Listener {
 
                 try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                     while (resultat_requete_select.next()) {
-                        ban = resultat_requete_select.getInt("ban");
+                        ban = resultat_requete_select.getInt("historique_sanctions->>'$.ban'");
                         temp_ban = resultat_requete_select.getString("historique_sanctions->>'$.temp_ban'");
                         motif_tempban = resultat_requete_select.getString("historique_sanctions->>'$.motif_tempban'");
                         motif_ban = resultat_requete_select.getString("historique_sanctions->>'$.motif_ban'");
@@ -201,15 +206,16 @@ public class Main extends JavaPlugin implements Listener {
                                 + "?characterEncoding=latin1&useConfigs=maxPerformance",
                         ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
                     String requet_Update_sql2 = "UPDATE " + ConfigBdd.getTable1() +
-                            " SET ban=?, historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')),historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) WHERE uuid=?";
+                            " SET historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')),, historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')),historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) WHERE uuid=?";
                     try (PreparedStatement statement2_select = connection_update
                             .prepareStatement(requet_Update_sql2)) {
-                        statement2_select.setInt(1, 0);
-                        statement2_select.setString(2, "motif_tempban");
-                        statement2_select.setString(3, "null");
-                        statement2_select.setString(4, "temp_ban");
-                        statement2_select.setString(5, "null");
-                        statement2_select.setString(6, uuid);
+                        statement2_select.setString(1, "ban");
+                        statement2_select.setString(2, "0");
+                        statement2_select.setString(3, "motif_tempban");
+                        statement2_select.setString(4, "null");
+                        statement2_select.setString(5, "temp_ban");
+                        statement2_select.setString(6, "null");
+                        statement2_select.setString(7, uuid);
                         statement2_select.executeUpdate();
                     }
 
@@ -275,7 +281,9 @@ public class Main extends JavaPlugin implements Listener {
             setTaskBlockSpawn(p);
             setTaskLoginTime(p);
             MessageLogin.sendLogin(p);
-
+            ListWrongPasswordTentative.setNewPlayer(uuid);
+            System.out.println(ListWrongPasswordTentative.getNumberTentativeOfPlayer(uuid));
+            
         } // Si l'uuid du joueur n'est pas égale à un uuid deja enregistrer.
         else {
             setTaskBlockSpawn(p);
@@ -315,6 +323,7 @@ public class Main extends JavaPlugin implements Listener {
             Bukkit.getScheduler().cancelTask(getTaskBlockSpawn(p));
             getTaskBlockSpawnRemove(p);
         }
+        //List vidage cache
         if (listPlayer.get(uuid) != null) {
             getListPlayerRemove(uuid);
         }
@@ -325,13 +334,12 @@ public class Main extends JavaPlugin implements Listener {
                 listIpPlayer.remove(ip);
             }
         }
-
+        //If player is online
         if (listOnlinePlayer.get(uuid) != null) {
             listOnlinePlayer.remove(uuid);
         }
-
-        System.out.println(listPlayer.get(uuid) + " " + listIpPlayer.get(ip));
-
+        //List tentative pass
+        ListWrongPasswordTentative.setRemovePlayer(uuid);
         // Fin test de vitesse
         long endTime = System.nanoTime();
         System.out.println("Test de vitesse quit : " + (endTime - startTime) * Math.pow(10, -6) + " ms");
