@@ -22,17 +22,15 @@ Est **un plugin** (sous java 8) qui a pour bute de **sécurisé** un serveur Min
 | uuid  |varchar(32)|null|Uuid du joueur recupérer automatique via LPsecurity.		|
 | pseudo|varchar(255)|null|Pseudo du joueur recupérer automatique via LPsecurity.		| 
 | password|varchar(64)|null|Password du joueur recupérer gace à saisie de la commande "register" et hacher tout via LPsecurity.|		 
-| ban|int(1)|0|Bannisement vraie ou faux en fonction du nom du joueur. 0 ou 1		| 
-| warn|int(1)|0| ? | 
-| historique_sanctions|JSON|null|Information sur les sanctions d'un joueur.|
+| historique_sanctions|JSON|{"ban": "0", "warn": "0", "temp_ban": "null", "motif_ban": "null", "temp_mute": "null", "motif_kick": "null", "motif_mute": "null", "motif_warn": "null", "motif_unban": "Se comporte bien. ", "motif_unmute": "null", "motif_tempban": "null", "motif_tempmute": "null"}|Information sur les sanctions d'un joueur.|
 
 # La partie sécurité intègre:
 ## Commande securiter (Sera amené à changer dans le temps).
 
 | Nomenclature | Nom |Option| Arguments |Permission| Description| 
 | :---------------:|:---------------:| :--------------:     | :---------------:  |  :---------------:  | :---------------:| 
-|/|login|null|'password'|LP.security.login|Identifier le joueur à la connection.| 
-|/|register|null|'password' 'password'|LP.security.register|Enregistre le joueur à sa première connection.| 
+|/|login|null|'password'|lpsecurity.login|Identifier le joueur à la connection.| 
+|/|register|null|'password' 'password'|lpsecurity.register|Enregistre le joueur à sa première connection.| 
 
 > La donnée "password" est soumise à une fonction de hachage: ici la SHA 256 avec un préfixe de salage.
 Elle intègre un côte passif, géré dans le code. Lorsque un joueur est déja en ligne celui-ci ne peut être déconnecté via un lanceur non officiel grâce à son pseudonyme.
@@ -43,16 +41,16 @@ Un joueur mal intentionné ne peut pas connecter plus de 1 à N (Un nombre N au 
 
 | Nomenclature | Nom |Option| Arguments |Permission| Description| 
 |:---------------:|:---------------:| :--------------:| :---------------:  | :---------------:  | :---------------:| 
-|/|ban|null|'nom joueur' 'raison !=null'|LP.sanction.ban|Bannir un joueur avec raison obligatoire.| 
-|/|unban|null|'nom joueur''raison !=null'|LP.sanction.ban|Pardonner un joueur avec raison obligatoire.| 
-|/|warn|null|'nom joueur''raison !=null'|LP.sanction.warn|Avertissement sur un joueur avec raison obligatoire.|
-|/|kick|null|'nom joueur''raison !=null'|LP.sanction.kick|Exclue le joueur avec une raison obligatoire.| 
-|/|mute|null|'nom joueur''raison !=null'|LP.sanction.mute|Met sous silence un joueur dans le chat avec raison  obligatoire.| 
-|/|unmute|null|'nom joueur''raison !=null'|LP.sanction.mute|Donner la parole à un joueur préalablement "mute" avec raison obligatoire.|
-|/|tempban|null|'nom joueur' 'temp !=null' 'raison !=null'|LP.sanction.ban|Bannir un joueur pour un temp donner avec raison obligatoire| 
-|/|tempmute|null|'nom joueur' 'temp !=null' 'raison !=null'|LP.sanction.mute|Mute un joueur pour un temp donner avec raison obligatoire.| 
-|/|historique|null|'nom joueur''raison !=null'|LP.sanction.h|Affiche toutes les sanctions du joueur.|
-|/|resethistorique|null|'nom joueur''raison !=null'|LP.sanction.rh|Supprime l'historique des sanctions du joueur.|
+|/|ban|null|'nom joueur' 'raison !=null'|lpsecurity.ban|Bannir un joueur avec raison obligatoire.| 
+|/|unban|null|'nom joueur''raison !=null'|lpsecurity.unban|Pardonner un joueur avec raison obligatoire.| 
+|/|warn|null|'nom joueur''raison !=null'|lpsecurity.warn|Avertissement sur un joueur avec raison obligatoire.|
+|/|kick|null|'nom joueur''raison !=null'|lpsecurity.kick|Exclue le joueur avec une raison obligatoire.| 
+|/|mute|null|'nom joueur''raison !=null'|lpsecurity.mute|Met sous silence un joueur dans le chat avec raison  obligatoire.| 
+|/|unmute|null|'nom joueur''raison !=null'|lpsecurity.unmute|Donner la parole à un joueur préalablement "mute" avec raison obligatoire.|
+|/|tempban|null|'nom joueur' 'temp !=null' 'raison !=null'|lpsecurity.tempban|Bannir un joueur pour un temp donner avec raison obligatoire| 
+|/|tempmute|null|'nom joueur' 'temp !=null' 'raison !=null'|lpsecurity.tempmute|Mute un joueur pour un temp donner avec raison obligatoire.| 
+|/|historique|null|'nom joueur''raison !=null'|lpsecurity.historique|Affiche toutes les sanctions du joueur.|
+|/|resethistorique|null|'nom joueur''raison !=null'|lpsecurity.resethistorique|Supprime l'historique des sanctions du joueur.|
 
 Toutes les données sont stockées sur la base de donné en fonction de 'l'UUID' du joueur pour permettre un suivi de leurs infractions.
 
@@ -71,8 +69,7 @@ Toutes les données sont stockées sur la base de donné en fonction de 'l'UUID'
 	- Données enregistrer : 
 		-  	Jouer-mot-de-passe ("Son mot de passe hash par algorithme sha256 + un préfixe salage").
 	- Données ajouter par default :
-		- 	Joueur-ban (0) .
-		- 	Joueur-warn (0) . 
+		- 	Joueur-historique_sanctions (json = {"ban": "0", "warn": "0", "temp_ban": "null", "motif_ban": "null", "temp_mute": "null", "motif_kick": "null", "motif_mute": "null", "motif_warn": "null", "motif_unban": "Se comporte bien. ", "motif_unmute": "null", "motif_tempban": "null", "motif_tempmute": "null"} ) . 
 	- Données enregistrer automatique en fonction du joueur:
 		-	Joueur-pseudo ("Son peseudo").
 		-   Joueur-uuid ("Son uudi").
