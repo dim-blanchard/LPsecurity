@@ -1,5 +1,6 @@
 package fr.loirelique.lpsecurity.Command;
 
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,10 +14,10 @@ import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
-import fr.loirelique.lpsecurity.String.MessageTempban;
+import fr.loirelique.lpsecurity.String.MessageTempmute;
 import fr.loirelique.lpsecurity.Useful.DateAndTime;
 
-public class CommandTempban implements CommandExecutor {
+public class CommandTempmute implements CommandExecutor{
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -24,10 +25,10 @@ public class CommandTempban implements CommandExecutor {
         boolean errorCommande = false;
         if (sender instanceof Player) {
             Player p = (Player) sender;// On récupère le joueur.
-            if (cmd.getName().equalsIgnoreCase("tempban")) { // Si c'est la commande "banish" qui a été tapée:
+            if (cmd.getName().equalsIgnoreCase("tempmute")) { // Si c'est la commande "banish" qui a été tapée:
 
                 if (args.length >= 2) {
-                    int ban = 2;
+                    int mute = 2;
                     String pseudo = args[0];
                     String uuid = Main.plugin.getUuidHash(pseudo);
                     System.out.println(args[0]);
@@ -56,14 +57,14 @@ public class CommandTempban implements CommandExecutor {
                                     + ConfigBdd.getDatabase1()
                                     + "?characterEncoding=latin1&useConfigs=maxPerformance",
                             ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-                        String requet_Select_sql2 = "SELECT historique_sanctions->>'$.ban' FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
+                        String requet_Select_sql2 = "SELECT historique_sanctions->>'$.mute' FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
                         try (PreparedStatement statement2_select = connection_register
                                 .prepareStatement(requet_Select_sql2)) {
                             statement2_select.setString(1, uuid);
 
                             try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                                 while (resultat_requete_select.next()) {
-                                    ban = resultat_requete_select.getInt("historique_sanctions->>'$.ban'");
+                                    mute = resultat_requete_select.getInt("historique_sanctions->>'$.mute'");
                                 }
                             }
                         }
@@ -71,7 +72,7 @@ public class CommandTempban implements CommandExecutor {
                         e.printStackTrace();
                     }
 
-                    if (ban == 0) {
+                    if (mute == 0) {
 
                         if (dateAndTime.testDateEtTime(years, months, dayOfMonths, hours, minutes) == true) {
 
@@ -96,11 +97,11 @@ public class CommandTempban implements CommandExecutor {
                                         " SET historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) , historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')), historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) , historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) WHERE uuid=?";
                                 try (PreparedStatement statement2_select = connection_update
                                         .prepareStatement(requet_Update_sql2)) {
-                                    statement2_select.setString(1, "ban");
+                                    statement2_select.setString(1, "mute");
                                     statement2_select.setString(2, "1");
-                                    statement2_select.setString(3, "temp_ban");
+                                    statement2_select.setString(3, "temp_mute");
                                     statement2_select.setString(4, heureDateTime);
-                                    statement2_select.setString(5, "motif_tempban");
+                                    statement2_select.setString(5, "motif_tempmute");
                                     statement2_select.setString(6, msg);
                                     statement2_select.setString(7, uuid);
                                     statement2_select.executeUpdate();
@@ -110,19 +111,19 @@ public class CommandTempban implements CommandExecutor {
                                 e.printStackTrace();
                             }
 
-                            p.sendMessage(MessageTempban.setColorTempban() + "[" + pseudo + "] "
-                                    + MessageTempban.getTempban());
+                            p.sendMessage(MessageTempmute.setColorTempmute() + "[" + pseudo + "] "
+                                    + MessageTempmute.getTempmute());
                             Player player = Main.plugin.getListPlayer(uuid);
-                            player.kickPlayer(msg);
+                            player.sendMessage(msg);
                             errorCommande = true;
 
                         } else if (dateAndTime.testDateEtTime(years, months, dayOfMonths, hours, minutes) == false) {
                             errorCommande = false;
                         }
 
-                    } else if (ban == 1) {
-                        p.sendMessage(MessageTempban.setColoralreadyTempban() + "[" + pseudo + "] "
-                                + MessageTempban.getAlreadyTempban());
+                    } else if (mute == 1) {
+                        p.sendMessage(MessageTempmute.setColoralreadyTempmute() + "[" + pseudo + "] "
+                                + MessageTempmute.getAlreadyTempmute());
                         errorCommande = true;
                     }
                 }
@@ -131,10 +132,11 @@ public class CommandTempban implements CommandExecutor {
                     errorCommande = true;
                 } else if (errorCommande == false) {
                     errorCommande = false;
-                    p.sendMessage(MessageTempban.setColorErrorTempban() + MessageTempban.getErrorTempban());
+                    p.sendMessage(MessageTempmute.setColorErrorTempmute() + MessageTempmute.getErrorTempmute());
                 }
             }
         }
         return errorCommande;
     }
+    
 }

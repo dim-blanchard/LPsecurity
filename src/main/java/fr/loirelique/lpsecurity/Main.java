@@ -21,9 +21,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -104,7 +106,8 @@ public class Main extends JavaPlugin implements Listener {
      */
     @Override
     public void onDisable() {
-
+        Bukkit.getConsoleSender().sendMessage("§4[Disable] §l§8LPsecurity §l§4v1.0");
+        Bukkit.getConsoleSender().sendMessage("§4[STOP SERVER] Don't reload with §l§8LPsecurity §l§4v1.0");  
     }
 
     /**
@@ -345,6 +348,12 @@ public class Main extends JavaPlugin implements Listener {
         System.out.println("Test de vitesse quit : " + (endTime - startTime) * Math.pow(10, -6) + " ms");
     }
 
+
+    //Suspend
+    @EventHandler
+    public void onChat(AsyncPlayerChatEvent p_envent){
+        
+    }
     /**
      * Getter de tache register.
      * On recupère l'id de la tache register en fonction de l'uuid du joueur.
