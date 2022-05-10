@@ -61,6 +61,11 @@ commands:
     description: Description de la commande.(LPsecurity)
     usage: §e/kick [Nom du joueur] [Raison]
     permission: lpsecurity.kick
+  
+  warn:
+    description: Description de la commande.(LPsecurity)
+    usage: §e/warn [Nom du joueur] [Avertisement(Niveau:1,2 ou 3)]
+    permission: lpsecurity.warn
 
 permissions:
   lpsecurity.login:
@@ -104,6 +109,10 @@ permissions:
     default: true
 
   lpsecurity.kick:
+    description: permet d'utiliser les commande kick.(LPsecurity)
+    default: true
+
+  lpsecurity.warn:
     description: permet d'utiliser les commande kick.(LPsecurity)
     default: true
     
