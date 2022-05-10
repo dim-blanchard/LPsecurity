@@ -85,7 +85,7 @@ public class CommandMute implements CommandExecutor {
                             p.sendMessage(MessageMute.setColorMute() + "[" + pseudo + "] " + MessageMute.getMute());
                             if (Main.plugin.getListOnlinePlayer(uuid) == "1") {
                                 Player player = Main.plugin.getListPlayer(uuid);
-                                player.kickPlayer("Bannie:" + msg);
+                                player.sendMessage("Mute: " + msg);
                             }
                             errorCommande = true;
                         }
