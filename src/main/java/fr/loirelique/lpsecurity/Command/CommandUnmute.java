@@ -14,7 +14,7 @@ import fr.loirelique.lpsecurity.Main;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageUnmute;
 
-public class CommandeUnmute implements CommandExecutor {
+public class CommandUnmute implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

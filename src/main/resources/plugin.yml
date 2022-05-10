@@ -41,6 +41,26 @@ commands:
     description: Description de la commande.(LPsecurity)
     usage: §e/historique [Nom du joueur]
     permission: lpsecurity.historique
+  
+  mute:
+    description: Description de la commande.(LPsecurity)
+    usage: §e/mute [Nom du joueur] [Raison]
+    permission: lpsecurity.mute
+
+  tempmute:
+    description: Description de la commande.(LPsecurity)
+    usage: §e/tempmute [Nom du joueur] [Temps <Année> <Mois> <Jours> <Heures> <Minutes>] [Raison]
+    permission: lpsecurity.tempmute
+  
+  unmute:
+    description: Description de la commande.(LPsecurity)
+    usage: §e/unmute [Nom du joueur] [Raison]
+    permission: lpsecurity.unmute
+  
+  kick:
+    description: Description de la commande.(LPsecurity)
+    usage: §e/kick [Nom du joueur] [Raison]
+    permission: lpsecurity.kick
 
 permissions:
   lpsecurity.login:
@@ -68,6 +88,22 @@ permissions:
     default: true
   
   lpsecurity.historique:
-    description: permet d'utiliser les commande resethistorique.(LPsecurity)
+    description: permet d'utiliser les commande historique.(LPsecurity)
+    default: true
+  
+  lpsecurity.mute:
+    description: permet d'utiliser les commande mute.(LPsecurity)
+    default: true
+
+  lpsecurity.tempmute:
+    description: permet d'utiliser les commande tempmute.(LPsecurity)
+    default: true
+  
+  lpsecurity.unmute:
+    description: permet d'utiliser les commande unmute.(LPsecurity)
+    default: true
+
+  lpsecurity.kick:
+    description: permet d'utiliser les commande kick.(LPsecurity)
     default: true
     

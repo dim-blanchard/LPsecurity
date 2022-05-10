@@ -21,7 +21,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -34,11 +33,15 @@ import org.bukkit.scheduler.BukkitTask;
 
 import fr.loirelique.lpsecurity.Command.CommandBan;
 import fr.loirelique.lpsecurity.Command.CommandHistorique;
+import fr.loirelique.lpsecurity.Command.CommandKick;
 import fr.loirelique.lpsecurity.Command.CommandLogin;
+import fr.loirelique.lpsecurity.Command.CommandMute;
 import fr.loirelique.lpsecurity.Command.CommandRegister;
 import fr.loirelique.lpsecurity.Command.CommandResetHistorique;
 import fr.loirelique.lpsecurity.Command.CommandTempban;
+import fr.loirelique.lpsecurity.Command.CommandTempmute;
 import fr.loirelique.lpsecurity.Command.CommandUnban;
+import fr.loirelique.lpsecurity.Command.CommandUnmute;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageKick;
 import fr.loirelique.lpsecurity.String.MessageLogin;
@@ -93,6 +96,18 @@ public class Main extends JavaPlugin implements Listener {
 
         CommandExecutor commandResetHistorique = new CommandResetHistorique();
         getCommand("resethistorique").setExecutor(commandResetHistorique);
+
+        CommandExecutor commandMute = new CommandMute();
+        getCommand("mute").setExecutor(commandMute);
+
+        CommandExecutor commandTempmute = new CommandTempmute();
+        getCommand("tempmute").setExecutor(commandTempmute);
+
+        CommandExecutor commandUnmute = new CommandUnmute();
+        getCommand("unmute").setExecutor(commandUnmute);
+
+        CommandExecutor commandKick= new CommandKick();
+        getCommand("kick").setExecutor(commandKick);
 
         Bukkit.getConsoleSender().sendMessage("     §4__   __");
         Bukkit.getConsoleSender().sendMessage("§4|   |__) (    §l§2LPsecurity §l§4v1.0 §l§8(by LoiRelique)");
