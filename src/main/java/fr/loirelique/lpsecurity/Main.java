@@ -46,6 +46,7 @@ import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageKick;
 import fr.loirelique.lpsecurity.String.MessageLogin;
 import fr.loirelique.lpsecurity.String.MessageRegister;
+import fr.loirelique.lpsecurity.Useful.List.ListWarningDegresAndMotifs;
 import fr.loirelique.lpsecurity.Useful.List.ListWrongPasswordTentative;
 
 /**
@@ -109,6 +110,8 @@ public class Main extends JavaPlugin implements Listener {
         CommandExecutor commandKick= new CommandKick();
         getCommand("kick").setExecutor(commandKick);
 
+        ListWarningDegresAndMotifs.initializeList();
+        
         Bukkit.getConsoleSender().sendMessage("     §4__   __");
         Bukkit.getConsoleSender().sendMessage("§4|   |__) (    §l§2LPsecurity §l§4v1.0 §l§8(by LoiRelique)");
         Bukkit.getConsoleSender().sendMessage("§4|__ |   __)   §l§8Running on Spigot 1.8.8");
