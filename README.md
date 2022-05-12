@@ -15,7 +15,7 @@ Est **un plugin** (sous java 8) qui a pour bute de **sécurisé** un serveur Min
 - Afin de **sécurisé les connections des joueurs** nous avons besoin d'un **plugin**. Ceci évitera les voles de compte permetra une gestion de ses utilisateur grace à une base de données le tout sur la même machine.
 
 
-## Infrastructure de la Base de donnée.(Les données conserver.)
+## Infrastructure de la table.(Les données conserver.)
 | Nom              | Type            | Donnée(s) par default| Description |
 | :---------------:|:---------------:| :--------------:     | :---------------:  |
 | id  |int(Auto increment)|n+1|Clef primaire de relation entre les tables.		| 
