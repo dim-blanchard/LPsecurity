@@ -42,6 +42,7 @@ import fr.loirelique.lpsecurity.Command.CommandTempban;
 import fr.loirelique.lpsecurity.Command.CommandTempmute;
 import fr.loirelique.lpsecurity.Command.CommandUnban;
 import fr.loirelique.lpsecurity.Command.CommandUnmute;
+import fr.loirelique.lpsecurity.Command.CommandWarn;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageKick;
 import fr.loirelique.lpsecurity.String.MessageLogin;
@@ -109,6 +110,9 @@ public class Main extends JavaPlugin implements Listener {
 
         CommandExecutor commandKick= new CommandKick();
         getCommand("kick").setExecutor(commandKick);
+
+        CommandExecutor commandWarn= new CommandWarn();
+        getCommand("warn").setExecutor(commandWarn);
 
         ListWarningDegresAndMotifs.initializeList();
         
@@ -202,7 +206,7 @@ public class Main extends JavaPlugin implements Listener {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.println("error block online ");
+                System.out.println("error block online player ");
             }
 
         }
@@ -216,7 +220,6 @@ public class Main extends JavaPlugin implements Listener {
             ZonedDateTime dateTimeNow = ZonedDateTime.now(ZoneId.of("Europe/Paris"));
 
             LocalDateTime dateTimeZone = dateTimeNow.toLocalDateTime();
-            System.out.println(dateTimeZone);
 
             if (dateTimeZone.isAfter(dateTime_temp_ban)) {
                 try (Connection connection_update = DriverManager.getConnection(
