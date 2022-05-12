@@ -36,25 +36,6 @@ Est **un plugin** (sous java 8) qui a pour bute de **sécurisé** un serveur Min
 Elle intègre un côte passif, géré dans le code. Lorsque un joueur est déja en ligne celui-ci ne peut être déconnecté via un lanceur non officiel grâce à son pseudonyme.
 Un joueur mal intentionné ne peut pas connecter plus de 1 à N (Un nombre N au choix.) comptes avec la même adresse IP (Internet Protocol) ainsi que pour les joueurs enregistrés.
 
-# La partie sanction intègre:
-## Commande sanction (Sera amené à changer dans le temps).
-
-| Nomenclature | Nom |Option| Arguments |Permission| Description| 
-|:---------------:|:---------------:| :--------------:| :---------------:  | :---------------:  | :---------------:| 
-|/|ban|null|'nom joueur' 'raison !=null'|lpsecurity.ban|Bannir un joueur avec raison obligatoire.| 
-|/|unban|null|'nom joueur''raison !=null'|lpsecurity.unban|Pardonner un joueur avec raison obligatoire.| 
-|/|warn|null|'nom joueur''raison !=null'|lpsecurity.warn|Avertissement sur un joueur avec raison obligatoire.|
-|/|kick|null|'nom joueur''raison !=null'|lpsecurity.kick|Exclue le joueur avec une raison obligatoire.| 
-|/|mute|null|'nom joueur''raison !=null'|lpsecurity.mute|Met sous silence un joueur dans le chat avec raison  obligatoire.| 
-|/|unmute|null|'nom joueur''raison !=null'|lpsecurity.unmute|Donner la parole à un joueur préalablement "mute" avec raison obligatoire.|
-|/|tempban|null|'nom joueur' 'temp !=null' 'raison !=null'|lpsecurity.tempban|Bannir un joueur pour un temp donner avec raison obligatoire| 
-|/|tempmute|null|'nom joueur' 'temp !=null' 'raison !=null'|lpsecurity.tempmute|Mute un joueur pour un temp donner avec raison obligatoire.| 
-|/|historique|null|'nom joueur''raison !=null'|lpsecurity.historique|Affiche toutes les sanctions du joueur.|
-|/|resethistorique|null|'nom joueur''raison !=null'|lpsecurity.resethistorique|Supprime l'historique des sanctions du joueur.|
-
-Toutes les données sont stockées sur la base de donné en fonction de 'l'UUID' du joueur pour permettre un suivi de leurs infractions.
-
-
 # Diagramme de cas d'utilisation
 
 ![Diagramme de cas d'utilisation](doc/DiagCasUtilisation.drawio.png)
@@ -85,6 +66,25 @@ Toutes les données sont stockées sur la base de donné en fonction de 'l'UUID'
 
 	- Si un joueur essaye de ce connecter à un serveur en prenent l'identité de celui ci il serra bloque avant d'entre sur le serveur.
 
+
+
+# La partie sanction intègre:
+## Commande sanction (Sera amené à changer dans le temps).
+
+| Nomenclature | Nom |Option| Arguments |Permission| Description| 
+|:---------------:|:---------------:| :--------------:| :---------------:  | :---------------:  | :---------------:| 
+|/|ban|null|'nom joueur' 'raison !=null'|lpsecurity.ban|Bannir un joueur avec raison obligatoire.| 
+|/|unban|null|'nom joueur''raison !=null'|lpsecurity.unban|Pardonner un joueur avec raison obligatoire.| 
+|/|warn|null|'nom joueur''raison !=null'|lpsecurity.warn|Avertissement sur un joueur avec raison obligatoire.|
+|/|kick|null|'nom joueur''raison !=null'|lpsecurity.kick|Exclue le joueur avec une raison obligatoire.| 
+|/|mute|null|'nom joueur''raison !=null'|lpsecurity.mute|Met sous silence un joueur dans le chat avec raison  obligatoire.| 
+|/|unmute|null|'nom joueur''raison !=null'|lpsecurity.unmute|Donner la parole à un joueur préalablement "mute" avec raison obligatoire.|
+|/|tempban|null|'nom joueur' 'temp !=null' 'raison !=null'|lpsecurity.tempban|Bannir un joueur pour un temp donner avec raison obligatoire| 
+|/|tempmute|null|'nom joueur' 'temp !=null' 'raison !=null'|lpsecurity.tempmute|Mute un joueur pour un temp donner avec raison obligatoire.| 
+|/|historique|null|'nom joueur''raison !=null'|lpsecurity.historique|Affiche toutes les sanctions du joueur.|
+|/|resethistorique|null|'nom joueur''raison !=null'|lpsecurity.resethistorique|Supprime l'historique des sanctions du joueur.|
+
+Toutes les données sont stockées sur la base de donné en fonction de 'l'UUID' du joueur pour permettre un suivi de leurs infractions.
 
 
 # Lien utiles à la suivie du projet
