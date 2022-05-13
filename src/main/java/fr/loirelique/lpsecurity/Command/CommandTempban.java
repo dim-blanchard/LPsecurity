@@ -93,7 +93,7 @@ public class CommandTempban implements CommandExecutor {
                                             + "?characterEncoding=latin1&useConfigs=maxPerformance",
                                     ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
                                 String requet_Update_sql2 = "UPDATE " + ConfigBdd.getTable1() +
-                                        " SET historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) , historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')), historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) , historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) WHERE uuid=?";
+                                        " SET historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')), historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) , historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) WHERE uuid=?";
                                 try (PreparedStatement statement2_select = connection_update
                                         .prepareStatement(requet_Update_sql2)) {
                                     statement2_select.setString(1, "ban");
