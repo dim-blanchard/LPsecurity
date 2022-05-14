@@ -16,6 +16,9 @@ import java.util.regex.Pattern;
 
 public class MyClassTest {
 
+    
+
+
 /*     private static HashMap<String, Integer> wrongLoginPasswordTentative = new HashMap<String, Integer>();
 
     public static HashMap<String, ArrayList<String>> listArrays = new HashMap<String, ArrayList<String>>();
@@ -77,9 +80,7 @@ public class MyClassTest {
     } */
 
     public static void main(String args[]) {
-
-
-
+        
         
 /*         setNewPlayer("test");
         System.out.println(getNumberTentativeOfPlayer("test"));

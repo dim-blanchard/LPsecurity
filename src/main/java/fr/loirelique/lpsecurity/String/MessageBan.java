@@ -1,5 +1,8 @@
 package fr.loirelique.lpsecurity.String;
 
+import java.nio.charset.StandardCharsets;
+
+
 import fr.loirelique.lpsecurity.Main;
 
 public class MessageBan {
@@ -10,7 +13,9 @@ public class MessageBan {
     }
 
     public static String getErrorBan() {
+        
         String errorBan = Main.plugin.getConfig().getString("string.error_ban");
+        errorBan = new String( errorBan.getBytes(), StandardCharsets.UTF_8);
         return errorBan;
     }
 
@@ -26,6 +31,7 @@ public class MessageBan {
 
     public static String setColorErrorBan() {
         String colorErrorBan = Main.plugin.getConfig().getString("string.color_error_ban");
+        colorErrorBan = new String( colorErrorBan.getBytes(), StandardCharsets.UTF_8);
         return colorErrorBan;
     }
 
