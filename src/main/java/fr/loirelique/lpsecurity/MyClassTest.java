@@ -1,13 +1,22 @@
 package fr.loirelique.lpsecurity;
 
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class MyClassTest {
 
 
     public static void main(String args[]) {
-        
+        boolean jour = false;
+        boolean mois = false;
+        boolean heure = false;
+        boolean minutes = false;
+
         String saisieClavier = "130";
-        String saisieClavier2 = "h";
+        String saisieClavier2 = "j";
         //String argss = saisieClavier.substring(saisieClavier.length()-1);
         System.out.println(saisieClavier + saisieClavier2);
         
@@ -15,18 +24,68 @@ public class MyClassTest {
 
         if (saisieClavier2.equals("j")) {
             System.out.println("On est en jours.");
+            jour = true;
         }
         if (saisieClavier2.equals("m")) {
             System.out.println("On est en mois.");
+            mois = true;
         }
         if (saisieClavier2.equals("h")) {
             System.out.println("On est en heure.");
+            heure = true;
         }
         if (saisieClavier2.equals("min") ) {
             System.out.println("On est en minutes.");
+            minutes = true;
         }
 
         
+        if (jour == true) {
+            int month;
+            int jours;
+            ZonedDateTime dateTimeNow = ZonedDateTime.now(ZoneId.of("Europe/Paris"));
+    
+            LocalDateTime dateTimeZone = dateTimeNow.toLocalDateTime();
+            System.out.println(dateTimeZone);
+
+            month = dateTimeZone.getMonth().getValue();
+            jours = dateTimeZone.getDayOfMonth();
+
+
+
+            
+
+
+            System.out.println(dateTimeZone.getDayOfMonth()+1);
+
+            System.out.println(dateTimeZone.withDayOfMonth(dateTimeZone.getDayOfMonth()+1));
+
+            dateTimeZone = dateTimeZone.withDayOfMonth(dateTimeZone.getDayOfMonth()+1);
+
+
+
+
+
+
+
+
+
+            DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("yy/MM/dd HH:mm");
+            System.out.println("yy/MM/dd HH:mm-> " + dtf2.format(dateTimeZone));
+
+        }
+        if (mois == true) {
+            
+        }
+        if (heure == true) {
+
+        }
+        if (minutes == true) {
+            
+        }
+        
+            
+
         
 /*         setNewPlayer("test");
         System.out.println(getNumberTentativeOfPlayer("test"));
