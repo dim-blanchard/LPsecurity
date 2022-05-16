@@ -1,85 +1,31 @@
 package fr.loirelique.lpsecurity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.io.UnsupportedEncodingException;
-import java.text.Normalizer;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.*;
-import java.time.format.DateTimeFormatter;
-import java.util.Scanner;
-import java.util.regex.Pattern;
-
-
 
 public class MyClassTest {
 
-    
-
-
-/*     private static HashMap<String, Integer> wrongLoginPasswordTentative = new HashMap<String, Integer>();
-
-    public static HashMap<String, ArrayList<String>> listArrays = new HashMap<String, ArrayList<String>>();
-
-    public static void getIpOfPlayerBeforeLogin(String ip, String name) {
-        if (listArrays.get(ip) != null) {
-            (listArrays.get(ip)).add(name);
-
-        } else {
-            listArrays.put(ip, new ArrayList<String>());
-            (listArrays.get(ip)).add(name);
-        }
-    }
-
-    public static String sansAccent(String s) {
-
-        String strTemp = Normalizer.normalize(s, Normalizer.Form.NFD);
-        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-        return pattern.matcher(strTemp).replaceAll("");
-    }
-
-
-    public static void setNewPlayer(String uuid) {
-        wrongLoginPasswordTentative.put(uuid, 0);
-    }
-
-    public static void setRemovePlayer(String uuid) {
-        wrongLoginPasswordTentative.remove(uuid);
-    }
-
-    public static int getNumberTentativeOfPlayer(String uuid) {
-        int numberTentative = wrongLoginPasswordTentative.get(uuid);
-        return numberTentative;
-    }
-
-    public static void incrementNumberTentativeOfPlayer(String uuid){
-        int numberTentative = wrongLoginPasswordTentative.get(uuid);
-        numberTentative++;
-        wrongLoginPasswordTentative.put(uuid,numberTentative);
-    }
-
-    public static boolean testChaineNumber(String chaine) {
-        boolean testNumber = false;
-        for (int i = 0; i < chaine.length(); i++) {
-            char chaineDeCaractere = chaine.charAt(i);
-            int ascii = chaineDeCaractere;
-            // System.out.println(ascii);
-            if (ascii >= 48 && ascii <= 57) {
-                // System.out.println("ok");
-                testNumber = true;
-
-            } else {
-                // System.out.println("Not Ok");
-                testNumber = false;
-                break;
-            }
-        }
-        return testNumber;
-    } */
 
     public static void main(String args[]) {
+        
+        String saisieClavier = "130";
+        String saisieClavier2 = "h";
+        //String argss = saisieClavier.substring(saisieClavier.length()-1);
+        System.out.println(saisieClavier + saisieClavier2);
+        
+      
+
+        if (saisieClavier2.equals("j")) {
+            System.out.println("On est en jours.");
+        }
+        if (saisieClavier2.equals("m")) {
+            System.out.println("On est en mois.");
+        }
+        if (saisieClavier2.equals("h")) {
+            System.out.println("On est en heure.");
+        }
+        if (saisieClavier2.equals("min") ) {
+            System.out.println("On est en minutes.");
+        }
+
         
         
 /*         setNewPlayer("test");
@@ -569,6 +515,71 @@ public class MyClassTest {
          * str = str.replaceAll("\\s", "");
          * System.out.println("Mot sans des espaces: " + str);
          */
+
+
+             
+
+
+/*     private static HashMap<String, Integer> wrongLoginPasswordTentative = new HashMap<String, Integer>();
+
+    public static HashMap<String, ArrayList<String>> listArrays = new HashMap<String, ArrayList<String>>();
+
+    public static void getIpOfPlayerBeforeLogin(String ip, String name) {
+        if (listArrays.get(ip) != null) {
+            (listArrays.get(ip)).add(name);
+
+        } else {
+            listArrays.put(ip, new ArrayList<String>());
+            (listArrays.get(ip)).add(name);
+        }
+    }
+
+    public static String sansAccent(String s) {
+
+        String strTemp = Normalizer.normalize(s, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(strTemp).replaceAll("");
+    }
+
+
+    public static void setNewPlayer(String uuid) {
+        wrongLoginPasswordTentative.put(uuid, 0);
+    }
+
+    public static void setRemovePlayer(String uuid) {
+        wrongLoginPasswordTentative.remove(uuid);
+    }
+
+    public static int getNumberTentativeOfPlayer(String uuid) {
+        int numberTentative = wrongLoginPasswordTentative.get(uuid);
+        return numberTentative;
+    }
+
+    public static void incrementNumberTentativeOfPlayer(String uuid){
+        int numberTentative = wrongLoginPasswordTentative.get(uuid);
+        numberTentative++;
+        wrongLoginPasswordTentative.put(uuid,numberTentative);
+    }
+
+    public static boolean testChaineNumber(String chaine) {
+        boolean testNumber = false;
+        for (int i = 0; i < chaine.length(); i++) {
+            char chaineDeCaractere = chaine.charAt(i);
+            int ascii = chaineDeCaractere;
+            // System.out.println(ascii);
+            if (ascii >= 48 && ascii <= 57) {
+                // System.out.println("ok");
+                testNumber = true;
+
+            } else {
+                // System.out.println("Not Ok");
+                testNumber = false;
+                break;
+            }
+        }
+        return testNumber;
+    } */
+
 
     }
 }

@@ -33,12 +33,17 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import fr.loirelique.lpsecurity.Command.CommandBan;
+import fr.loirelique.lpsecurity.Command.CommandChatclear;
+import fr.loirelique.lpsecurity.Command.CommandChatmute;
 import fr.loirelique.lpsecurity.Command.CommandHistorique;
 import fr.loirelique.lpsecurity.Command.CommandKick;
 import fr.loirelique.lpsecurity.Command.CommandLogin;
 import fr.loirelique.lpsecurity.Command.CommandMute;
 import fr.loirelique.lpsecurity.Command.CommandRegister;
 import fr.loirelique.lpsecurity.Command.CommandResetHistorique;
+import fr.loirelique.lpsecurity.Command.CommandSupport;
+import fr.loirelique.lpsecurity.Command.CommandSupportlist;
+import fr.loirelique.lpsecurity.Command.CommandSuppsupport;
 import fr.loirelique.lpsecurity.Command.CommandTempban;
 import fr.loirelique.lpsecurity.Command.CommandTempmute;
 import fr.loirelique.lpsecurity.Command.CommandUnban;
@@ -114,6 +119,37 @@ public class Main extends JavaPlugin implements Listener {
 
         CommandExecutor commandWarn= new CommandWarn();
         getCommand("warn").setExecutor(commandWarn);
+
+        CommandExecutor commandSupport= new CommandSupport();
+        getCommand("support").setExecutor(commandSupport);
+
+        CommandExecutor commandSuppsupport= new CommandSuppsupport();
+        getCommand("suppsuport").setExecutor(commandSuppsupport);
+
+        CommandExecutor commandSupportlist= new CommandSupportlist();
+        getCommand("supportlist").setExecutor(commandSupportlist);
+
+        CommandExecutor commandChatmute= new CommandChatmute();
+        getCommand("chatmute").setExecutor(commandChatmute);
+
+        CommandExecutor commandChatclear= new CommandChatclear();
+        getCommand("chatclear").setExecutor(commandChatclear);
+
+/*
+Chat :
+
+/clearchat : supprime tout les messages du chat
+
+/chatmute : plus personne ne peut écrire sauf le staff
+
+/support [ Raison ] : ouvre un support visible uniquement par le staff
+
+/support [ Joueur ] : met le staff dans une discussion privé avec celui qui a créer le support
+
+/suppsupport  [ Joueur ] : supprime le support du joueur
+
+/supportlist : affiche tout les supports ouvert
+*/
 
         ListWarningDegresAndMotifs.initializeList();
         
