@@ -1,5 +1,7 @@
 package fr.loirelique.lpsecurity.Useful;
 
+import java.util.Calendar;
+import java.util.Date;
 
 public class DateAndTime {
 
@@ -168,4 +170,45 @@ public class DateAndTime {
         return testDateEtTime;
     }
 
+    public static Date getDate(int donneTemps, String typeTemps ) {
+
+        Calendar dateOfTheDay = Calendar.getInstance();
+        Date date = dateOfTheDay.getTime();
+        
+    
+        if (typeTemps.equals("j")) {
+            System.out.println("On est en jours.");
+            dateOfTheDay.add(Calendar.DATE,donneTemps);
+            System.out.println(dateOfTheDay.getTime());
+            date = dateOfTheDay.getTime();      
+        }
+          
+        if (typeTemps.equals("m")) {
+            System.out.println("On est en mois.");
+            dateOfTheDay.add(Calendar.MONTH,donneTemps);
+            System.out.println(dateOfTheDay.getTime());
+            date = dateOfTheDay.getTime();
+        }
+        if (typeTemps.equals("h")) {
+            System.out.println("On est en heure.");
+            dateOfTheDay.add(Calendar.HOUR,donneTemps);
+            System.out.println(dateOfTheDay.getTime());
+            date = dateOfTheDay.getTime();
+        }
+        if (typeTemps.equals("min")) {
+            System.out.println("On est en minutes.");
+            dateOfTheDay.add(Calendar.MINUTE,donneTemps);
+            System.out.println(dateOfTheDay.getTime());
+            date = dateOfTheDay.getTime();
+        }
+
+    
+        return date;
+    
+    }
+    
+
+
 }
+
+
