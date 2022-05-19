@@ -11,7 +11,7 @@ public class MyClassTest {
     public static void main(String args[]) {
 
         int jours_donne = (-10);
-        String saisieClavier2 = "min"; 
+        String saisieClavier2 = ""; 
         
 
         Calendar aujourdhui = Calendar.getInstance();
@@ -43,6 +43,10 @@ public class MyClassTest {
             aujourdhui.add(Calendar.MINUTE,10);
             System.out.println(aujourdhui.getTime());
             datefinal = aujourdhui.getTime();
+        }
+
+        if (!saisieClavier2.equals("j") && !saisieClavier2.equals("m") && !saisieClavier2.equals("h") &&!saisieClavier2.equals("min")) {
+            System.out.println("Pas de correspondance");
         }
         
 

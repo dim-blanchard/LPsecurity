@@ -202,6 +202,11 @@ public class DateAndTime {
             date = dateOfTheDay.getTime();
         }
 
+        if (!typeTemps.equals("j") && !typeTemps.equals("m")&&!typeTemps.equals("h")&&!typeTemps.equals("min")) {
+            System.out.println("Pas de correspondance");
+        }
+
+
     
         return date;
     
