@@ -170,12 +170,11 @@ public class DateAndTime {
         return testDateEtTime;
     }
 
-    public static Date getDate(int donneTemps, String typeTemps ) {
+    public Date getDate(int donneTemps, String typeTemps ) {
 
         Calendar dateOfTheDay = Calendar.getInstance();
         Date date = dateOfTheDay.getTime();
-        
-    
+       
         if (typeTemps.equals("j")) {
             System.out.println("On est en jours.");
             dateOfTheDay.add(Calendar.DATE,donneTemps);
@@ -205,9 +204,7 @@ public class DateAndTime {
         if (!typeTemps.equals("j") && !typeTemps.equals("m")&&!typeTemps.equals("h")&&!typeTemps.equals("min")) {
             System.out.println("Pas de correspondance");
         }
-
-
-    
+   
         return date;
     
     }

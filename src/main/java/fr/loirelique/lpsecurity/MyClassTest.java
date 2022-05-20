@@ -1,17 +1,16 @@
 package fr.loirelique.lpsecurity;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public class MyClassTest {
 
     public static void main(String args[]) {
-
+ 
         int jours_donne = (-10);
-        String saisieClavier2 = ""; 
+        String saisieClavier2 = "j"; 
         
 
         Calendar aujourdhui = Calendar.getInstance();
@@ -54,7 +53,11 @@ public class MyClassTest {
             System.out.println("Toujour bannie");
         }else{
             System.out.println("plus bannie");
-        }
+        } 
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");     
+        System.out.println(dateFormat.format(datefinal));
+
 
         /*
          * setNewPlayer("test");

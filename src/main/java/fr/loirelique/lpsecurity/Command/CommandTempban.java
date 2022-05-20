@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -32,7 +35,15 @@ public class CommandTempban implements CommandExecutor {
                     String uuid = Main.plugin.getUuidHash(pseudo);
                     System.out.println(args[0]);
                     DateAndTime dateAndTime = new DateAndTime();
-                    String years = args[1];
+                    Date dateGive ;
+                    int donneTemps = Integer.parseInt(args[1]);
+                    String typeTemps= args[2];
+
+                    dateGive = dateAndTime.getDate(donneTemps, typeTemps);
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");     
+                    dateFormat.format(dateGive);
+
+                    /* String years = args[1];
                     System.out.println(args[1]);
                     String months = args[2];
                     System.out.println(args[2]);
@@ -41,7 +52,7 @@ public class CommandTempban implements CommandExecutor {
                     String hours = args[4];
                     System.out.println(args[4]);
                     String minutes = args[5];
-                    System.out.println(args[5]);
+                    System.out.println(args[5]); */
 
                     StringBuilder builder = new StringBuilder();
                     for (int i = 6; i < args.length; i++) {
