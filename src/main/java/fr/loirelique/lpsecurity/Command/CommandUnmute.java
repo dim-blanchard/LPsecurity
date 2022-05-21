@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import fr.loirelique.lpsecurity.Main;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageUnmute;
+import fr.loirelique.lpsecurity.Useful.List.ListMutePlayer;
 
 public class CommandUnmute implements CommandExecutor {
 
@@ -83,9 +84,13 @@ public class CommandUnmute implements CommandExecutor {
                             e.printStackTrace();
                         }
 
+                        ListMutePlayer.removeMutePlayer(uuid);
+                        ListMutePlayer.removeMutePlayerMotif(uuid);
                         p.sendMessage(MessageUnmute.setColorUnmute() + "[" + pseudo + "] " + MessageUnmute.getUnmute());
                         errorCommande = true;
-                    } else if (mute == 0) {
+                    } else if (mute == 0) {              
+                        ListMutePlayer.removeMutePlayer(uuid);
+                        ListMutePlayer.removeMutePlayerMotif(uuid);
                         p.sendMessage(MessageUnmute.setColorAlreadyUnmute() + "[" + pseudo + "] "
                                 + MessageUnmute.getAlreadyUnmute());
                         errorCommande = true;

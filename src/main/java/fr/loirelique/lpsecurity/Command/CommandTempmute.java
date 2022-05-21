@@ -14,6 +14,7 @@ import fr.loirelique.lpsecurity.Main;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageTempmute;
 import fr.loirelique.lpsecurity.Useful.DateAndTime;
+import fr.loirelique.lpsecurity.Useful.List.ListMutePlayer;
 
 public class CommandTempmute implements CommandExecutor {
 
@@ -99,7 +100,8 @@ public class CommandTempmute implements CommandExecutor {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-
+                            ListMutePlayer.setMutePlayer(uuid);
+                            ListMutePlayer.setMutePlayerMotif(uuid, msg);
                             p.sendMessage(MessageTempmute.setColorTempmute() + "[" + pseudo + "] "
                                     + MessageTempmute.getTempmute());
                             Player player = Main.plugin.getListPlayer(uuid);
