@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import fr.loirelique.lpsecurity.Main;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageMute;
+import fr.loirelique.lpsecurity.Useful.List.ListMutePlayer;
 
 public class CommandMute implements CommandExecutor {
 
@@ -82,6 +83,8 @@ public class CommandMute implements CommandExecutor {
                                 e.printStackTrace();
                             }
 
+                            ListMutePlayer.setMutePlayer(uuid);
+                            ListMutePlayer.setMutePlayerMotif(uuid, msg);
                             p.sendMessage(MessageMute.setColorMute() + "[" + pseudo + "] " + MessageMute.getMute());
                             if (Main.plugin.getListOnlinePlayer(uuid) == "1") {
                                 Player player = Main.plugin.getListPlayer(uuid);
