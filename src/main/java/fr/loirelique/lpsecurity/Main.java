@@ -7,15 +7,13 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import javax.xml.bind.DatatypeConverter;
 
 import java.text.Normalizer;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
@@ -53,6 +51,7 @@ import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageKick;
 import fr.loirelique.lpsecurity.String.MessageLogin;
 import fr.loirelique.lpsecurity.String.MessageRegister;
+import fr.loirelique.lpsecurity.Useful.DateAndTime;
 import fr.loirelique.lpsecurity.Useful.List.ListWarningDegresAndMotifs;
 import fr.loirelique.lpsecurity.Useful.List.ListWrongPasswordTentative;
 
@@ -114,45 +113,29 @@ public class Main extends JavaPlugin implements Listener {
         CommandExecutor commandUnmute = new CommandUnmute();
         getCommand("unmute").setExecutor(commandUnmute);
 
-        CommandExecutor commandKick= new CommandKick();
+        CommandExecutor commandKick = new CommandKick();
         getCommand("kick").setExecutor(commandKick);
 
-        CommandExecutor commandWarn= new CommandWarn();
+        CommandExecutor commandWarn = new CommandWarn();
         getCommand("warn").setExecutor(commandWarn);
 
-        CommandExecutor commandSupport= new CommandSupport();
+ /*        CommandExecutor commandSupport = new CommandSupport();
         getCommand("support").setExecutor(commandSupport);
 
-        CommandExecutor commandSuppsupport= new CommandSuppsupport();
+        CommandExecutor commandSuppsupport = new CommandSuppsupport();
         getCommand("suppsuport").setExecutor(commandSuppsupport);
 
-        CommandExecutor commandSupportlist= new CommandSupportlist();
+        CommandExecutor commandSupportlist = new CommandSupportlist();
         getCommand("supportlist").setExecutor(commandSupportlist);
 
-        CommandExecutor commandChatmute= new CommandChatmute();
+        CommandExecutor commandChatmute = new CommandChatmute();
         getCommand("chatmute").setExecutor(commandChatmute);
 
-        CommandExecutor commandChatclear= new CommandChatclear();
-        getCommand("chatclear").setExecutor(commandChatclear);
-
-/*
-Chat :
-
-/clearchat : supprime tout les messages du chat
-
-/chatmute : plus personne ne peut écrire sauf le staff
-
-/support [ Raison ] : ouvre un support visible uniquement par le staff
-
-/support [ Joueur ] : met le staff dans une discussion privé avec celui qui a créer le support
-
-/suppsupport  [ Joueur ] : supprime le support du joueur
-
-/supportlist : affiche tout les supports ouvert
-*/
+        CommandExecutor commandChatclear = new CommandChatclear();
+        getCommand("chatclear").setExecutor(commandChatclear); */
 
         ListWarningDegresAndMotifs.initializeList();
-        
+
         Bukkit.getConsoleSender().sendMessage("     §4__   __");
         Bukkit.getConsoleSender().sendMessage("§4|   |__) (    §l§2LPsecurity §l§4v1.0 §l§8(by LoiRelique)");
         Bukkit.getConsoleSender().sendMessage("§4|__ |   __)   §l§8Running on Spigot 1.8.8");
@@ -166,7 +149,7 @@ Chat :
     @Override
     public void onDisable() {
         Bukkit.getConsoleSender().sendMessage("§4[Disable] §l§8LPsecurity §l§4v1.0");
-        Bukkit.getConsoleSender().sendMessage("§4[STOP SERVER] Don't reload with §l§8LPsecurity §l§4v1.0");  
+        Bukkit.getConsoleSender().sendMessage("§4[STOP SERVER] Don't reload with §l§8LPsecurity §l§4v1.0");
     }
 
     /**
@@ -252,13 +235,14 @@ Chat :
             p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
                     motif_ban);
         } else if (temp_ban.equals("null") == false && ban == 1) {
-            LocalDateTime dateTime_temp_ban = LocalDateTime.parse(temp_ban);
 
-            ZonedDateTime dateTimeNow = ZonedDateTime.now(ZoneId.of("Europe/Paris"));
+            Calendar dateTimeNow = Calendar.getInstance();
+            Date dateTimeZone = dateTimeNow.getTime();
 
-            LocalDateTime dateTimeZone = dateTimeNow.toLocalDateTime();
+            DateAndTime dateAndTime = new DateAndTime();
+            Date dateTime_temp_ban = dateAndTime.getDateFromBddToCompare(temp_ban);
 
-            if (dateTimeZone.isAfter(dateTime_temp_ban)) {
+            if (dateTimeZone.after(dateTime_temp_ban)) {
                 try (Connection connection_update = DriverManager.getConnection(
                         ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
                                 ConfigBdd.getPort()
@@ -285,12 +269,9 @@ Chat :
                 }
             } else {
 
-                LocalDateTime dateTemp_ban = LocalDateTime.parse(temp_ban);
-
-                DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("yyyy/MM/dd à HH:mm");
-
+                String dateTemp_ban = dateAndTime.getDateForPlayer(dateAndTime.getDateFromBddToCompare(temp_ban));
                 p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                        "Bannie jusqu'au: " + dtf2.format(dateTemp_ban) + " Raison: " + motif_tempban);
+                        "Bannie jusqu'au: " + dateTemp_ban + " Raison: " + motif_tempban);
             }
 
         }
@@ -344,7 +325,7 @@ Chat :
             MessageLogin.sendLogin(p);
             ListWrongPasswordTentative.setNewPlayer(uuid);
             System.out.println(ListWrongPasswordTentative.getNumberTentativeOfPlayer(uuid));
-            
+
         } // Si l'uuid du joueur n'est pas égale à un uuid deja enregistrer.
         else {
             setTaskBlockSpawn(p);
@@ -384,7 +365,7 @@ Chat :
             Bukkit.getScheduler().cancelTask(getTaskBlockSpawn(p));
             getTaskBlockSpawnRemove(p);
         }
-        //List vidage cache
+        // List vidage cache
         if (listPlayer.get(uuid) != null) {
             getListPlayerRemove(uuid);
         }
@@ -395,23 +376,23 @@ Chat :
                 listIpPlayer.remove(ip);
             }
         }
-        //If player is online
+        // If player is online
         if (listOnlinePlayer.get(uuid) != null) {
             listOnlinePlayer.remove(uuid);
         }
-        //List tentative pass
+        // List tentative pass
         ListWrongPasswordTentative.setRemovePlayer(uuid);
         // Fin test de vitesse
         long endTime = System.nanoTime();
         System.out.println("Test de vitesse quit : " + (endTime - startTime) * Math.pow(10, -6) + " ms");
     }
 
-
-    //Suspend
+    // Suspend
     @EventHandler
-    public void onChat(AsyncPlayerChatEvent p_envent){
-        
+    public void onChat(AsyncPlayerChatEvent p_envent) {
+
     }
+
     /**
      * Getter de tache register.
      * On recupère l'id de la tache register en fonction de l'uuid du joueur.

@@ -1,7 +1,11 @@
 package fr.loirelique.lpsecurity.Useful;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class DateAndTime {
 
@@ -25,32 +29,32 @@ public class DateAndTime {
         boolean testDateEtTime = false;
 
         if (testChaineNumber(years) == false && testChaineNumber(months) == true
-        && testChaineNumber(dayOfMonths) == true && testChaineNumber(hours) == true
-        && testChaineNumber(minutes) == true) {
+                && testChaineNumber(dayOfMonths) == true && testChaineNumber(hours) == true
+                && testChaineNumber(minutes) == true) {
             System.out.println("Tu as fais une erreur de caractère dans l'année.");
- 
-        }else if(testChaineNumber(years) == true && testChaineNumber(months) == false
-        && testChaineNumber(dayOfMonths) == true && testChaineNumber(hours) == true
-        && testChaineNumber(minutes) == true) {
+
+        } else if (testChaineNumber(years) == true && testChaineNumber(months) == false
+                && testChaineNumber(dayOfMonths) == true && testChaineNumber(hours) == true
+                && testChaineNumber(minutes) == true) {
             System.out.println("Tu as fais une erreur de caractère dans le mois.");
- 
-        }else if(testChaineNumber(years) == true && testChaineNumber(months) == true
-        && testChaineNumber(dayOfMonths) == false && testChaineNumber(hours) == true
-        && testChaineNumber(minutes) == true) {
+
+        } else if (testChaineNumber(years) == true && testChaineNumber(months) == true
+                && testChaineNumber(dayOfMonths) == false && testChaineNumber(hours) == true
+                && testChaineNumber(minutes) == true) {
             System.out.println("Tu as fais une erreur de caractère dans le jour.");
- 
-        }else if(testChaineNumber(years) == true && testChaineNumber(months) == true
-        && testChaineNumber(dayOfMonths) == true && testChaineNumber(hours) == false
-        && testChaineNumber(minutes) == true) {
+
+        } else if (testChaineNumber(years) == true && testChaineNumber(months) == true
+                && testChaineNumber(dayOfMonths) == true && testChaineNumber(hours) == false
+                && testChaineNumber(minutes) == true) {
             System.out.println("Tu as fais une erreur de caractère dans l'heure.");
- 
-        }else if(testChaineNumber(years) == true && testChaineNumber(months) == true
-        && testChaineNumber(dayOfMonths) == true && testChaineNumber(hours) == true
-        && testChaineNumber(minutes) == false) {
+
+        } else if (testChaineNumber(years) == true && testChaineNumber(months) == true
+                && testChaineNumber(dayOfMonths) == true && testChaineNumber(hours) == true
+                && testChaineNumber(minutes) == false) {
             System.out.println("Tu as fais une erreur de caractère dans les minutes.");
- 
-        }else if (testChaineNumber(years) == true && testChaineNumber(months) == true
-            && testChaineNumber(dayOfMonths) == true && testChaineNumber(hours) == true
+
+        } else if (testChaineNumber(years) == true && testChaineNumber(months) == true
+                && testChaineNumber(dayOfMonths) == true && testChaineNumber(hours) == true
                 && testChaineNumber(minutes) == true) {
 
             int year = Integer.parseInt(years.replaceAll("\\s", ""));
@@ -132,20 +136,17 @@ public class DateAndTime {
             if (hour >= 0 && hour <= 23) {
                 timeVerification = true;
                 System.out.println("Heure entre 0 et 23.");
-                if (minute >=0 && minute <=59) {
+                if (minute >= 0 && minute <= 59) {
                     timeVerification = true;
                     System.out.println("Minute entre 0 et 59.");
                 } else {
                     timeVerification = false;
                     System.out.println("Minute entre 0 et 59 non respecter.");
                 }
-            }else{
+            } else {
                 timeVerification = false;
                 System.out.println("Heure entre 0 et 23 non respecter.");
             }
-
-
-
 
             if (dateVerification == true && timeVerification == true) {
                 System.out.println("On peut executer les requetes sql.");
@@ -164,53 +165,78 @@ public class DateAndTime {
                         + month + "/" + dayOfMonth + " " + hour + ":" + minute);
             }
 
-           
         }
 
         return testDateEtTime;
     }
 
-    public Date getDate(int donneTemps, String typeTemps ) {
+    public Date getDateFromCommand(int donneTemps, String typeTemps) {
 
         Calendar dateOfTheDay = Calendar.getInstance();
         Date date = dateOfTheDay.getTime();
-       
+
         if (typeTemps.equals("j")) {
             System.out.println("On est en jours.");
-            dateOfTheDay.add(Calendar.DATE,donneTemps);
+            dateOfTheDay.add(Calendar.DATE, donneTemps);
             System.out.println(dateOfTheDay.getTime());
-            date = dateOfTheDay.getTime();      
+            date = dateOfTheDay.getTime();
         }
-          
+
         if (typeTemps.equals("m")) {
             System.out.println("On est en mois.");
-            dateOfTheDay.add(Calendar.MONTH,donneTemps);
+            dateOfTheDay.add(Calendar.MONTH, donneTemps);
             System.out.println(dateOfTheDay.getTime());
             date = dateOfTheDay.getTime();
         }
         if (typeTemps.equals("h")) {
             System.out.println("On est en heure.");
-            dateOfTheDay.add(Calendar.HOUR,donneTemps);
+            dateOfTheDay.add(Calendar.HOUR, donneTemps);
             System.out.println(dateOfTheDay.getTime());
             date = dateOfTheDay.getTime();
         }
         if (typeTemps.equals("min")) {
             System.out.println("On est en minutes.");
-            dateOfTheDay.add(Calendar.MINUTE,donneTemps);
+            dateOfTheDay.add(Calendar.MINUTE, donneTemps);
             System.out.println(dateOfTheDay.getTime());
             date = dateOfTheDay.getTime();
         }
 
-        if (!typeTemps.equals("j") && !typeTemps.equals("m")&&!typeTemps.equals("h")&&!typeTemps.equals("min")) {
+        if (!typeTemps.equals("j") && !typeTemps.equals("m") && !typeTemps.equals("h") && !typeTemps.equals("min")) {
             System.out.println("Pas de correspondance");
         }
-   
-        return date;
-    
-    }
-    
 
+        return date;
+
+    }
+
+    public String getDateForPlayer(Date date) {
+        // Date retouner au joueur
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        String dateGiveString = dateFormat.format(date);
+
+        return dateGiveString;
+    }
+
+    public String getDateForBdd(Date date) {
+        // Date dans la bdd
+        String stringCalendar = date.toString();
+
+        return stringCalendar;
+    }
+
+    public Date getDateFromBddToCompare(String date) {
+        // Date de la bdd vers la comparaison
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+        try {
+            cal.setTime(sdf.parse(date));
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        Date date2 = cal.getTime();
+
+        return date2;
+    }
 
 }
-
-

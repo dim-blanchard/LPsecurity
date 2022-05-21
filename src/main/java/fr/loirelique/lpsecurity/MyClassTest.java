@@ -1,14 +1,45 @@
 package fr.loirelique.lpsecurity;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class MyClassTest {
 
+    public static boolean testChaineNumber(String chaine) {
+        boolean testNumber = false;
+        for (int i = 0; i < chaine.length(); i++) {
+            char chaineDeCaractere = chaine.charAt(i);
+            int ascii = chaineDeCaractere;
+            if (ascii >= 48 && ascii <= 57) {
+                testNumber = true;
+            } else {
+                testNumber = false;
+                break;
+            }
+        }
+        return testNumber;
+    }
+
     public static void main(String args[]) {
- 
+
+        String test ="1a0";
+
+        
+        if (testChaineNumber(test)==true) {
+            System.out.println("ok");
+        }else{System.out.println("not ok");}
+
+
+
+/*  
         int jours_donne = (-10);
         String saisieClavier2 = "j"; 
         
@@ -54,9 +85,37 @@ public class MyClassTest {
         }else{
             System.out.println("plus bannie");
         } 
+    /*     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String parsetest = datefinal.format(formatter);
+        System.out.println(parsetest);
 
+        
+        LocalDateTime dateTime = LocalDateTime.parse(parsetest, formatter);
+
+        System.out.println(dateTime); */
+
+
+     /*    //Date retouner au joueur        
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");     
-        System.out.println(dateFormat.format(datefinal));
+        String dateGiveString = dateFormat.format(datefinal);
+        System.out.println("String: "+dateGiveString);
+
+
+        //Date dans la bdd 
+        String parseCalendar = datefinal.toString();
+        System.out.println("String: "+parseCalendar);
+
+        //Date de la bdd vers la comparaison
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy",Locale.ENGLISH);
+        try {
+            cal.setTime(sdf.parse(parseCalendar));
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        System.out.println("Object: "+cal.getTime()); */ 
+
 
 
         /*
