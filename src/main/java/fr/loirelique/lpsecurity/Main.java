@@ -32,8 +32,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import fr.loirelique.lpsecurity.Command.CommandBan;
-import fr.loirelique.lpsecurity.Command.CommandChatclear;
-import fr.loirelique.lpsecurity.Command.CommandChatmute;
 import fr.loirelique.lpsecurity.Command.CommandHistorique;
 import fr.loirelique.lpsecurity.Command.CommandKick;
 import fr.loirelique.lpsecurity.Command.CommandLogin;
@@ -122,20 +120,15 @@ public class Main extends JavaPlugin implements Listener {
         getCommand("warn").setExecutor(commandWarn);
 
         /*
-         * CommandExecutor commandSupport = new CommandSupport();
-         * getCommand("support").setExecutor(commandSupport);
-         * 
-         * CommandExecutor commandSuppsupport = new CommandSuppsupport();
-         * getCommand("suppsuport").setExecutor(commandSuppsupport);
-         * 
-         * CommandExecutor commandSupportlist = new CommandSupportlist();
-         * getCommand("supportlist").setExecutor(commandSupportlist);
-         * 
-         * CommandExecutor commandChatmute = new CommandChatmute();
-         * getCommand("chatmute").setExecutor(commandChatmute);
-         * 
-         * CommandExecutor commandChatclear = new CommandChatclear();
-         * getCommand("chatclear").setExecutor(commandChatclear);
+          CommandExecutor commandSupport = new CommandSupport();
+          getCommand("support").setExecutor(commandSupport);
+         
+          CommandExecutor commandSuppsupport = new CommandSuppsupport();
+          getCommand("suppsuport").setExecutor(commandSuppsupport);
+         
+          CommandExecutor commandSupportlist = new CommandSupportlist();
+          getCommand("supportlist").setExecutor(commandSupportlist);
+        
          */
 
         ListWarningDegresAndMotifs.initializeList();
