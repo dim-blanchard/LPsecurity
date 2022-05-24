@@ -32,15 +32,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import fr.loirelique.lpsecurity.Command.CommandBan;
+import fr.loirelique.lpsecurity.Command.CommandCreateSupport;
 import fr.loirelique.lpsecurity.Command.CommandHistorique;
 import fr.loirelique.lpsecurity.Command.CommandKick;
+import fr.loirelique.lpsecurity.Command.CommandListSupport;
 import fr.loirelique.lpsecurity.Command.CommandLogin;
 import fr.loirelique.lpsecurity.Command.CommandMute;
 import fr.loirelique.lpsecurity.Command.CommandRegister;
+import fr.loirelique.lpsecurity.Command.CommandRemovesupport;
 import fr.loirelique.lpsecurity.Command.CommandResetHistorique;
-import fr.loirelique.lpsecurity.Command.CommandSupport;
-import fr.loirelique.lpsecurity.Command.CommandSupportlist;
-import fr.loirelique.lpsecurity.Command.CommandSuppsupport;
+
 import fr.loirelique.lpsecurity.Command.CommandTempban;
 import fr.loirelique.lpsecurity.Command.CommandTempmute;
 import fr.loirelique.lpsecurity.Command.CommandUnban;
@@ -119,17 +120,15 @@ public class Main extends JavaPlugin implements Listener {
         CommandExecutor commandWarn = new CommandWarn();
         getCommand("warn").setExecutor(commandWarn);
 
-        /*
-          CommandExecutor commandSupport = new CommandSupport();
-          getCommand("support").setExecutor(commandSupport);
+        CommandExecutor commandCreateSupport = new CommandCreateSupport();
+        getCommand("createsupport").setExecutor(commandCreateSupport);
          
-          CommandExecutor commandSuppsupport = new CommandSuppsupport();
-          getCommand("suppsuport").setExecutor(commandSuppsupport);
+        CommandExecutor commandRemovesupport = new CommandRemovesupport();
+        getCommand("removesuport").setExecutor(commandRemovesupport);
          
-          CommandExecutor commandSupportlist = new CommandSupportlist();
-          getCommand("supportlist").setExecutor(commandSupportlist);
-        
-         */
+        CommandExecutor commandListSupport = new CommandListSupport();
+        getCommand("listsupport").setExecutor(commandListSupport);
+       
 
         ListWarningDegresAndMotifs.initializeList();
 
