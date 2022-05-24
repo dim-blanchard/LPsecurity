@@ -6,12 +6,16 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
 
 public class MyClassTest {
+
+
 
     public static boolean testChaineNumber(String chaine) {
         boolean testNumber = false;
@@ -27,15 +31,86 @@ public class MyClassTest {
         }
         return testNumber;
     }
+    private static HashMap<String, HashMap<String,String>> listSupport = new HashMap<String, HashMap<String,String>>();
+    
+
+    public static void creatSupport(String nom , String String) {
+
+        if (listSupport.get(nom)==null) {
+           listSupport.put(nom, new HashMap<String,String>());
+           listSupport.get(nom).put(String, String);
+        }else{
+            System.out.println("support deja exisant");
+          //  String.sendMessage("Support deja exsistant choisir un autre nom."); 
+        }
+    }
+
+    public static String getlistSupport() {
+        StringBuilder builder = new StringBuilder();
+        Object lisObject[] = listSupport.keySet().toArray();
+        String list ="";
+        for (int i = 0; i <lisObject.length ; i++) {          
+            String ar = "[Support]["+i+"]:"+lisObject[i].toString().replace(" ' ", " \' ");
+            builder.append(ar).append(" \n");          
+            list = builder.toString();
+        }
+        return list;
+    }
+
+    public static void joinSupport(String  nom, String String) {
+        if (listSupport.get(nom)!=null) {
+            if (listSupport.get(nom).get(String)== null) {
+                listSupport.get(nom).put(String, String);
+            }else{
+                //player.sendMessage("Tu fais deja partie du support.");
+            }
+        }else{
+            //String.sendMessage("le nom de support n'existe pas.");
+        }
+    }
+
+    public static void removeSupport(String nom , String String) {
+        if(listSupport.get(nom)!= null){
+            listSupport.remove(nom);
+        }else{
+            //String.sendMessage("le nom de support n'existe pas.");
+        }
+    }
+
 
     public static void main(String args[]) {
 
-        String test ="1a0";
+        creatSupport("Atest", "joueur1");
+
+        creatSupport("Btest", "joueur1");
+
+        creatSupport("Ctest", "joueur1");
+
+        joinSupport("Atest", "j");
+
+        Object lisObject[] = listSupport.keySet().toArray();
+        String list ="";
+        for (int i = 0; i <lisObject.length ; i++) { 
+           list=lisObject[i].toString();
+           if (listSupport.get(list).get("j2") !=null) {
+               System.out.println("Joueur dans une list");
+           }else{
+               System.out.println("Pas de joueur dans list");
+           }
+        }
 
         
-        if (testChaineNumber(test)==true) {
-            System.out.println("ok");
-        }else{System.out.println("not ok");}
+
+
+
+    /*     System.out.println(listSupport.keySet());
+        Object test[] = listSupport.keySet().toArray();
+
+        System.out.println(test.length);
+        for (int i = 0; i <test.length ; i++) {
+            System.out.println(test[i]);
+        } */
+        
 
 
 

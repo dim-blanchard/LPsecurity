@@ -34,6 +34,7 @@ import org.bukkit.scheduler.BukkitTask;
 import fr.loirelique.lpsecurity.Command.CommandBan;
 import fr.loirelique.lpsecurity.Command.CommandCreateSupport;
 import fr.loirelique.lpsecurity.Command.CommandHistorique;
+import fr.loirelique.lpsecurity.Command.CommandJoinSupport;
 import fr.loirelique.lpsecurity.Command.CommandKick;
 import fr.loirelique.lpsecurity.Command.CommandListSupport;
 import fr.loirelique.lpsecurity.Command.CommandLogin;
@@ -128,8 +129,11 @@ public class Main extends JavaPlugin implements Listener {
          
         CommandExecutor commandListSupport = new CommandListSupport();
         getCommand("listsupport").setExecutor(commandListSupport);
-       
 
+        CommandExecutor commandJoinSupport = new CommandJoinSupport();
+        getCommand("joinsupport").setExecutor(commandJoinSupport);
+    
+       
         ListWarningDegresAndMotifs.initializeList();
 
         Bukkit.getConsoleSender().sendMessage("     §4__   __");
