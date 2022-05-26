@@ -13,29 +13,26 @@ public class CommandCreateSupport implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         boolean errorCommande = false;
         if (sender instanceof Player) {
-            Player p = (Player) sender;// On récupère le joueur.
-            if (p.hasPermission("lpsecurity.ban")) {
+            Player p = (Player) sender;
+            if (p.hasPermission("lpsecurity.createsupport")) {
                 if (cmd.getName().equalsIgnoreCase("createsupport")) {
                     if (args.length >= 2) {
                         String nom = args[0];
-                        ListSupport.creatSupport(nom, p);
-
-                        if (errorCommande == true) {
-                            errorCommande = true;
-                        } else if (errorCommande == false) {
-                            errorCommande = false;
-
-                        }
-
+                        errorCommande = ListSupport.creatSupport(nom, p);
+                    } else {
+                        errorCommande = false;
                     }
                 } else {
                     p.sendMessage("Pas la permission.");
                 }
             }
-           
+        }
+        if (errorCommande == true) {
+            errorCommande = true;
+        } else if (errorCommande == false) {
+            errorCommande = false;
         }
         return errorCommande;
-
     }
 
 }

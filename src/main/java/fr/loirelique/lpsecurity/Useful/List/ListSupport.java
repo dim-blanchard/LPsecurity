@@ -8,8 +8,8 @@ public class ListSupport {
 
     private static HashMap<String, HashMap<String, Player>> listSupport = new HashMap<String, HashMap<String, Player>>();
 
-    public static void creatSupport(String nom, Player player) {
-
+    public static boolean creatSupport(String nom, Player player) {
+        boolean error = false;
         Object lisObject[] = listSupport.keySet().toArray();
         String list = "";
         for (int i = 0; i < lisObject.length; i++) {
@@ -19,14 +19,22 @@ public class ListSupport {
                 if (listSupport.get(nom) == null) {
                     listSupport.put(nom, new HashMap<String, Player>());
                     listSupport.get(nom).put(player.getName(), player);
+                    player.sendMessage("Tu as bien créé ton support attent qu'un modo intervienne");
+                    error = true;
+                    return error;
                 } else {
                     player.sendMessage("Support deja exsistant choisir un autre nom.");
+                    error = true;
+                    return error;
                 }
             } else {
                player.sendMessage("Tu es deja dans un support quit le pour en créé un nouveau.");
-
+               error = true;
+               return error;
             }
+           
         }
+        return error;
 
     }
 

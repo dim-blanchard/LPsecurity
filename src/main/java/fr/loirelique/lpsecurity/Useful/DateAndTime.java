@@ -231,7 +231,6 @@ public class DateAndTime {
         try {
             cal.setTime(sdf.parse(date));
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         Date date2 = cal.getTime();
