@@ -125,7 +125,7 @@ public class Main extends JavaPlugin implements Listener {
         getCommand("createsupport").setExecutor(commandCreateSupport);
          
         CommandExecutor commandRemovesupport = new CommandRemovesupport();
-        getCommand("removesuport").setExecutor(commandRemovesupport);
+        getCommand("removesupport").setExecutor(commandRemovesupport);
          
         CommandExecutor commandListSupport = new CommandListSupport();
         getCommand("listsupport").setExecutor(commandListSupport);

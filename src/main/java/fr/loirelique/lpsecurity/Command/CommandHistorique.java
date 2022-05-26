@@ -19,9 +19,8 @@ public class CommandHistorique implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         boolean errorCommande = false;
         if (sender instanceof Player) {
-            Player p = (Player) sender;// On récupère le joueur.*
-            
-                if (cmd.getName().equalsIgnoreCase("historique")) { // Si c'est la commande "banish" qui a été tapée:
+            Player p = (Player) sender;  
+                if (cmd.getName().equalsIgnoreCase("historique")) { 
                     errorCommande = false;
                     if (args.length == 1) {
                         String uuid = Main.plugin.getUuidHash(args[0]);

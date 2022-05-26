@@ -67,6 +67,26 @@ commands:
     usage: §e/warn [Nom du joueur] [Avertisement(Niveau:1,2 ou 3)]
     permission: lpsecurity.warn
 
+  createsupport:
+    description: Description de la commande.(LPsecurity)
+    usage: §e/createsupport [Nom du suport]
+    permission: lpsecurity.createsupport
+  
+  removesupport:
+    description: Description de la commande.(LPsecurity)
+    usage: §e/removesupport [Nom du support] 
+    permission: lpsecurity.removesupport
+
+  listsupport:
+    description: Description de la commande.(LPsecurity)
+    usage: §e/listsupport
+    permission: lpsecurity.listsupport
+
+  joinsupport:
+    description: Description de la commande.(LPsecurity)
+    usage: §e/joinsupport [Nom du support] 
+    permission: lpsecurity.joinsupport
+
 permissions:
   lpsecurity.login:
     description: permet d'utiliser la commande login.(LPsecurity)
@@ -115,4 +135,20 @@ permissions:
   lpsecurity.warn:
     description: permet d'utiliser les commande kick.(LPsecurity)
     default: true
-    
+
+  lpsecurity.createsupport:
+    description: permet d'utiliser les commande createSupport.(LPsecurity)
+    default: true
+
+  lpsecurity.removesupport:
+    description: permet d'utiliser les commande removeSupport.(LPsecurity)
+    default: true
+
+  lpsecurity.listsupport:
+    description: permet d'utiliser les commande listSupport.(LPsecurity)
+    default: true
+
+  lpsecurity.joinsupport:
+    description: permet d'utiliser les commande joinSupport.(LPsecurity)
+    default: true
+
