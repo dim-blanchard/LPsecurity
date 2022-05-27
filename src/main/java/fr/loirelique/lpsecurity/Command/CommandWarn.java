@@ -11,9 +11,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
+import fr.loirelique.lpsecurity.List.ListWarningDegresAndMotifs;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageWarn;
-import fr.loirelique.lpsecurity.Useful.List.ListWarningDegresAndMotifs;
 
 public class CommandWarn implements CommandExecutor {
 

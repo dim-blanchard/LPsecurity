@@ -5,7 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import fr.loirelique.lpsecurity.Useful.List.ListSupport;
+import fr.loirelique.lpsecurity.List.ListSupport;
 
 public class CommandCreateSupport implements CommandExecutor {
 

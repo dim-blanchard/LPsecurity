@@ -1,29 +1,37 @@
 package fr.loirelique.lpsecurity.String;
 
+import fr.loirelique.lpsecurity.Main;
+
 public class MessageUnmute {
 
     public static String setColorUnmute() {
-        return null;
+        String colorUnmute = Main.plugin.getConfig().getString("string.color_unmute");
+        return colorUnmute;
     }
 
     public static String getUnmute() {
-        return null;
+        String unMute = Main.plugin.getConfig().getString("string.unmute");
+        return unMute;
     }
 
     public static String setColorAlreadyUnmute() {
-        return null;
+        String colorAlreadyUnmute = Main.plugin.getConfig().getString("string.color_already_unmute");
+        return colorAlreadyUnmute;
     }
 
     public static String getAlreadyUnmute() {
-        return null;
+        String alreadyUnmute = Main.plugin.getConfig().getString("string.already_unmute");
+        return alreadyUnmute;
     }
 
     public static String setColorErrorUnmute() {
-        return null;
+        String colorErrorUnmute = Main.plugin.getConfig().getString("string.color_error_unmute");
+        return colorErrorUnmute;
     }
 
     public static String getErrorUnmute() {
-        return null;
+        String errorUnmute = Main.plugin.getConfig().getString("string.error_unmute");
+        return errorUnmute;
     }
     
 }

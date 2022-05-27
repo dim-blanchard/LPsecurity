@@ -1,6 +1,10 @@
-package fr.loirelique.lpsecurity.Useful.List;
+package fr.loirelique.lpsecurity.List;
 
 import java.util.HashMap;
+
+import com.avaje.ebeaninternal.server.cluster.mcast.Message;
+
+import fr.loirelique.lpsecurity.String.MessageWarn;
 
 public class ListWarningDegresAndMotifs {
     private static HashMap<String, String> warningMotifs = new HashMap<String,String>();
@@ -8,16 +12,18 @@ public class ListWarningDegresAndMotifs {
     private static int warnDegresMax ;
 
     public static void initializeList() {
-        warnDegresMax = 10;
-        String motif_warn_1 = "Advertissement niveau 1";
-        int Degres_warn_1 = 1;
-        String warn_lvl_1 = "motif1";
-        String motif_warn_2 = "Advertissement niveau 2";
-        int Degres_warn_2 = 2;
-        String warn_lvl_2 = "motif2";
-        int Degres_warn_3 = 3;
-        String motif_warn_3 = "Advertissement niveau 3";
-        String warn_lvl_3= "motif3";
+        warnDegresMax = MessageWarn.getWarnDegresMax();
+        String motif_warn_1 = MessageWarn.getMotifWarnLvl1Text();
+        int Degres_warn_1 = MessageWarn.getMotifWarnlvl1Degres();
+        String warn_lvl_1 = MessageWarn.getMotifWarnLvl1();
+
+        String motif_warn_2 = MessageWarn.getMotifWarnLvl2Text();
+        int Degres_warn_2 = MessageWarn.getMotifWarnlvl2Degres();
+        String warn_lvl_2 = MessageWarn.getMotifWarnLvl2();
+
+        int Degres_warn_3 = MessageWarn.getMotifWarnlvl3Degres();
+        String motif_warn_3 = MessageWarn.getMotifWarnLvl3Text();
+        String warn_lvl_3= MessageWarn.getMotifWarnLvl3();
         warningMotifs.put(warn_lvl_1,motif_warn_1);
         warningMotifs.put(warn_lvl_2,motif_warn_2);
         warningMotifs.put(warn_lvl_3,motif_warn_3);

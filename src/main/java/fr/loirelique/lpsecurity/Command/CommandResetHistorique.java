@@ -21,7 +21,7 @@ public class CommandResetHistorique implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         boolean errorCommande = false;
         if (sender instanceof Player) {
-            Player p = (Player) sender;// On récupère le joueur.
+            Player p = (Player) sender;
             if (cmd.getName().equalsIgnoreCase("resethistorique")) { // Si c'est la commande "register" qui a été tapée:
                 if (args.length == 1) {                 
                     String uuid = Main.plugin.getUuidHash(args[0]);
@@ -74,6 +74,8 @@ public class CommandResetHistorique implements CommandExecutor {
                     p.sendMessage("Commande non executer");
                 }
             }
+        }else{
+            System.out.println("Que les joueurs peuvent executer cette commande.");
         }
 
         return errorCommande;

@@ -10,27 +10,27 @@ public class MessageMute {
     }
 
     public static String setColorMute() {
-        String mute = Main.plugin.getConfig().getString("string.mute");
-        return mute;
+        String colorMute = Main.plugin.getConfig().getString("string.color_mute");
+        return colorMute;
     }
 
     public static String setColorAlreadyMute() {
-        String mute = Main.plugin.getConfig().getString("string.mute");
-        return mute;
+        String colorAlreadyMute = Main.plugin.getConfig().getString("string.color_already_mute");
+        return colorAlreadyMute;
     }
 
     public static String getAlreadyMute() {
-        String mute = Main.plugin.getConfig().getString("string.mute");
-        return mute;
+        String alreadyMute = Main.plugin.getConfig().getString("string.already_mute");
+        return alreadyMute;
     }
 
     public static String setColorErrorMute() {
-        String mute = Main.plugin.getConfig().getString("string.mute");
-        return mute;
+        String colorErrorMute = Main.plugin.getConfig().getString("string.color_error_mute");
+        return colorErrorMute;
     }
 
     public static String getErrorMute() {
-        String mute = Main.plugin.getConfig().getString("string.mute");
-        return mute;
+        String errorMute = Main.plugin.getConfig().getString("string.error_mute");
+        return errorMute;
     }
 }

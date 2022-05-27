@@ -12,9 +12,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
+import fr.loirelique.lpsecurity.List.ListWrongPasswordTentative;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageLogin;
-import fr.loirelique.lpsecurity.Useful.List.ListWrongPasswordTentative;
 
 public class CommandLogin implements CommandExecutor {
 

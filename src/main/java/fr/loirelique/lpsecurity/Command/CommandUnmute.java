@@ -11,9 +11,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
+import fr.loirelique.lpsecurity.List.ListMutePlayer;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageUnmute;
-import fr.loirelique.lpsecurity.Useful.List.ListMutePlayer;
 
 public class CommandUnmute implements CommandExecutor {
 

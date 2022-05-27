@@ -125,6 +125,55 @@ string:
   error_ban: La commande n'a pas été executer.
   already_ban: joueur déja bannie de la communauté.
 
+#Unmute
+  color_unmute: §5
+  color_error_unmute: §5
+  color_already_unmute: §5
+  
+  unmute: est autorisé à recomposer dans le CHAT de la communauté de serveur.
+  error_unmute: La commande n'a pas été executer.
+  already_unmute: Le joueur est déja autorisé à composer dans le "chat" la communauté de serveur.
+#Tempmute
+  color_tempmute: §5
+  color_error_tempmute: §5
+  color_already_tempmute: §5
 
+  tempmute: a étais temporairement interdie à composer dans le CHAT de la communauté de serveur.
+  error_tempmute: La commande n'a pas été executer.
+  already_tempmute: joueur est déja temporairement interdie à composer dans le CHAT de la communauté de serveur.
+#mute
+  color_mute: §5
+  color_error_mute: §5
+  color_already_mute: §5
 
+  mute: a étais interdie à composer dans le CHAT de la communauté de serveur.
+  error_mute: La commande n'a pas été executer.
+  already_mute: Le joueur est déja interdie à composer dans le CHAT de la communauté de serveur.
+
+#warn
+  color_warn: §5
+  color_error_warn: §5
+  color_already_warn_ban: §5
+  color_warn_ban: §5
+  
+  warn: viens d'avoir un avertissement.
+  warn_ban: viens d'être bannie suite à un nombre de sanction donné.
+  error_warn: La commande n'a pas été executer.
+  already_warn_ban: Le joueur à un nombre de sanctions supérieur à la limite donné et il est bannie.
+  
+  #Configuration des motifs prédéfinie:
+  warn_degres_max: 10
+
+  motif_warn_lvl_1: motif1
+  motif_warn_lvl_1_degres: 1
+  motif_warn_lvl_1_text: Advertissement niveau 1
+
+  motif_warn_lvl_2: motif2
+  motif_warn_lvl_2_degres: 2
+  motif_warn_lvl_2_text: Advertissement niveau 2
+
+  motif_warn_lvl_3: motif3
+  motif_warn_lvl_3_degres: 3
+  motif_warn_lvl_3_text: Advertissement niveau 3
+  
 

@@ -1,4 +1,4 @@
-package fr.loirelique.lpsecurity.Useful.List;
+package fr.loirelique.lpsecurity.List;
 
 import java.util.HashMap;
 
