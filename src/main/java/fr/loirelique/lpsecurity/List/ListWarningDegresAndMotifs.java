@@ -2,8 +2,6 @@ package fr.loirelique.lpsecurity.List;
 
 import java.util.HashMap;
 
-import com.avaje.ebeaninternal.server.cluster.mcast.Message;
-
 import fr.loirelique.lpsecurity.String.MessageWarn;
 
 public class ListWarningDegresAndMotifs {

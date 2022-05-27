@@ -20,6 +20,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -118,8 +119,9 @@ public class Main extends JavaPlugin implements Listener {
         CommandExecutor commandKick = new CommandKick();
         getCommand("kick").setExecutor(commandKick);
 
-        CommandExecutor commandWarn = new CommandWarn();
+        TabExecutor commandWarn = new CommandWarn();
         getCommand("warn").setExecutor(commandWarn);
+        getCommand("warn").setTabCompleter(commandWarn);
 
         CommandExecutor commandCreateSupport = new CommandCreateSupport();
         getCommand("createsupport").setExecutor(commandCreateSupport);

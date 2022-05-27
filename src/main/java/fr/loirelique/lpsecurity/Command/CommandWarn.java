@@ -4,10 +4,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
@@ -15,7 +18,7 @@ import fr.loirelique.lpsecurity.List.ListWarningDegresAndMotifs;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageWarn;
 
-public class CommandWarn implements CommandExecutor {
+public class CommandWarn implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -56,13 +59,13 @@ public class CommandWarn implements CommandExecutor {
                         e.printStackTrace();
                     }
 
-                    if (motifInsert.equals("motif1")) {
+                    if (motifInsert.equals(MessageWarn.getMotifWarnLvl1())) {
                         warn += ListWarningDegresAndMotifs.getDegres(motifInsert);
                     }
-                    if (motifInsert.equals("motif2")) {
+                    if (motifInsert.equals(MessageWarn.getMotifWarnLvl2())) {
                         warn += ListWarningDegresAndMotifs.getDegres(motifInsert);
                     }
-                    if (motifInsert.equals("motif3")) {
+                    if (motifInsert.equals(MessageWarn.getMotifWarnLvl3())) {
                         warn += ListWarningDegresAndMotifs.getDegres(motifInsert);
                     }
                     if (warn >= ListWarningDegresAndMotifs.getWarnDegresMax()) {
@@ -155,6 +158,18 @@ public class CommandWarn implements CommandExecutor {
             }
         }
         return errorCommande;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (args.length == 2) {
+            List<String> listMotif = new ArrayList<String>();
+            listMotif.add(MessageWarn.getMotifWarnLvl1());
+            listMotif.add(MessageWarn.getMotifWarnLvl2());
+            listMotif.add(MessageWarn.getMotifWarnLvl3());
+            return listMotif;
+        }
+        return null;
     }
 
 }
