@@ -16,7 +16,7 @@ import java.util.TimeZone;
 public class MyClassTest {
 
 
-
+/* 
     public static boolean testChaineNumber(String chaine) {
         boolean testNumber = false;
         for (int i = 0; i < chaine.length(); i++) {
@@ -75,12 +75,16 @@ public class MyClassTest {
         }else{
             //String.sendMessage("le nom de support n'existe pas.");
         }
-    }
+    } */
 
 
     public static void main(String args[]) {
 
-        creatSupport("Atest", "joueur1");
+
+
+        
+
+  /*       creatSupport("Atest", "joueur1");
 
         creatSupport("Btest", "joueur1");
 
@@ -98,7 +102,7 @@ public class MyClassTest {
                System.out.println("Pas de joueur dans list");
            }
         }
-
+ */
         
 
 
