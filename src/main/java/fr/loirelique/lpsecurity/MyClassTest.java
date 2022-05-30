@@ -1,5 +1,8 @@
 package fr.loirelique.lpsecurity;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -81,7 +84,21 @@ public class MyClassTest {
     public static void main(String args[]) {
 
 
+        
+       File test = new File("C:\\Users\\Master\\Desktop\\Erizia-spigot-1.8.8\\Spigot-1.8.8-serveur\\plugins\\LPsecurity");
+       
 
+       if (test.getName() == "test.json" ) {
+            System.out.println("ok");
+        }
+
+   
+       try (FileWriter test2 = new FileWriter(test)) {
+          
+    } catch (IOException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    }
         
 
   /*       creatSupport("Atest", "joueur1");

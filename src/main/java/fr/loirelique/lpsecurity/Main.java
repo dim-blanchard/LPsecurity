@@ -150,15 +150,6 @@ public class Main extends JavaPlugin implements Listener {
 
       
 
-       File test = new File(getDataFolder(),"test");
-
-   
-       try (FileWriter test2 = new FileWriter(test)) {
-          
-    } catch (IOException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-    }
     }
 
     /**
