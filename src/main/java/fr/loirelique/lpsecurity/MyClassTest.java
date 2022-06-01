@@ -1,6 +1,8 @@
 package fr.loirelique.lpsecurity;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -16,203 +18,275 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import com.google.gson.JsonObject;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;  
+
 public class MyClassTest {
 
-
-/* 
-    public static boolean testChaineNumber(String chaine) {
-        boolean testNumber = false;
-        for (int i = 0; i < chaine.length(); i++) {
-            char chaineDeCaractere = chaine.charAt(i);
-            int ascii = chaineDeCaractere;
-            if (ascii >= 48 && ascii <= 57) {
-                testNumber = true;
-            } else {
-                testNumber = false;
-                break;
-            }
-        }
-        return testNumber;
-    }
-    private static HashMap<String, HashMap<String,String>> listSupport = new HashMap<String, HashMap<String,String>>();
+    /*
+     * public static boolean testChaineNumber(String chaine) {
+     * boolean testNumber = false;
+     * for (int i = 0; i < chaine.length(); i++) {
+     * char chaineDeCaractere = chaine.charAt(i);
+     * int ascii = chaineDeCaractere;
+     * if (ascii >= 48 && ascii <= 57) {
+     * testNumber = true;
+     * } else {
+     * testNumber = false;
+     * break;
+     * }
+     * }
+     * return testNumber;
+     * }
+     * private static HashMap<String, HashMap<String,String>> listSupport = new
+     * HashMap<String, HashMap<String,String>>();
+     * 
+     * 
+     * public static void creatSupport(String nom , String String) {
+     * 
+     * if (listSupport.get(nom)==null) {
+     * listSupport.put(nom, new HashMap<String,String>());
+     * listSupport.get(nom).put(String, String);
+     * }else{
+     * System.out.println("support deja exisant");
+     * // String.sendMessage("Support deja exsistant choisir un autre nom.");
+     * }
+     * }
+     * 
+     * public static String getlistSupport() {
+     * StringBuilder builder = new StringBuilder();
+     * Object lisObject[] = listSupport.keySet().toArray();
+     * String list ="";
+     * for (int i = 0; i <lisObject.length ; i++) {
+     * String ar = "[Support]["+i+"]:"+lisObject[i].toString().replace(" ' ",
+     * " \' ");
+     * builder.append(ar).append(" \n");
+     * list = builder.toString();
+     * }
+     * return list;
+     * }
+     * 
+     * public static void joinSupport(String nom, String String) {
+     * if (listSupport.get(nom)!=null) {
+     * if (listSupport.get(nom).get(String)== null) {
+     * listSupport.get(nom).put(String, String);
+     * }else{
+     * //player.sendMessage("Tu fais deja partie du support.");
+     * }
+     * }else{
+     * //String.sendMessage("le nom de support n'existe pas.");
+     * }
+     * }
+     * 
+     * public static void removeSupport(String nom , String String) {
+     * if(listSupport.get(nom)!= null){
+     * listSupport.remove(nom);
+     * }else{
+     * //String.sendMessage("le nom de support n'existe pas.");
+     * }
     
 
-    public static void creatSupport(String nom , String String) {
+     */
 
-        if (listSupport.get(nom)==null) {
-           listSupport.put(nom, new HashMap<String,String>());
-           listSupport.get(nom).put(String, String);
-        }else{
-            System.out.println("support deja exisant");
-          //  String.sendMessage("Support deja exsistant choisir un autre nom."); 
+    public static void updateFiles(String ban, String mute,String warn,String temp_ban, String motif_ban,String temp_mute,String motif_kick,String motif_mute,String motif_warn,String motif_unban,String motif_unmute,String motif_tempban,String motif_tempmute,File file) {
+        
+        JSONObject historique_sanctions = new JSONObject();
+        historique_sanctions.put("ban", ban);
+        historique_sanctions.put("mute",mute);
+        historique_sanctions.put("warn", warn);
+        historique_sanctions.put("temp_ban", temp_ban);
+        historique_sanctions.put("motif_ban", motif_ban);
+        historique_sanctions.put("temp_mute", temp_mute);
+        historique_sanctions.put("motif_kick", motif_kick);
+        historique_sanctions.put("motif_mute", motif_mute);
+        historique_sanctions.put("motif_warn", motif_warn);
+        historique_sanctions.put("motif_unban", motif_unban);
+        historique_sanctions.put("motif_unmute", motif_unmute);
+        historique_sanctions.put("motif_tempban", motif_tempban);
+        historique_sanctions.put("motif_tempmute", motif_tempmute);
+
+
+        try (FileWriter fileW = new FileWriter(file)) {       
+            fileW.write(historique_sanctions.toJSONString());
+            fileW.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
     }
 
-    public static String getlistSupport() {
-        StringBuilder builder = new StringBuilder();
-        Object lisObject[] = listSupport.keySet().toArray();
-        String list ="";
-        for (int i = 0; i <lisObject.length ; i++) {          
-            String ar = "[Support]["+i+"]:"+lisObject[i].toString().replace(" ' ", " \' ");
-            builder.append(ar).append(" \n");          
-            list = builder.toString();
-        }
-        return list;
-    }
+    public static void readFiles(String key,String namefile) {
+        JSONParser parser = new JSONParser();
+       
+            Object obj;
+            try {
+                obj = parser.parse(new FileReader("C:\\Users\\Master\\Desktop\\Erizia-spigot-1.8.8\\Spigot-1.8.8-serveur\\plugins\\LPsecurity\\historique_sanctions\\"+namefile)); 
+                JSONObject jsonObject =  (JSONObject) obj;
+                String data = (String) jsonObject.get(key);
+                System.out.println(data);
 
-    public static void joinSupport(String  nom, String String) {
-        if (listSupport.get(nom)!=null) {
-            if (listSupport.get(nom).get(String)== null) {
-                listSupport.get(nom).put(String, String);
-            }else{
-                //player.sendMessage("Tu fais deja partie du support.");
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (org.json.simple.parser.ParseException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
-        }else{
-            //String.sendMessage("le nom de support n'existe pas.");
-        }
+
+    
+        
     }
-
-    public static void removeSupport(String nom , String String) {
-        if(listSupport.get(nom)!= null){
-            listSupport.remove(nom);
-        }else{
-            //String.sendMessage("le nom de support n'existe pas.");
-        }
-    } */
-
 
     public static void main(String args[]) {
 
+        //Creation du dossier 
+        File test = new File(
+                "C:\\Users\\Master\\Desktop\\Erizia-spigot-1.8.8\\Spigot-1.8.8-serveur\\plugins\\LPsecurity", "historique_sanctions");
+        if (test.exists() == true) {
+            System.out.println("Dossier Exsist...");
+        } else {
+            System.out.println("Dossier abs création..");
+            test.mkdir();
+        }
+        ////////////////////
 
+        //if le fichier du joueur existe on le cree sinon non
+        String nameFile = "players.json";
+        File test1 = new File("C:\\Users\\Master\\Desktop\\Erizia-spigot-1.8.8\\Spigot-1.8.8-serveur\\plugins\\LPsecurity\\historique_sanctions", nameFile);
+        if (test1.exists() == true) {
+            System.out.println("Fichier exsite...");
+        } else {
+            System.out.println("Fichier n'exsite pas...Fichier en création...");
+            updateFiles("ban", "mute", "warn", "temp_ban", "motif_ban", "temp_mute", "motif_kick", "motif_mute", "motif_warn", "motif_unban", "motif_unmute", "motif_tempban", "motif_tempmute", test1);
+
+        }
+
+        System.out.println("\n[--Lecture du fichier--]");
+        readFiles("ban", "players.json");
+        readFiles("temp_mute", "players.json");
         
-       File test = new File("C:\\Users\\Master\\Desktop\\Erizia-spigot-1.8.8\\Spigot-1.8.8-serveur\\plugins\\LPsecurity");
+
        
 
-       if (test.getName() == "test.json" ) {
-            System.out.println("ok");
-        }
+        /*
+         * creatSupport("Atest", "joueur1");
+         * 
+         * creatSupport("Btest", "joueur1");
+         * 
+         * creatSupport("Ctest", "joueur1");
+         * 
+         * joinSupport("Atest", "j");
+         * 
+         * Object lisObject[] = listSupport.keySet().toArray();
+         * String list ="";
+         * for (int i = 0; i <lisObject.length ; i++) {
+         * list=lisObject[i].toString();
+         * if (listSupport.get(list).get("j2") !=null) {
+         * System.out.println("Joueur dans une list");
+         * }else{
+         * System.out.println("Pas de joueur dans list");
+         * }
+         * }
+         */
 
-   
-       try (FileWriter test2 = new FileWriter(test)) {
-          
-    } catch (IOException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-    }
-        
+        /*
+         * System.out.println(listSupport.keySet());
+         * Object test[] = listSupport.keySet().toArray();
+         * 
+         * System.out.println(test.length);
+         * for (int i = 0; i <test.length ; i++) {
+         * System.out.println(test[i]);
+         * }
+         */
 
-  /*       creatSupport("Atest", "joueur1");
+        /*
+         * int jours_donne = (-10);
+         * String saisieClavier2 = "j";
+         * 
+         * 
+         * Calendar aujourdhui = Calendar.getInstance();
+         * Calendar aujourdhui2= Calendar.getInstance();
+         * Date datefinal = aujourdhui.getTime();
+         * Date dateauj = aujourdhui2.getTime();
+         * 
+         * if (saisieClavier2.equals("j")) {
+         * System.out.println("On est en jours.");
+         * aujourdhui.add(Calendar.DATE,130);
+         * System.out.println(aujourdhui.getTime());
+         * datefinal = aujourdhui.getTime();
+         * }
+         * 
+         * if (saisieClavier2.equals("m")) {
+         * System.out.println("On est en mois.");
+         * aujourdhui.add(Calendar.MONTH,2);
+         * System.out.println(aujourdhui.getTime());
+         * datefinal = aujourdhui.getTime();
+         * }
+         * if (saisieClavier2.equals("h")) {
+         * System.out.println("On est en heure.");
+         * aujourdhui.add(Calendar.HOUR,24);
+         * System.out.println(aujourdhui.getTime());
+         * datefinal = aujourdhui.getTime();
+         * }
+         * if (saisieClavier2.equals("min")) {
+         * System.out.println("On est en minutes.");
+         * aujourdhui.add(Calendar.MINUTE,10);
+         * System.out.println(aujourdhui.getTime());
+         * datefinal = aujourdhui.getTime();
+         * }
+         * 
+         * if (!saisieClavier2.equals("j") && !saisieClavier2.equals("m") &&
+         * !saisieClavier2.equals("h") &&!saisieClavier2.equals("min")) {
+         * System.out.println("Pas de correspondance");
+         * }
+         * 
+         * 
+         * if (datefinal.after(dateauj)) {
+         * System.out.println("Toujour bannie");
+         * }else{
+         * System.out.println("plus bannie");
+         * }
+         * /* DateTimeFormatter formatter =
+         * DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+         * String parsetest = datefinal.format(formatter);
+         * System.out.println(parsetest);
+         * 
+         * 
+         * LocalDateTime dateTime = LocalDateTime.parse(parsetest, formatter);
+         * 
+         * System.out.println(dateTime);
+         */
 
-        creatSupport("Btest", "joueur1");
-
-        creatSupport("Ctest", "joueur1");
-
-        joinSupport("Atest", "j");
-
-        Object lisObject[] = listSupport.keySet().toArray();
-        String list ="";
-        for (int i = 0; i <lisObject.length ; i++) { 
-           list=lisObject[i].toString();
-           if (listSupport.get(list).get("j2") !=null) {
-               System.out.println("Joueur dans une list");
-           }else{
-               System.out.println("Pas de joueur dans list");
-           }
-        }
- */
-        
-
-
-
-    /*     System.out.println(listSupport.keySet());
-        Object test[] = listSupport.keySet().toArray();
-
-        System.out.println(test.length);
-        for (int i = 0; i <test.length ; i++) {
-            System.out.println(test[i]);
-        } */
-        
-
-
-
-/*  
-        int jours_donne = (-10);
-        String saisieClavier2 = "j"; 
-        
-
-        Calendar aujourdhui = Calendar.getInstance();
-        Calendar aujourdhui2= Calendar.getInstance();
-        Date datefinal = aujourdhui.getTime();
-        Date dateauj = aujourdhui2.getTime();
-
-        if (saisieClavier2.equals("j")) {
-            System.out.println("On est en jours.");
-            aujourdhui.add(Calendar.DATE,130);
-            System.out.println(aujourdhui.getTime());
-            datefinal = aujourdhui.getTime();      
-        }
-          
-        if (saisieClavier2.equals("m")) {
-            System.out.println("On est en mois.");
-            aujourdhui.add(Calendar.MONTH,2);
-            System.out.println(aujourdhui.getTime());
-            datefinal = aujourdhui.getTime();
-        }
-        if (saisieClavier2.equals("h")) {
-            System.out.println("On est en heure.");
-            aujourdhui.add(Calendar.HOUR,24);
-            System.out.println(aujourdhui.getTime());
-            datefinal = aujourdhui.getTime();
-        }
-        if (saisieClavier2.equals("min")) {
-            System.out.println("On est en minutes.");
-            aujourdhui.add(Calendar.MINUTE,10);
-            System.out.println(aujourdhui.getTime());
-            datefinal = aujourdhui.getTime();
-        }
-
-        if (!saisieClavier2.equals("j") && !saisieClavier2.equals("m") && !saisieClavier2.equals("h") &&!saisieClavier2.equals("min")) {
-            System.out.println("Pas de correspondance");
-        }
-        
-
-        if (datefinal.after(dateauj)) {
-            System.out.println("Toujour bannie");
-        }else{
-            System.out.println("plus bannie");
-        } 
-    /*     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        String parsetest = datefinal.format(formatter);
-        System.out.println(parsetest);
-
-        
-        LocalDateTime dateTime = LocalDateTime.parse(parsetest, formatter);
-
-        System.out.println(dateTime); */
-
-
-     /*    //Date retouner au joueur        
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");     
-        String dateGiveString = dateFormat.format(datefinal);
-        System.out.println("String: "+dateGiveString);
-
-
-        //Date dans la bdd 
-        String parseCalendar = datefinal.toString();
-        System.out.println("String: "+parseCalendar);
-
-        //Date de la bdd vers la comparaison
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy",Locale.ENGLISH);
-        try {
-            cal.setTime(sdf.parse(parseCalendar));
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        System.out.println("Object: "+cal.getTime()); */ 
-
-
+        /*
+         * //Date retouner au joueur
+         * DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+         * String dateGiveString = dateFormat.format(datefinal);
+         * System.out.println("String: "+dateGiveString);
+         * 
+         * 
+         * //Date dans la bdd
+         * String parseCalendar = datefinal.toString();
+         * System.out.println("String: "+parseCalendar);
+         * 
+         * //Date de la bdd vers la comparaison
+         * Calendar cal = Calendar.getInstance();
+         * SimpleDateFormat sdf = new
+         * SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy",Locale.ENGLISH);
+         * try {
+         * cal.setTime(sdf.parse(parseCalendar));
+         * } catch (ParseException e) {
+         * // TODO Auto-generated catch block
+         * e.printStackTrace();
+         * }
+         * System.out.println("Object: "+cal.getTime());
+         */
 
         /*
          * setNewPlayer("test");
