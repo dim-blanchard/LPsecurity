@@ -90,8 +90,12 @@ public class MyClassTest {
     
 
      */
-    private static String chemainFolder = "/home/padymaster/Documents/VisualStudioCode/Spigot-serveur-1.8.8/plugins/LPsecurity";
-    private static String chemainFiles = "/home/padymaster/Documents/VisualStudioCode/Spigot-serveur-1.8.8/plugins/LPsecurity/historique_sanctions/";
+    //private static String chemainFolder = "/home/padymaster/Documents/VisualStudioCode/Spigot-serveur-1.8.8/plugins/LPsecurity";
+    //private static String chemainFiles = "/home/padymaster/Documents/VisualStudioCode/Spigot-serveur-1.8.8/plugins/LPsecurity/historique_sanctions/";
+
+    private static String chemainFolder = "C:\\Users\\Master\\Desktop\\Erizia-spigot-1.8.8\\Spigot-1.8.8-serveur\\plugins\\LPsecurity";
+    private static String chemainFiles = "C:\\Users\\Master\\Desktop\\Erizia-spigot-1.8.8\\Spigot-1.8.8-serveur\\plugins\\LPsecurity\\historique_sanctions\\";
+
     public static void createFiles(String ban, String mute,String warn,String temp_ban, String motif_ban,String temp_mute,String motif_kick,String motif_mute,String motif_warn,String motif_unban,String motif_unmute,String motif_tempban,String motif_tempmute,File file) {
         
         JSONObject historique_sanctions = new JSONObject();
