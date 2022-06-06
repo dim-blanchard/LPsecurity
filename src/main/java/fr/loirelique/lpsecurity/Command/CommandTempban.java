@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import fr.loirelique.lpsecurity.Main;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageTempban;
-import fr.loirelique.lpsecurity.Useful.DateAndTime;
+import fr.loirelique.lpsecurity.Usefull.DateAndTime;
 
 public class CommandTempban implements CommandExecutor {
 

@@ -1,4 +1,4 @@
-package fr.loirelique.lpsecurity.Useful;
+package fr.loirelique.lpsecurity.Usefull;
 
 import java.text.DateFormat;
 import java.text.ParseException;

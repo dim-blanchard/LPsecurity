@@ -60,7 +60,8 @@ import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageKick;
 import fr.loirelique.lpsecurity.String.MessageLogin;
 import fr.loirelique.lpsecurity.String.MessageRegister;
-import fr.loirelique.lpsecurity.Useful.DateAndTime;
+import fr.loirelique.lpsecurity.Usefull.DateAndTime;
+import fr.loirelique.lpsecurity.Usefull.UsefullJson;
 
 /**
  * Information sur la class!LPSECURITY
@@ -69,6 +70,28 @@ import fr.loirelique.lpsecurity.Useful.DateAndTime;
 
 public class Main extends JavaPlugin implements Listener {
 
+    //Json ressource
+    private String chemainFolder = getDataFolder().toString();
+    private String chemainFiles = getDataFolder().toString()+"\\dataPlayerUsefull\\";
+    private String nameFile = "null";
+    private String nameFolder = "dataPlayerUsefull";
+
+    private String ban = "null";
+    private String mute= "null";
+    private String warn= "null";
+    private String temp_ban= "null";
+    private String motif_ban= "null";
+    private String temp_mute= "null";
+    private String motif_kick= "null";
+    private String motif_mute= "null";
+    private String motif_warn= "null";
+    private String motif_unban= "null";
+    private String motif_unmute= "null";
+    private String motif_tempban= "null";
+    private String motif_tempmute= "null";
+    private String isOnline= "null";
+    private String isLogin= "null";
+    //
     public static Main plugin;
     // Liste des taches joueurs
     private HashMap<String, Integer> listTacheRegister = new HashMap<String, Integer>();
@@ -141,6 +164,7 @@ public class Main extends JavaPlugin implements Listener {
     
        
         ListWarningDegresAndMotifs.initializeList();
+        UsefullJson.creatFolderAndVerifExists(nameFolder,chemainFolder);
 
         Bukkit.getConsoleSender().sendMessage("     §4__   __");
         Bukkit.getConsoleSender().sendMessage("§4|   |__) (    §l§2LPsecurity §l§4v1.0 §l§8(by LoiRelique)");
@@ -166,6 +190,8 @@ public class Main extends JavaPlugin implements Listener {
      */
     @EventHandler
     public void playerBeforeJoinServer(AsyncPlayerPreLoginEvent p_event) {
+        nameFile = getUuidHash(p_event);
+        UsefullJson.createFilesAndIfExisteUpdate(ban, mute, warn, temp_ban, motif_ban, temp_mute, motif_kick, motif_mute, motif_warn, motif_unban, motif_unmute, motif_tempban, motif_tempmute, isOnline, isLogin, chemainFiles, nameFile);
 
         String uuid = getUuidHash(p_event);
         String ip = p_event.getAddress().getHostAddress();

@@ -14,7 +14,7 @@ import fr.loirelique.lpsecurity.Main;
 import fr.loirelique.lpsecurity.List.ListMutePlayer;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageTempmute;
-import fr.loirelique.lpsecurity.Useful.DateAndTime;
+import fr.loirelique.lpsecurity.Usefull.DateAndTime;
 
 public class CommandTempmute implements CommandExecutor {
 
