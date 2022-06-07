@@ -61,7 +61,8 @@ import fr.loirelique.lpsecurity.String.MessageKick;
 import fr.loirelique.lpsecurity.String.MessageLogin;
 import fr.loirelique.lpsecurity.String.MessageRegister;
 import fr.loirelique.lpsecurity.Usefull.DateAndTime;
-import fr.loirelique.lpsecurity.Usefull.UsefullJson;
+import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
+import fr.loirelique.lpsecurity.Usefull.DataPlayersFolder;
 
 /**
  * Information sur la class!LPSECURITY
@@ -76,21 +77,7 @@ public class Main extends JavaPlugin implements Listener {
     private String nameFile = "null";
     private String nameFolder = "dataPlayerUsefull";
 
-    private String ban = "null";
-    private String mute= "null";
-    private String warn= "null";
-    private String temp_ban= "null";
-    private String motif_ban= "null";
-    private String temp_mute= "null";
-    private String motif_kick= "null";
-    private String motif_mute= "null";
-    private String motif_warn= "null";
-    private String motif_unban= "null";
-    private String motif_unmute= "null";
-    private String motif_tempban= "null";
-    private String motif_tempmute= "null";
-    private String isOnline= "null";
-    private String isLogin= "null";
+
     //
     public static Main plugin;
     // Liste des taches joueurs
@@ -164,7 +151,7 @@ public class Main extends JavaPlugin implements Listener {
     
        
         ListWarningDegresAndMotifs.initializeList();
-        UsefullJson.creatFolderAndVerifExists(nameFolder,chemainFolder);
+        DataPlayersFolder.create();
 
         Bukkit.getConsoleSender().sendMessage("     §4__   __");
         Bukkit.getConsoleSender().sendMessage("§4|   |__) (    §l§2LPsecurity §l§4v1.0 §l§8(by LoiRelique)");
@@ -190,19 +177,29 @@ public class Main extends JavaPlugin implements Listener {
      */
     @EventHandler
     public void playerBeforeJoinServer(AsyncPlayerPreLoginEvent p_event) {
-        nameFile = getUuidHash(p_event);
-        UsefullJson.createFilesAndIfExisteUpdate(ban, mute, warn, temp_ban, motif_ban, temp_mute, motif_kick, motif_mute, motif_warn, motif_unban, motif_unmute, motif_tempban, motif_tempmute, isOnline, isLogin, chemainFiles, nameFile);
-
-        String uuid = getUuidHash(p_event);
+        String uuidPlayers = getUuidHash(p_event);
+        
         String ip = p_event.getAddress().getHostAddress();
         int ban = 2;
-        int mute = 2;
+        String motif_ban = "null";
+        String motif_unban = "null";
+        
         String temp_ban = "null";
         String motif_tempban = "null";
-        String motif_ban = "null";
+
+        int mute = 2;
         String motif_mute = "null";
-        String motif_tempmute = "null";
+        String motif_unmute = "null";
+    
         String temp_mute = "null";
+        String motif_tempmute = "null";
+
+        String motif_kick = "null";
+
+        int warn = 0;
+        String motif_warn = "null";
+
+        DataPlayersFiles.create(uuidPlayers);
 
         long startTime = System.nanoTime();
         // On fait une requet dans la base de donnée qui retourne la valeur de la
@@ -212,22 +209,34 @@ public class Main extends JavaPlugin implements Listener {
                         + ConfigBdd.getDatabase1()
                         + "?characterEncoding=latin1&useConfigs=maxPerformance",
                 ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-            String requet_Select_sql2 ="SELECT historique_sanctions->>'$.ban', historique_sanctions->>'$.temp_ban', historique_sanctions->>'$.motif_tempban', historique_sanctions->>'$.motif_ban', historique_sanctions->>'$.mute', historique_sanctions->>'$.motif_mute', historique_sanctions->>'$.motif_tempmute', historique_sanctions->>'$.temp_mute' FROM "
+            String requet_Select_sql2 ="SELECT  historique_sanctions->>'$.motif_kick',historique_sanctions->>'$.motif_warn',historique_sanctions->>'$.warn', historique_sanctions->>'$.ban', historique_sanctions->>'$.temp_ban', historique_sanctions->>'$.motif_tempban',historique_sanctions->>'$.motif_unban' ,historique_sanctions->>'$.motif_ban', historique_sanctions->>'$.mute', historique_sanctions->>'$.motif_unmute', historique_sanctions->>'$.motif_mute', historique_sanctions->>'$.motif_tempmute', historique_sanctions->>'$.temp_mute' FROM "
                     + ConfigBdd.getTable1() + " WHERE uuid=?";
             try (PreparedStatement statement2_select = connection_register
                     .prepareStatement(requet_Select_sql2)) {
-                statement2_select.setString(1, uuid);
+                statement2_select.setString(1, uuidPlayers);
 
                 try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                     while (resultat_requete_select.next()) {
                         ban = resultat_requete_select.getInt("historique_sanctions->>'$.ban'");
+                        motif_ban = resultat_requete_select.getString("historique_sanctions->>'$.motif_ban'");
+                        motif_unban = resultat_requete_select.getString("historique_sanctions->>'$.motif_unban'");
+
                         temp_ban = resultat_requete_select.getString("historique_sanctions->>'$.temp_ban'");
                         motif_tempban = resultat_requete_select.getString("historique_sanctions->>'$.motif_tempban'");
-                        motif_ban = resultat_requete_select.getString("historique_sanctions->>'$.motif_ban'");
+
+                        
                         mute = resultat_requete_select.getInt("historique_sanctions->>'$.mute'");
                         motif_mute = resultat_requete_select.getString("historique_sanctions->>'$.motif_mute'");
-                        motif_tempmute = resultat_requete_select.getString("historique_sanctions->>'$.motif_tempmute'");
+                        motif_unmute = resultat_requete_select.getString("historique_sanctions->>'$.motif_unmute'");
+
                         temp_mute = resultat_requete_select.getString("historique_sanctions->>'$.temp_mute'");
+                        motif_tempmute = resultat_requete_select.getString("historique_sanctions->>'$.motif_tempmute'");
+
+                        warn = resultat_requete_select.getInt("historique_sanctions->>'$.warn'");
+                        motif_warn = resultat_requete_select.getString("historique_sanctions->>'$.motif_warn'");
+
+                        motif_kick = resultat_requete_select.getString("historique_sanctions->>'$.motif_kick'");
+                        
                     }
                 }
             }
@@ -237,19 +246,19 @@ public class Main extends JavaPlugin implements Listener {
                     "La base de donné n'est pas en ligne merci de reitérer plus tard.");
         }
 
+        DataPlayersFiles.updateHistoriqueSanctions(uuidPlayers, ban, motif_ban, motif_unban, temp_ban, motif_tempban, mute, motif_mute, motif_unmute, temp_mute, motif_tempmute, motif_kick, warn, motif_warn);
+
 
             if (ban == 0) {
                 // On test si le joueur et deja en ligne avec le même uuid(Générer avec le
                 // pseudo + un préfixe de salage en MD5).
 
-                try {
-                    if (listOnlinePlayer.get(uuid) != null) {
-                        p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
+                if (DataPlayersFiles.getIsOnline(uuidPlayers)==true) {
+                    p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
                                 MessageKick.getKickOnline());
-                    } else {
-                        listOnlinePlayer.put(uuid, 1);
-
-                        // On vérifie si le nombre d'ip similaire connecter ne depasse pas la
+                }else{
+                    DataPlayersFiles.setIsOnline(uuidPlayers, true);
+                                            // On vérifie si le nombre d'ip similaire connecter ne depasse pas la
                         // configuration donner.
                         try {
                             if (listIpPlayer.get(ip) != null) {
@@ -257,24 +266,35 @@ public class Main extends JavaPlugin implements Listener {
                                     p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
                                             MessageKick.getKickIp());
                                 } else {
-                                    (listIpPlayer.get(ip)).add(uuid);
+                                    (listIpPlayer.get(ip)).add(uuidPlayers);
                                 }
 
                             } else {
                                 listIpPlayer.put(ip, new ArrayList<String>());
-                                (listIpPlayer.get(ip)).add(uuid);
+                                (listIpPlayer.get(ip)).add(uuidPlayers);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
                             System.out.println("error block Ip player ");
                         }
+                }
+            }
+/* 
+                try {
+                    if (listOnlinePlayer.get(uuidPlayers) != null) {
+                        p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
+                                MessageKick.getKickOnline());
+                    } else {
+                        listOnlinePlayer.put(uuidPlayers, 1);
+                        
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.out.println("error block online player ");
-                }
+                } */
 
-            }
+            
 
             if (temp_ban.equals("null") == true && ban == 1) {
                 p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
@@ -305,7 +325,7 @@ public class Main extends JavaPlugin implements Listener {
                             statement2_select.setString(4, "null");
                             statement2_select.setString(5, "temp_ban");
                             statement2_select.setString(6, "null");
-                            statement2_select.setString(7, uuid);
+                            statement2_select.setString(7, uuidPlayers);
                             statement2_select.executeUpdate();
                         }
 
@@ -322,8 +342,8 @@ public class Main extends JavaPlugin implements Listener {
 
             
         if (temp_mute.equals("null") == true && mute == 1) {
-            ListMutePlayer.setMutePlayer(uuid);
-            ListMutePlayer.setMutePlayerMotif(uuid, motif_mute);
+            ListMutePlayer.setMutePlayer(uuidPlayers);
+            ListMutePlayer.setMutePlayerMotif(uuidPlayers, motif_mute);
         } else if (temp_mute.equals("null") == false && mute == 1) {
 
             Calendar dateTimeNow1 = Calendar.getInstance();
@@ -350,26 +370,26 @@ public class Main extends JavaPlugin implements Listener {
                         statement2_select.setString(4, "null");
                         statement2_select.setString(5, "temp_mute");
                         statement2_select.setString(6, "null");
-                        statement2_select.setString(7, uuid);
+                        statement2_select.setString(7, uuidPlayers);
                         statement2_select.executeUpdate();
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                if (ListMutePlayer.getMutePlayer(uuid)!= 0) {
-                    ListMutePlayer.removeMutePlayer(uuid);
+                if (ListMutePlayer.getMutePlayer(uuidPlayers)!= 0) {
+                    ListMutePlayer.removeMutePlayer(uuidPlayers);
                 }
-                if (ListMutePlayer.getMutePlayerMotif(uuid)!= null) {
-                    ListMutePlayer.removeMutePlayerMotif(uuid);
+                if (ListMutePlayer.getMutePlayerMotif(uuidPlayers)!= null) {
+                    ListMutePlayer.removeMutePlayerMotif(uuidPlayers);
                 }
 
              
                 
 
             } else {
-                ListMutePlayer.setMutePlayer(uuid);
-                ListMutePlayer.setMutePlayerMotif(uuid, motif_tempmute);
+                ListMutePlayer.setMutePlayer(uuidPlayers);
+                ListMutePlayer.setMutePlayerMotif(uuidPlayers, motif_tempmute);
             }
 
             long endTime = System.nanoTime();
@@ -444,6 +464,7 @@ public class Main extends JavaPlugin implements Listener {
         // Variable utile
         final Player p = p_event.getPlayer();
         String uuid = getUuidHash(p);
+        String uuidPlayers = getUuidHash(p);
         String ip = p.getAddress().getHostString();
         // Début test de vitesse
         long startTime = System.nanoTime();
@@ -474,9 +495,12 @@ public class Main extends JavaPlugin implements Listener {
             }
         }
         // If player is online
-        if (listOnlinePlayer.get(uuid) != null) {
+/*         if (listOnlinePlayer.get(uuid) != null) {
             listOnlinePlayer.remove(uuid);
-        }
+        } */
+        if(DataPlayersFiles.getIsOnline(uuidPlayers)==true){
+            DataPlayersFiles.setIsOnline(uuidPlayers,false);
+        }       
         // List tentative pass
         ListWrongPasswordTentative.setRemovePlayer(uuid);
         // List mute
