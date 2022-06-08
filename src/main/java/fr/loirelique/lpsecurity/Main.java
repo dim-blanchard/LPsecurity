@@ -62,7 +62,8 @@ import fr.loirelique.lpsecurity.String.MessageLogin;
 import fr.loirelique.lpsecurity.String.MessageRegister;
 import fr.loirelique.lpsecurity.Usefull.DateAndTime;
 import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
-import fr.loirelique.lpsecurity.Usefull.DataPlayersFolder;
+import fr.loirelique.lpsecurity.Usefull.DataFolder;
+import fr.loirelique.lpsecurity.Usefull.DataListFiles;
 
 /**
  * Information sur la class!LPSECURITY
@@ -73,7 +74,7 @@ public class Main extends JavaPlugin implements Listener {
 
     //Json ressource
     private String chemainFolder = getDataFolder().toString();
-    private String chemainFiles = getDataFolder().toString()+"\\dataPlayerUsefull\\";
+    private String chemainFiles = "/DataPlayer";
     private String nameFile = "null";
     private String nameFolder = "dataPlayerUsefull";
 
@@ -151,7 +152,16 @@ public class Main extends JavaPlugin implements Listener {
     
        
         ListWarningDegresAndMotifs.initializeList();
-        DataPlayersFolder.create();
+        DataFolder.create("/DataPlayer");
+        DataFolder.create("/DataList");
+        DataFolder.create("/DataList/Support");
+        DataFolder.create("/DataList/Ip");
+        DataPlayersFiles.create("test","/DataPlayer");
+        DataListFiles.setIp("1234567890", "192.168.1.1", "/DataList/Ip");
+        DataListFiles.setSupport("0987654321", "nomdusupport", "/DataList/Support");
+        System.out.println(DataListFiles.getKeyList("192.168.1.1", "list","/DataList/Ip"));
+        System.out.println(DataListFiles.getKeyListTest("nomdusupport", "list","/DataList/Support"));
+
 
         Bukkit.getConsoleSender().sendMessage("     §4__   __");
         Bukkit.getConsoleSender().sendMessage("§4|   |__) (    §l§2LPsecurity §l§4v1.0 §l§8(by LoiRelique)");
@@ -177,9 +187,9 @@ public class Main extends JavaPlugin implements Listener {
      */
     @EventHandler
     public void playerBeforeJoinServer(AsyncPlayerPreLoginEvent p_event) {
-        String uuidPlayers = getUuidHash(p_event);
-        
+        String uuidPlayers = getUuidHash(p_event);       
         String ip = p_event.getAddress().getHostAddress();
+
         int ban = 2;
         String motif_ban = "null";
         String motif_unban = "null";
@@ -199,7 +209,7 @@ public class Main extends JavaPlugin implements Listener {
         int warn = 0;
         String motif_warn = "null";
 
-        DataPlayersFiles.create(uuidPlayers);
+        DataPlayersFiles.create(uuidPlayers, chemainFiles);
 
         long startTime = System.nanoTime();
         // On fait une requet dans la base de donnée qui retourne la valeur de la
@@ -246,18 +256,18 @@ public class Main extends JavaPlugin implements Listener {
                     "La base de donné n'est pas en ligne merci de reitérer plus tard.");
         }
 
-        DataPlayersFiles.updateHistoriqueSanctions(uuidPlayers, ban, motif_ban, motif_unban, temp_ban, motif_tempban, mute, motif_mute, motif_unmute, temp_mute, motif_tempmute, motif_kick, warn, motif_warn);
+        DataPlayersFiles.updateHistoriqueSanctions(uuidPlayers, ban, motif_ban, motif_unban, temp_ban, motif_tempban, mute, motif_mute, motif_unmute, temp_mute, motif_tempmute, motif_kick, warn, motif_warn,chemainFiles);
 
 
             if (ban == 0) {
                 // On test si le joueur et deja en ligne avec le même uuid(Générer avec le
                 // pseudo + un préfixe de salage en MD5).
 
-                if (DataPlayersFiles.getIsOnline(uuidPlayers)==true) {
+                if (DataPlayersFiles.getIsOnline(uuidPlayers,chemainFiles)==true) {
                     p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
                                 MessageKick.getKickOnline());
                 }else{
-                    DataPlayersFiles.setIsOnline(uuidPlayers, true);
+                    DataPlayersFiles.setIsOnline(uuidPlayers, true,chemainFiles);
                                             // On vérifie si le nombre d'ip similaire connecter ne depasse pas la
                         // configuration donner.
                         try {
@@ -498,8 +508,8 @@ public class Main extends JavaPlugin implements Listener {
 /*         if (listOnlinePlayer.get(uuid) != null) {
             listOnlinePlayer.remove(uuid);
         } */
-        if(DataPlayersFiles.getIsOnline(uuidPlayers)==true){
-            DataPlayersFiles.setIsOnline(uuidPlayers,false);
+        if(DataPlayersFiles.getIsOnline(uuidPlayers,chemainFiles)==true){
+            DataPlayersFiles.setIsOnline(uuidPlayers,false,chemainFiles);
         }       
         // List tentative pass
         ListWrongPasswordTentative.setRemovePlayer(uuid);

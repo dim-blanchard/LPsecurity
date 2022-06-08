@@ -8,17 +8,17 @@ public class ListSupport {
 
     private static HashMap<String, HashMap<String, Player>> listSupport = new HashMap<String, HashMap<String, Player>>();
 
-    public static boolean creatSupport(String nom, Player player) {
+    public static boolean creatSupport(String nomSupport, Player player, String uuidPlayers) {
         boolean error = false;
         Object lisObject[] = listSupport.keySet().toArray();
         String list = "";
         for (int i = 0; i < lisObject.length; i++) {
             list = lisObject[i].toString();
-            if (listSupport.get(list).get(nom) == null) {
+            if (listSupport.get(list).get(nomSupport) == null) {
                 System.out.println("Pas de joueur dans list");
-                if (listSupport.get(nom) == null) {
-                    listSupport.put(nom, new HashMap<String, Player>());
-                    listSupport.get(nom).put(player.getName(), player);
+                if (listSupport.get(nomSupport) == null) {
+                    listSupport.put(nomSupport, new HashMap<String, Player>());
+                    listSupport.get(nomSupport).put(uuidPlayers, player);
                     player.sendMessage("Tu as bien créé ton support attent qu'un modo intervienne");
                     error = true;
                     return error;

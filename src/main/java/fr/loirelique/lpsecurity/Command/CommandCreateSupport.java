@@ -5,6 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import fr.loirelique.lpsecurity.Main;
 import fr.loirelique.lpsecurity.List.ListSupport;
 
 public class CommandCreateSupport implements CommandExecutor {
@@ -16,9 +17,10 @@ public class CommandCreateSupport implements CommandExecutor {
             Player p = (Player) sender;
             if (p.hasPermission("lpsecurity.createsupport")) {
                 if (cmd.getName().equalsIgnoreCase("createsupport")) {
+                    String uuidPlayers = Main.plugin.getUuidHash(p);
                     if (args.length >= 2) {
-                        String nom = args[0];
-                        errorCommande = ListSupport.creatSupport(nom, p);
+                        String nomSupport = args[0];
+                        errorCommande = ListSupport.creatSupport(nomSupport, p, uuidPlayers);
                     } else {
                         errorCommande = false;
                     }

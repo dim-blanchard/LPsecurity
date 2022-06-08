@@ -398,17 +398,9 @@ public class MyClassTest {
             myMap.put(keyValue[0], keyValue[1]);
 
             System.out.println(keyValue[0] +""+keyValue[1] );
-
-            File file = new File("C:\\Users\\Master\\Desktop\\Erizia-spigot-1.8.8\\Spigot-1.8.8-serveur\\plugins\\LPsecurity", "test.json");
-            try (FileWriter fileW = new FileWriter(file)) {
-                 fileW.write(jsonObject.toJSONString());
-                 fileW.flush();
-                 
-                } catch (IOException e) {
-                e.printStackTrace();
-                }
         }
 
+        System.out.println(System.getProperty("os.name"));
 
     
         
