@@ -153,23 +153,8 @@ public class Main extends JavaPlugin implements Listener {
         DataFolder.create("/DataList/Support");
         DataFolder.create("/DataList/Ip");
 
-        
-        DataListFiles.setSupport("/DataList/Support","nomdusupport","uuidplayers1","Players1");
-
-
-        System.out.println(DataListFiles.getSupport("nomdusupport"));
-        
-        
-        //DataListFiles.setIp("1234567890", "192.168.1.1", "/DataList/Ip");
-        System.out.println(DataListFiles.getKeyList("192.168.1.1", "list","/DataList/Ip"));
-        System.out.println(DataListFiles.getIp("192.168.1.1"));  
-
-        if((DataListFiles.getIp("192.168.1.1").size()==MessageKick.getKickOverIp()) && DataListFiles.getIp("192.168.1.1")!=null) {
-            System.out.println("KICK");
-        }else{
-            DataListFiles.setIp("arfazhgdv142365546", "192.168.1.1", "/DataList/Ip");
-            System.out.println("Ajoue Player");
-        }
+        //Cree le fichier verifie sil existe compare la taille kick le joueur en fonction du nombre d'ip similaire utiliser
+        DataListFiles.setIp("4567998432345A", "0.0.0.0");
 
         Bukkit.getConsoleSender().sendMessage("     §4__   __");
         Bukkit.getConsoleSender().sendMessage("§4|   |__) (    §l§2LPsecurity §l§4v1.0 §l§8(by LoiRelique)");

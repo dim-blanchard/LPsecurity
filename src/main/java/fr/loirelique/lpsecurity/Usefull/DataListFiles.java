@@ -9,6 +9,7 @@ import java.util.List;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.loirelique.lpsecurity.Main;
+import fr.loirelique.lpsecurity.String.MessageKick;
 
 public class DataListFiles {
 
@@ -26,23 +27,45 @@ public class DataListFiles {
         return value;
     }
 
-    public static void setIp(String uuidPlayers, String ipPlayers, String chemainFiles) {
-        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
+    public static void setIp(String uuidPlayers, String ipPlayers) {
+        final String chemainFile = Main.plugin.getDataFolder().toString() + "/DataList/Ip";
         final String nameFile = ipPlayers + ".yml";
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
         if (file.exists() == true) {
+            Boolean testip = false;
             System.out.println("[LPsecurity] File Data List Ip Exists.");
             List<String> ip = new ArrayList<String>();
             ip = getIp(ipPlayers);
-            ip.add(uuidPlayers);
-            fileConfiguration.set("list",ip);
-            try {
-                fileConfiguration.save(file);
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            for(int i=0;i<ip.size();i++){
+                System.out.println(ip.get(i));
+                String getIp = ip.get(i);
+                if (getIp.equals(ipPlayers)==true) {
+                    testip=true;
+                    System.out.println(testip);               
+                }else{
+                    System.out.println(testip);
+                }
             }
+            System.out.println(testip);
+            if (testip==false) {
+                if (ip.size()==MessageKick.getKickOverIp()) {
+                    System.out.println("Kick Le Joueur");
+                   // p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
+                   //                             MessageKick.getKickIp());
+                }else{
+                ip.add(uuidPlayers);
+                fileConfiguration.set("list",ip);
+                try {
+                    fileConfiguration.save(file);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                }
+            }
+
+            
         } else {
             System.out.println("[LPsecurity] File Data List Ip Not Exists.");
             final List ip = new ArrayList<String>();

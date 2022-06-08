@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -403,6 +404,20 @@ public class MyClassTest {
 
         System.out.println(System.getProperty("os.name"));
 
+        List<String> ip = new ArrayList<String>();
+            Boolean testip = false;
+            ip.add("azert");
+            for(int i=0;i<ip.size();i++){
+                System.out.println(ip.get(i));
+                String getIp = ip.get(i);
+                if (getIp==("azert")) {
+                    testip=true;
+                    System.out.println(testip);               
+                }else{
+                    System.out.println(testip);
+                }
+            }
+            System.out.println(testip);
 
     
         
