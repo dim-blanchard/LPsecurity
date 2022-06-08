@@ -383,9 +383,8 @@ public class MyClassTest {
     public static void main(String args[]) {
         HashMap<String, String> myMap = new HashMap<String, String>();
 
-        JSONObject jsonObject = new JSONObject();
 
-        String requette = "{\"ban\": \"0\", \"mute\":\"0\", \"warn\": \"2\", \"temp_ban\": \"null\", \"motif_ban\": \"null\", \"temp_mute\": \"null\", \"motif_kick\": \"null\", \"motif_mute\": \"null\", \"motif_warn\": \"Advertissement niveau 2\", \"motif_unban\": \"null\", \"motif_unmute\": \"null\", \"motif_tempban\": \"null\", \"motif_tempmute\": \"null\"}";
+        String requette = "{\"ban\": \"12\", \"mute\":\"0\", \"warn\": \"2\", \"temp_ban\": \"null\", \"motif_ban\": \"null\", \"temp_mute\": \"null\", \"motif_kick\": \"null\", \"motif_mute\": \"null\", \"motif_warn\": \"Advertissement niveau 2\", \"motif_unban\": \"null\", \"motif_unmute\": \"null\", \"motif_tempban\": \"null\", \"motif_tempmute\": \"null\"}";
         System.out.println(requette);
         requette = requette.replaceAll(" ", "");
         requette = requette.substring(1, (requette.length()-1));
@@ -398,9 +397,12 @@ public class MyClassTest {
             myMap.put(keyValue[0], keyValue[1]);
 
             System.out.println(keyValue[0] +""+keyValue[1] );
+
         }
+        System.out.println(myMap.get("ban"));
 
         System.out.println(System.getProperty("os.name"));
+
 
     
         

@@ -72,12 +72,8 @@ import fr.loirelique.lpsecurity.Usefull.DataListFiles;
 
 public class Main extends JavaPlugin implements Listener {
 
-    //Json ressource
-    private String chemainFolder = getDataFolder().toString();
+    //Yml ressource
     private String chemainFiles = "/DataPlayer";
-    private String nameFile = "null";
-    private String nameFolder = "dataPlayerUsefull";
-
 
     //
     public static Main plugin;
@@ -158,7 +154,7 @@ public class Main extends JavaPlugin implements Listener {
         DataFolder.create("/DataList/Ip");
         DataPlayersFiles.create("test","/DataPlayer");
         DataListFiles.setIp("1234567890", "192.168.1.1", "/DataList/Ip");
-        DataListFiles.setSupport("0987654321", "nomdusupport", "/DataList/Support");
+        DataListFiles.setSupport("/DataList/Support","nomdusupport","uuidplayers1","Players1");     
         System.out.println(DataListFiles.getKeyList("192.168.1.1", "list","/DataList/Ip"));
         System.out.println(DataListFiles.getKeyListTest("nomdusupport", "list","/DataList/Support"));
 
