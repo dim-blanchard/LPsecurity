@@ -11,20 +11,43 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import fr.loirelique.lpsecurity.Main;
 
 public class DataListFiles {
-    
-    public static void setIp(String uuidPlayers,String ipPlayers, String chemainFiles) {
-        final String chemainFile = Main.plugin.getDataFolder().toString() +chemainFiles;
+
+     /////////////////////////////////////////
+     public static List<String> getIp(String nameFiles) {
+        List<String> value = new ArrayList<String>();
+        final String chemainFile = Main.plugin.getDataFolder().toString() +"/DataList/Ip";
+        final String nameFile = nameFiles + ".yml";
+        final File file = new File(chemainFile, nameFile);
+        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        if (file.exists() == true) {
+            System.out.println("Get uuid from ip list");
+            value = (List<String>) fileConfiguration.getList("list");
+        }
+        return value;
+    }
+
+    public static void setIp(String uuidPlayers, String ipPlayers, String chemainFiles) {
+        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
         final String nameFile = ipPlayers + ".yml";
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
         if (file.exists() == true) {
             System.out.println("[LPsecurity] File Data List Ip Exists.");
-
+            List<String> ip = new ArrayList<String>();
+            ip = getIp(ipPlayers);
+            ip.add(uuidPlayers);
+            fileConfiguration.set("list",ip);
+            try {
+                fileConfiguration.save(file);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         } else {
             System.out.println("[LPsecurity] File Data List Ip Not Exists.");
             final List ip = new ArrayList<String>();
             ip.add(uuidPlayers);
-            fileConfiguration.set("list",ip);
+            fileConfiguration.set("list", ip);
             try {
                 fileConfiguration.save(file);
             } catch (IOException e1) {
@@ -35,8 +58,8 @@ public class DataListFiles {
         }
     }
 
-    public static void supportJoin(String chemainFiles,String nameSupport,String uuidPlayers,String Players) {
-        final String chemainFile = Main.plugin.getDataFolder().toString() +chemainFiles;
+    public static void supportJoin(String chemainFiles, String nameSupport, String uuidPlayers, String Players) {
+        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
         final String nameFile = nameSupport + ".yml";
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
@@ -44,8 +67,8 @@ public class DataListFiles {
             System.out.println("[LPsecurity] File Data List Support Exists.");
             List player = new ArrayList<String>();
             player = fileConfiguration.getList("list");
-            player.add(uuidPlayers+"&"+Players);
-            fileConfiguration.set("list",player);
+            player.add(uuidPlayers + "&" + Players);
+            fileConfiguration.set("list", player);
             try {
                 fileConfiguration.save(file);
                 System.out.println("[LPsecurity] File Data List Support Was Update.");
@@ -53,25 +76,25 @@ public class DataListFiles {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
-            
-        }else{
+
+        } else {
             System.out.println("Ce support n'existe pas.");
         }
     }
 
-//////////////////////////////
-    public static void setSupport(String chemainFiles,String nameSupport,String uuidPlayers,String Players) {
-        final String chemainFile = Main.plugin.getDataFolder().toString() +chemainFiles;
+    //////////////////////////////
+    public static void setSupport(String chemainFiles, String nameSupport, String uuidPlayers, String Players) {
+        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
         final String nameFile = nameSupport + ".yml";
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
         if (file.exists() == true) {
-            System.out.println("[LPsecurity] File Data List Support Exists.");           
+            System.out.println("[LPsecurity] File Data List Support Exists.");
         } else {
             System.out.println("[LPsecurity] File Data List Support Not Exists.");
             final List player = new ArrayList<String>();
-            player.add(uuidPlayers+"&"+Players);
-            fileConfiguration.set("list",player);
+            player.add(uuidPlayers + "&" + Players);
+            fileConfiguration.set("list", player);
             try {
                 fileConfiguration.save(file);
             } catch (IOException e1) {
@@ -83,73 +106,77 @@ public class DataListFiles {
     }
 
     /////////////////////////////////////////
-public static List getKeyList(String nameFiles, String key, String chemainFiles) {    
-    List value = new ArrayList<String>();
-    final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
-    final String nameFile = nameFiles + ".yml";
-    final File file = new File(chemainFile, nameFile);
-    final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
-    if (file.exists() == true) {
-        System.out.println("Get String key");
-        value = fileConfiguration.getList(key);
+    public static List getKeyList(String nameFiles, String key, String chemainFiles) {
+        List value = new ArrayList<String>();
+        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
+        final String nameFile = nameFiles + ".yml";
+        final File file = new File(chemainFile, nameFile);
+        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        if (file.exists() == true) {
+            System.out.println("Get String key");
+            value = fileConfiguration.getList(key);
+        }
+        return value;
     }
-    return value; 
-}
-///////////////////////
-public static List getKeyListTest(String nameFiles, String key, String chemainFiles) {
-    HashMap<String,String> myMap = new HashMap<String,String>();
-    String test ="null";   
-    List value = new ArrayList<String>();
-    final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
-    final String nameFile = nameFiles + ".yml";
-    final File file = new File(chemainFile, nameFile);
-    final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
-    if (file.exists() == true) {
-        System.out.println("Get String key");
-        value = fileConfiguration.getList(key);
+
+    ///////////////////////
+    public static HashMap getSupport(String nameFiles) {
+        HashMap<String, String> myMap = new HashMap<String, String>();
+        String test = "null";
+        List value = new ArrayList<String>();
+        final String chemainFile = Main.plugin.getDataFolder().toString() + "/DataList/Support";
+        final String nameFile = nameFiles + ".yml";
+        final File file = new File(chemainFile, nameFile);
+        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        if (file.exists() == true) {
+            System.out.println("Get String key");
+            value = fileConfiguration.getList("list");
+        }
+        test = fileConfiguration.get("list").toString();
+        test = test.substring(1, (test.length() - 1));
+        test = test.replaceAll(" ", "");
+        System.out.println(test);
+        String[] pairs = test.split(",");
+        for (int i = 0; i < pairs.length; i++) {
+            String pair = pairs[i];
+            String[] keyValue = pair.split("&");
+            myMap.put(keyValue[0], keyValue[1]);
+
+            System.out.println(keyValue[0] + "" + keyValue[1]);
+        }
+
+        return myMap;
     }
-    test = fileConfiguration.get(key).toString();
-    test = test.substring(1, (test.length()-1));
-    test = test.replaceAll(" ","");
-    System.out.println(test);
-    String[] pairs = test.split(",");
-    for (int i = 0; i < pairs.length; i++) {
-        String pair = pairs[i];
-        String[] keyValue = pair.split("&");
-        myMap.put(keyValue[0], keyValue[1]);
 
-        System.out.println(keyValue[0] +""+keyValue[1] );}
-    
+    public static boolean setListSupport(String nameFiles, String key, String chemainFiles) {
+        boolean error = false;
+        HashMap<String, String> myMap = new HashMap<String, String>();
+        String str = "null";
+        List value = new ArrayList<String>();
+        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
+        final String nameFile = nameFiles + ".yml";
+        final File file = new File(chemainFile, nameFile);
+        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        if (file.exists() == true) {
+            System.out.println("Get String key");
+            value = fileConfiguration.getList(key);
+        }
+        str = fileConfiguration.get(key).toString();
+        str = str.substring(1, (str.length() - 1));
+        str = str.replaceAll(" ", "");
+        System.out.println(str);
+        String[] pairs = str.split(",");
+        for (int i = 0; i < pairs.length; i++) {
+            String pair = pairs[i];
+            String[] keyValue = pair.split("&");
+            myMap.put(keyValue[0], keyValue[1]);
 
-    return value; 
-}
+            System.out.println(keyValue[0] + "" + keyValue[1]);
+        }
 
-public static boolean setListSupport(String nameFiles, String key, String chemainFiles) {
-    boolean error = false;
-    HashMap<String,String> myMap = new HashMap<String,String>();
-    String str ="null";   
-    List value = new ArrayList<String>();
-    final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
-    final String nameFile = nameFiles + ".yml";
-    final File file = new File(chemainFile, nameFile);
-    final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
-    if (file.exists() == true) {
-        System.out.println("Get String key");
-        value = fileConfiguration.getList(key);
+        return error;
     }
-    str = fileConfiguration.get(key).toString();
-    str = str.substring(1, (str.length()-1));
-    str = str.replaceAll(" ","");
-    System.out.println(str);
-    String[] pairs = str.split(",");
-    for (int i = 0; i < pairs.length; i++) {
-        String pair = pairs[i];
-        String[] keyValue = pair.split("&");
-        myMap.put(keyValue[0], keyValue[1]);
 
-        System.out.println(keyValue[0] +""+keyValue[1] );}
-    
+   
 
-    return error; 
-}
 }
