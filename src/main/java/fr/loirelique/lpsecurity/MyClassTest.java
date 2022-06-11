@@ -1,29 +1,7 @@
 package fr.loirelique.lpsecurity;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
-
-import com.google.gson.JsonObject;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 public class MyClassTest {
 
@@ -176,15 +154,15 @@ public class MyClassTest {
      * return data;
      * 
      * } catch (FileNotFoundException e) {
-     * // TODO Auto-generated catch block
+     * // 
      * e.printStackTrace();
      * return "error";
      * } catch (IOException e) {
-     * // TODO Auto-generated catch block
+     * //
      * e.printStackTrace();
      * return "error";
      * } catch (org.json.simple.parser.ParseException e) {
-     * // TODO Auto-generated catch block
+     * // 
      * e.printStackTrace();
      * return "error";
      * }
@@ -330,15 +308,15 @@ public class MyClassTest {
             return data;
 
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
+            //
             e.printStackTrace();
             return "error";
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            // 
             e.printStackTrace();
             return "error";
         } catch (org.json.simple.parser.ParseException e) {
-            // TODO Auto-generated catch block
+            // 
             e.printStackTrace();
             return "error";
         }
@@ -381,8 +359,23 @@ public class MyClassTest {
         }
     } */
 
+  
+
     public static void main(String args[]) {
-        HashMap<String, String> myMap = new HashMap<String, String>();
+
+      
+/* 
+    
+        final File folder = new File("C:/Users/Master/Desktop/Erizia-spigot-1.8.8/Spigot-1.8.8-serveur/plugins/LPsecurity", "DataPlayer");
+        try{
+          setfalseIsOnline(folder);
+        }catch(IOException e){
+          e.printStackTrace();
+        }
+
+ */
+
+   /*      HashMap<String, String> myMap = new HashMap<String, String>();
 
 
         String requette = "{\"ban\": \"12\", \"mute\":\"0\", \"warn\": \"2\", \"temp_ban\": \"null\", \"motif_ban\": \"null\", \"temp_mute\": \"null\", \"motif_kick\": \"null\", \"motif_mute\": \"null\", \"motif_warn\": \"Advertissement niveau 2\", \"motif_unban\": \"null\", \"motif_unmute\": \"null\", \"motif_tempban\": \"null\", \"motif_tempmute\": \"null\"}";
@@ -418,7 +411,7 @@ public class MyClassTest {
                 }
             }
             System.out.println(testip);
-
+ */
     
         
     /*
@@ -576,7 +569,7 @@ public class MyClassTest {
          * try {
          * cal.setTime(sdf.parse(parseCalendar));
          * } catch (ParseException e) {
-         * // TODO Auto-generated catch block
+         * // 
          * e.printStackTrace();
          * }
          * System.out.println("Object: "+cal.getTime());
@@ -937,7 +930,7 @@ public class MyClassTest {
          * System.out.println(joa);
          * 
          * } catch (Exception e) {
-         * //TODO: handle exception
+         * //
          * }
          */
 

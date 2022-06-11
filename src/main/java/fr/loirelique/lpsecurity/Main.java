@@ -1,12 +1,12 @@
 package fr.loirelique.lpsecurity;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,8 +29,10 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
+
 
 import fr.loirelique.lpsecurity.Command.CommandBan;
 import fr.loirelique.lpsecurity.Command.CommandCreateSupport;
@@ -142,6 +144,8 @@ public class Main extends JavaPlugin implements Listener {
 
         CommandExecutor commandJoinSupport = new CommandJoinSupport();
         getCommand("joinsupport").setExecutor(commandJoinSupport);
+
+        
     
        
         ListWarningDegresAndMotifs.initializeList();
@@ -476,24 +480,32 @@ public class Main extends JavaPlugin implements Listener {
             }else{
                 message = DataPlayersFiles.getMotifMute(uuidPlayers, dataPlayer);
             }
-            player.sendMessage(message);
+            player.sendMessage("Mute: "+ message);
         } else {
             p_envent.setCancelled(false);
         }
     
     }
 
-    /*
-     * @EventHandler
-     * public void onCommand( PlayerCommandPreprocessEvent p_envent) {
-     * final Player player = p_envent.getPlayer();
-     * player.getName();
-     * System.out.println(player.getName());
-     * System.out.println(p_envent.getMessage());
-     * System.out.println(p_envent.getFormat());
-     * 
-     * }
-     */
+    
+      @EventHandler
+      public void onCommand( PlayerCommandPreprocessEvent p_envent) {
+      if (p_envent.getMessage().equals("/stop")) {
+        final File folder = new File(Main.plugin.getDataFolder().toString(), dataPlayer);
+        DataPlayersFiles.setIsOnlineFalse(folder);
+      }
+      }
+
+     @EventHandler
+     public void ServerCommandEvent(ServerCommandEvent event){
+        System.out.println(event.getCommand());
+        if (event.getCommand().equals("stop")) {
+            final File folder = new File(Main.plugin.getDataFolder().toString(), dataPlayer);
+            DataPlayersFiles.setIsOnlineFalse(folder);
+        }
+
+     }
+
 
     /**
      * Getter de tache register.

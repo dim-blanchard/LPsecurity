@@ -1,6 +1,7 @@
 package fr.loirelique.lpsecurity.Usefull;
 
 import java.io.File;
+import java.io.IOException;
 
 import fr.loirelique.lpsecurity.Main;
 
@@ -17,4 +18,15 @@ public class DataFolder {
             System.out.println("[LPsecurity] Folder"+nameFolder+" Was Create.");
         }
     }
+
+    public static void remove(String nameFolder) {
+        final String chemainFolder = Main.plugin.getDataFolder().toString();
+        final File folder = new File(chemainFolder, nameFolder);
+        if (folder.exists() == true) {
+            folder.delete();
+            System.out.println("[LPsecurity] Folder"+nameFolder+"delete.");
+        }
+    }
+
+   
 }

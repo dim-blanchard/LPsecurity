@@ -51,6 +51,11 @@ public class CommandMute implements CommandExecutor {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                        if (mute == 1) {
+                            p.sendMessage(
+                                    MessageMute.setColorAlreadyMute() + "[" + pseudo + "] " + MessageMute.getAlreadyMute());
+                            errorCommande = true;
+                        }
                         if (mute == 0) {
                             StringBuilder builder = new StringBuilder();
                             for (int i = 1; i < args.length; i++) {
@@ -92,11 +97,7 @@ public class CommandMute implements CommandExecutor {
                             }
                             errorCommande = true;
                         }
-                        if (mute == 1) {
-                            p.sendMessage(
-                                    MessageMute.setColorAlreadyMute() + "[" + pseudo + "] " + MessageMute.getAlreadyMute());
-                            errorCommande = true;
-                        }
+
 
                     }
 

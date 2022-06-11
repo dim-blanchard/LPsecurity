@@ -91,6 +91,42 @@ public class DataPlayersFiles {
 
     }
 
+/////////////////////////////////////////////////////
+    public static void setIsOnlineFalse(File f){
+ 
+        if(f.isDirectory()){       
+            //lister le contenu du répertoire
+            String files[] = f.list();
+       
+            for (String tmp : files) {
+               File file = new File(f, tmp);
+               //suppression récursive
+               setIsOnlineFalse(file);
+            }            
+        }else{
+        //si il est un fichier, supprimez-le
+            
+        final String chemainFile = Main.plugin.getDataFolder().toString() + Main.plugin.dataPlayer;
+        String nameFile = f.getName();
+
+        final File file = new File(chemainFile, nameFile);
+        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
+
+        Boolean isOnline = false;
+        
+        if (file.exists() == true) {
+            fileConfiguration.set("isOnline", isOnline);
+            try {
+                fileConfiguration.save(file);
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        }
+        }
+      }
+  
+
     //////////////////////////////////////////////////////////////////
     public static void setIsOnline(String uuidPlayers, Boolean isOnline, String chemainFiles) {
 
