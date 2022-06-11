@@ -64,6 +64,7 @@ import fr.loirelique.lpsecurity.Usefull.DateAndTime;
 import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
 import fr.loirelique.lpsecurity.Usefull.DataFolder;
 import fr.loirelique.lpsecurity.Usefull.DataListFiles;
+import fr.loirelique.lpsecurity.Usefull.DataListIp;
 
 /**
  * Information sur la class!LPSECURITY
@@ -153,8 +154,7 @@ public class Main extends JavaPlugin implements Listener {
         DataFolder.create("/DataList/Support");
         DataFolder.create("/DataList/Ip");
 
-        //Cree le fichier verifie sil existe compare la taille kick le joueur en fonction du nombre d'ip similaire utiliser
-        DataListFiles.setIp("4567998432345A", "0.0.0.0");
+        
 
         Bukkit.getConsoleSender().sendMessage("     §4__   __");
         Bukkit.getConsoleSender().sendMessage("§4|   |__) (    §l§2LPsecurity §l§4v1.0 §l§8(by LoiRelique)");
@@ -180,8 +180,8 @@ public class Main extends JavaPlugin implements Listener {
      */
     @EventHandler
     public void playerBeforeJoinServer(AsyncPlayerPreLoginEvent p_event) {
-        String uuidPlayers = getUuidHash(p_event);       
-        String ip = p_event.getAddress().getHostAddress();
+        String uuidPlayers = getUuidHash(p_event);
+        String ipPlayers = p_event.getAddress().getHostAddress();
 
         int ban = 2;
         String motif_ban = "null";
@@ -263,41 +263,10 @@ public class Main extends JavaPlugin implements Listener {
                     DataPlayersFiles.setIsOnline(uuidPlayers, true,chemainFiles);
                                             // On vérifie si le nombre d'ip similaire connecter ne depasse pas la
                         // configuration donner.
-                        try {
-                            if (listIpPlayer.get(ip) != null) {
-                                if (listIpPlayer.size() == MessageKick.getKickOverIp()) {
-                                    p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                                            MessageKick.getKickIp());
-                                } else {
-                                    (listIpPlayer.get(ip)).add(uuidPlayers);
-                                }
-
-                            } else {
-                                listIpPlayer.put(ip, new ArrayList<String>());
-                                (listIpPlayer.get(ip)).add(uuidPlayers);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            System.out.println("error block Ip player ");
-                        }
+                    //Cree le fichier verifie sil existe compare la taille kick le joueur en fonction du nombre d'ip similaire utiliser
+                    DataListIp.setFile(uuidPlayers, ipPlayers,p_event);
                 }
-            }
-/* 
-                try {
-                    if (listOnlinePlayer.get(uuidPlayers) != null) {
-                        p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                                MessageKick.getKickOnline());
-                    } else {
-                        listOnlinePlayer.put(uuidPlayers, 1);
-                        
-
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    System.out.println("error block online player ");
-                } */
-
-            
+            }          
 
             if (temp_ban.equals("null") == true && ban == 1) {
                 p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
@@ -468,7 +437,7 @@ public class Main extends JavaPlugin implements Listener {
         final Player p = p_event.getPlayer();
         String uuid = getUuidHash(p);
         String uuidPlayers = getUuidHash(p);
-        String ip = p.getAddress().getHostString();
+        String ipPlayers= p.getAddress().getHostString();
         // Début test de vitesse
         long startTime = System.nanoTime();
 
@@ -491,16 +460,9 @@ public class Main extends JavaPlugin implements Listener {
             getListPlayerRemove(uuid);
         }
 
-        if (listIpPlayer.get(ip) != null) {
-            listIpPlayer.get(ip).remove(uuid);
-            if (listIpPlayer.get(ip).size() == 0) {
-                listIpPlayer.remove(ip);
-            }
-        }
+        //Enleve l'ip du joueur de la List
+        DataListIp.removeFileOrPlayers(uuidPlayers, ipPlayers);
         // If player is online
-/*         if (listOnlinePlayer.get(uuid) != null) {
-            listOnlinePlayer.remove(uuid);
-        } */
         if(DataPlayersFiles.getIsOnline(uuidPlayers,chemainFiles)==true){
             DataPlayersFiles.setIsOnline(uuidPlayers,false,chemainFiles);
         }       
