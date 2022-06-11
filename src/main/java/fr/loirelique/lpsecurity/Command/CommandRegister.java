@@ -15,6 +15,8 @@ import fr.loirelique.lpsecurity.Main;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageLogin;
 import fr.loirelique.lpsecurity.String.MessageRegister;
+import fr.loirelique.lpsecurity.Usefull.DataListIp;
+import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
 
 public class CommandRegister implements CommandExecutor {
 
@@ -27,8 +29,11 @@ public class CommandRegister implements CommandExecutor {
             if (cmd.getName().equalsIgnoreCase("register")) { // Si c'est la commande "register" qui a été tapée:
 
                 if (args.length == 2) {
-                    String uuid = Main.plugin.getUuidHash(p);
+                    String uuidPlayers = Main.plugin.getUuidHash(p);
+                    String ipPlayers= p.getAddress().getHostString();
                     String bddUuid = "";
+                    Player player = Main.plugin.getListPlayer(uuidPlayers);
+                    
 
                     try (Connection connection_register = DriverManager.getConnection(
                             ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
@@ -40,7 +45,7 @@ public class CommandRegister implements CommandExecutor {
                         String requet_Select_sql2 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
                         try (PreparedStatement statement3_select = connection_register
                                 .prepareStatement(requet_Select_sql2)) {
-                            statement3_select.setObject(1, uuid);
+                            statement3_select.setObject(1, uuidPlayers);
 
                             try (ResultSet resultat_requete_select = statement3_select.executeQuery()) {
                                 while (resultat_requete_select.next()) {
@@ -51,14 +56,37 @@ public class CommandRegister implements CommandExecutor {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Player player = Main.plugin.getListPlayer(uuid);
+                        player = Main.plugin.getListPlayer(uuidPlayers);
                         player.kickPlayer("La base de donné n'est pas en ligne merci de reitérer.");
                     }
 
-                    if (uuid.equals(bddUuid)) {
+                    if (uuidPlayers.equals(bddUuid)) {
                         p.sendMessage(MessageRegister.getwrongRegister());
                     } else {
                         if (args[0].equals(args[1]) && args[0].length() >= 8 && args[1].length() >= 8) {
+
+                            int ban = 0;
+                            String motif_ban = "null";
+                            String motif_unban = "null";
+
+                            String temp_ban = "null";
+                            String motif_tempban = "null";
+
+                            int mute = 0;
+                            String motif_mute = "null";
+                            String motif_unmute = "null";
+
+                            String temp_mute = "null";
+                            String motif_tempmute = "null";
+
+                            String motif_kick = "null";
+
+                            int warn = 0;
+                            String motif_warn = "null";
+                            DataPlayersFiles.updateHistoriqueSanctions(uuidPlayers, ban, motif_ban, motif_unban,
+                                    temp_ban, motif_tempban, mute, motif_mute, motif_unmute, temp_mute, motif_tempmute,
+                                    motif_kick, warn, motif_warn, Main.plugin.dataPlayer);
+                            DataListIp.setFile(uuidPlayers, ipPlayers,player);
 
                             try (Connection connection_addPlayer = DriverManager.getConnection(
                                     ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort()
@@ -75,8 +103,8 @@ public class CommandRegister implements CommandExecutor {
                                     pseudo = pseudo.toLowerCase();
                                     pseudo = pseudo.replaceAll("\\s", "");
                                     String pass = Main.plugin.getHash(args[0]);
-                                    String historiqueSanctionDefault = "{\"mute\": \"0\",\"warn\": \"0\",\"ban\": \"0\",\"temp_ban\": \"null\", \"motif_ban\": \"null\", \"temp_mute\": \"null\", \"motif_kick\": \"null\", \"motif_mute\": \"null\", \"motif_warn\": \"null\", \"motif_unban\": \"null\", \"motif_unmute\": \"null\", \"motif_tempban\": \"null\", \"motif_tempmute\": \"null\"}";
-                                    statement1_insert.setString(1, uuid);
+                                    String historiqueSanctionDefault = "{\"mute\": 0,\"warn\": 0,\"ban\": 0,\"temp_ban\": \"null\", \"motif_ban\": \"null\", \"temp_mute\": \"null\", \"motif_kick\": \"null\", \"motif_mute\": \"null\", \"motif_warn\": \"null\", \"motif_unban\": \"null\", \"motif_unmute\": \"null\", \"motif_tempban\": \"null\", \"motif_tempmute\": \"null\"}";
+                                    statement1_insert.setString(1, uuidPlayers);
                                     statement1_insert.setString(2, pseudo);
                                     statement1_insert.setString(3, pass);
                                     statement1_insert.setString(4, historiqueSanctionDefault);
@@ -87,17 +115,16 @@ public class CommandRegister implements CommandExecutor {
                                 e.printStackTrace();
                             }
 
-                            if(Main.plugin.getTaskRegisterTime(p) != null) {
+                            if (Main.plugin.getTaskRegisterTime(p) != null) {
                                 Bukkit.getScheduler().cancelTask(Main.plugin.getTaskRegisterTime(p));
                                 Main.plugin.getTaskRegisterTimeRemove(p);
                                 Main.plugin.setTaskLoginTime(p);
                                 MessageLogin.sendLogin(p);
                                 errorCommande = true;
-                            }else{
+                            } else {
                                 p.sendMessage(MessageRegister.getErrorRegister());
                                 errorCommande = false;
                             }
-                            
 
                         } else {
                             p.sendMessage(MessageRegister.getwrongRegisterPass());

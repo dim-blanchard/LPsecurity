@@ -2,8 +2,6 @@ package fr.loirelique.lpsecurity.Usefull;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -12,7 +10,7 @@ import fr.loirelique.lpsecurity.Main;
 public class DataPlayersFiles {
 
     public static void create(String uuidPlayers, String chemainFiles) {
-        final String chemainFile = Main.plugin.getDataFolder().toString() +chemainFiles;
+        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
         final String nameFile = uuidPlayers + ".yml";
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
@@ -57,9 +55,9 @@ public class DataPlayersFiles {
             int mute, String motif_mute, String motif_unmute,
             String temp_mute, String motif_tempmute,
             String motif_kick,
-            int warn, String motif_warn,String chemainFiles) {
+            int warn, String motif_warn, String chemainFiles) {
 
-        final String chemainFile = Main.plugin.getDataFolder().toString() +chemainFiles;
+        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
         final String nameFile = uuidPlayers + ".yml";
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
@@ -92,10 +90,11 @@ public class DataPlayersFiles {
         }
 
     }
-//////////////////////////////////////////////////////////////////        
-        public static void setIsOnline(String uuidPlayers,Boolean isOnline, String chemainFiles) {
 
-        final String chemainFile = Main.plugin.getDataFolder().toString() +chemainFiles;
+    //////////////////////////////////////////////////////////////////
+    public static void setIsOnline(String uuidPlayers, Boolean isOnline, String chemainFiles) {
+
+        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
         final String nameFile = uuidPlayers + ".yml";
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
@@ -108,11 +107,10 @@ public class DataPlayersFiles {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
-        } 
+        }
     }
 
-
-    public static void setIsLogin(String uuidPlayers,Boolean isLogin,String chemainFiles) {
+    public static void setIsLogin(String uuidPlayers, Boolean isLogin, String chemainFiles) {
 
         final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
         final String nameFile = uuidPlayers + ".yml";
@@ -127,10 +125,10 @@ public class DataPlayersFiles {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
-        } 
+        }
     }
 
-////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
 
     public static boolean getIsLogin(String uuidPlayers, String chemainFiles) {
         Boolean isLogin = false;
@@ -142,10 +140,10 @@ public class DataPlayersFiles {
             System.out.println("Get IsLogin or not.");
             isLogin = (Boolean) fileConfiguration.get("islogin");
         }
-        return isLogin; 
+        return isLogin;
     }
 
-    public static boolean getIsOnline(String uuidPlayers ,String chemainFiles) {
+    public static boolean getIsOnline(String uuidPlayers, String chemainFiles) {
         Boolean isOnline = false;
         final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
         final String nameFile = uuidPlayers + ".yml";
@@ -155,47 +153,154 @@ public class DataPlayersFiles {
             System.out.println("Get IsOnline or not.");
             isOnline = (Boolean) fileConfiguration.get("isOnline");
         }
-        return isOnline; 
+        return isOnline;
     }
-////////////////////////////////////////////
-    public static int getKeyInt(String uuidPlayers, String key,String chemainFiles) {
-        int value = 0;
-        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
-        final String nameFile = uuidPlayers + ".yml";
-        final File file = new File(chemainFile, nameFile);
-        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
-        if (file.exists() == true) {
-            System.out.println("Get Int key");
-            value = (int) fileConfiguration.get(key);
-        }
-        return value; 
-    }
-/////////////////////////////////////////
-    public static String getKeyString(String uuidPlayers, String key, String chemainFiles) {
-        String value = "null";
-        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
-        final String nameFile = uuidPlayers + ".yml";
-        final File file = new File(chemainFile, nameFile);
-        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
-        if (file.exists() == true) {
-            System.out.println("Get String key");
-            value = (String) fileConfiguration.get(key);
-        }
-        return value; 
-    }
-/////////////////////////////////////////
-public static List getKeyList(String uuidPlayers, String key, String chemainFiles) {
-    List value = new ArrayList<String>();
-    final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
-    final String nameFile = uuidPlayers + ".yml";
-    final File file = new File(chemainFile, nameFile);
-    final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
-    if (file.exists() == true) {
-        System.out.println("Get String key");
-        value = fileConfiguration.getList(key);
-    }
-    return value; 
-}
 
+    /*
+     * HISTORIQUE SANCTION SECTION MUTE
+     * 
+     */
+
+    public static void updateMuteAndMotif(String uuidPlayers,
+            int mute, String motif_mute, String chemainFiles) {
+
+        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
+        final String nameFile = uuidPlayers + ".yml";
+        final File file = new File(chemainFile, nameFile);
+        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        if (file.exists() == true) {
+            fileConfiguration.set("mute", mute);
+            fileConfiguration.set("motif_mute", motif_mute);
+            try {
+                fileConfiguration.save(file);
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        }
+
+    }
+
+    public static void setMuteTempMuteAndMotif(String uuidPlayers,
+            int mute, String temp_mute, String motif_tempmute, String chemainFiles) {
+
+        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
+        final String nameFile = uuidPlayers + ".yml";
+        final File file = new File(chemainFile, nameFile);
+        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        if (file.exists() == true) {
+            fileConfiguration.set("mute", mute);
+            fileConfiguration.set("temp_mute", temp_mute);
+            fileConfiguration.set("motif_tempmute", motif_tempmute);
+
+            try {
+                fileConfiguration.save(file);
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        }
+
+    }
+
+    public static void setMuteAndMotif(String uuidPlayers,
+            int mute, String motif_mute, String chemainFiles) {
+
+        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
+        final String nameFile = uuidPlayers + ".yml";
+        final File file = new File(chemainFile, nameFile);
+        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        if (file.exists() == true) {
+            fileConfiguration.set("mute", mute);
+            fileConfiguration.set("motif_mute", motif_mute);
+            try {
+                fileConfiguration.save(file);
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        }
+
+    }
+
+    public static void setUnmuteAndMotif(String uuidPlayers,
+            int mute, String motif_unmute, String chemainFiles) {
+
+        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
+        final String nameFile = uuidPlayers + ".yml";
+        final File file = new File(chemainFile, nameFile);
+        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        if (file.exists() == true) {
+            fileConfiguration.set("mute", mute);
+            fileConfiguration.set("motif_unmute", motif_unmute);
+            try {
+                fileConfiguration.save(file);
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        }
+
+    }
+
+    public static int getMute(String uuidPlayers, String chemainFiles) {
+        int value = 2;
+        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
+        final String nameFile = uuidPlayers + ".yml";
+        final File file = new File(chemainFile, nameFile);
+        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        if (file.exists() == true) {
+            value = fileConfiguration.getInt("mute");
+        }
+        return value;
+    }
+
+    public static String getMotifMute(String uuidPlayers, String chemainFiles) {
+        String value = new String();
+        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
+        final String nameFile = uuidPlayers + ".yml";
+        final File file = new File(chemainFile, nameFile);
+        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        if (file.exists() == true) {
+            value = fileConfiguration.getString("motif_mute");
+        }
+        return value;
+    }
+
+    public static String getTempMute(String uuidPlayers, String chemainFiles) {
+        String value = new String();
+        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
+        final String nameFile = uuidPlayers + ".yml";
+        final File file = new File(chemainFile, nameFile);
+        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        if (file.exists() == true) {
+            value = fileConfiguration.getString("temp_mute");
+        }
+        return value;
+    }
+
+    public static String getMotifTempMute(String uuidPlayers, String chemainFiles) {
+        String value = new String();
+        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
+        final String nameFile = uuidPlayers + ".yml";
+        final File file = new File(chemainFile, nameFile);
+        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        if (file.exists() == true) {
+            value = fileConfiguration.getString("motif_tempmute");
+        }
+        return value;
+    }
+
+    public static String getUnMute(String uuidPlayers, String chemainFiles) {
+        String value = new String();
+        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
+        final String nameFile = uuidPlayers + ".yml";
+        final File file = new File(chemainFile, nameFile);
+        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        if (file.exists() == true) {
+            value = fileConfiguration.getString("motif_unmute");
+        }
+        return value;
+    }
 
 }

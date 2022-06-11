@@ -1,8 +1,5 @@
 package fr.loirelique.lpsecurity;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.sql.Connection;
@@ -32,7 +29,6 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -53,7 +49,6 @@ import fr.loirelique.lpsecurity.Command.CommandTempmute;
 import fr.loirelique.lpsecurity.Command.CommandUnban;
 import fr.loirelique.lpsecurity.Command.CommandUnmute;
 import fr.loirelique.lpsecurity.Command.CommandWarn;
-import fr.loirelique.lpsecurity.List.ListMutePlayer;
 import fr.loirelique.lpsecurity.List.ListWarningDegresAndMotifs;
 import fr.loirelique.lpsecurity.List.ListWrongPasswordTentative;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
@@ -63,7 +58,6 @@ import fr.loirelique.lpsecurity.String.MessageRegister;
 import fr.loirelique.lpsecurity.Usefull.DateAndTime;
 import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
 import fr.loirelique.lpsecurity.Usefull.DataFolder;
-import fr.loirelique.lpsecurity.Usefull.DataListFiles;
 import fr.loirelique.lpsecurity.Usefull.DataListIp;
 
 /**
@@ -73,8 +67,11 @@ import fr.loirelique.lpsecurity.Usefull.DataListIp;
 
 public class Main extends JavaPlugin implements Listener {
 
-    //Yml ressource
-    private String chemainFiles = "/DataPlayer";
+    //Chemain des fichies ressource.
+    public String dataPlayer = "/DataPlayer";
+    public String dataList = "/DataList";
+    public String dataListSupport = "/DataList/Support";
+    public String dataListIp = "/DataList/Ip";
 
     //
     public static Main plugin;
@@ -86,7 +83,6 @@ public class Main extends JavaPlugin implements Listener {
     // Liste des joueurs. Liste d'ip similaire en fonction du joueur. Liste des
     // joueurs en Ligne.
     private HashMap<String, Player> listPlayer = new HashMap<String, Player>();
-    private static HashMap<String, ArrayList<String>> listIpPlayer = new HashMap<String, ArrayList<String>>();
     private static HashMap<String, Integer> listOnlinePlayer = new HashMap<String, Integer>();
 
     /**
@@ -149,12 +145,10 @@ public class Main extends JavaPlugin implements Listener {
     
        
         ListWarningDegresAndMotifs.initializeList();
-        DataFolder.create("/DataPlayer");
-        DataFolder.create("/DataList");
-        DataFolder.create("/DataList/Support");
-        DataFolder.create("/DataList/Ip");
-
-        
+        DataFolder.create(dataPlayer);
+        DataFolder.create(dataList);
+        DataFolder.create(dataListSupport);
+        DataFolder.create(dataListIp);
 
         Bukkit.getConsoleSender().sendMessage("     §4__   __");
         Bukkit.getConsoleSender().sendMessage("§4|   |__) (    §l§2LPsecurity §l§4v1.0 §l§8(by LoiRelique)");
@@ -165,6 +159,7 @@ public class Main extends JavaPlugin implements Listener {
       
 
     }
+
 
     /**
      * EVENT ON DISABLE PLUGIN
@@ -199,10 +194,10 @@ public class Main extends JavaPlugin implements Listener {
 
         String motif_kick = "null";
 
-        int warn = 0;
+        int warn = 2;
         String motif_warn = "null";
 
-        DataPlayersFiles.create(uuidPlayers, chemainFiles);
+        DataPlayersFiles.create(uuidPlayers, dataPlayer);
 
         long startTime = System.nanoTime();
         // On fait une requet dans la base de donnée qui retourne la valeur de la
@@ -249,18 +244,17 @@ public class Main extends JavaPlugin implements Listener {
                     "La base de donné n'est pas en ligne merci de reitérer plus tard.");
         }
 
-        DataPlayersFiles.updateHistoriqueSanctions(uuidPlayers, ban, motif_ban, motif_unban, temp_ban, motif_tempban, mute, motif_mute, motif_unmute, temp_mute, motif_tempmute, motif_kick, warn, motif_warn,chemainFiles);
-
+        DataPlayersFiles.updateHistoriqueSanctions(uuidPlayers, ban, motif_ban, motif_unban, temp_ban, motif_tempban, mute, motif_mute, motif_unmute, temp_mute, motif_tempmute, motif_kick, warn, motif_warn,dataPlayer);
 
             if (ban == 0) {
                 // On test si le joueur et deja en ligne avec le même uuid(Générer avec le
                 // pseudo + un préfixe de salage en MD5).
 
-                if (DataPlayersFiles.getIsOnline(uuidPlayers,chemainFiles)==true) {
+                if (DataPlayersFiles.getIsOnline(uuidPlayers,dataPlayer)==true) {
                     p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
                                 MessageKick.getKickOnline());
                 }else{
-                    DataPlayersFiles.setIsOnline(uuidPlayers, true,chemainFiles);
+                    DataPlayersFiles.setIsOnline(uuidPlayers, true,dataPlayer);
                                             // On vérifie si le nombre d'ip similaire connecter ne depasse pas la
                         // configuration donner.
                     //Cree le fichier verifie sil existe compare la taille kick le joueur en fonction du nombre d'ip similaire utiliser
@@ -280,6 +274,9 @@ public class Main extends JavaPlugin implements Listener {
                 Date dateTime_temp_ban = dateAndTime.getDateFromBddToCompare(temp_ban);
 
                 if (dateTimeZone.after(dateTime_temp_ban)) {
+                    ban = 0;
+                    motif_tempban = "null";
+                    temp_ban = "null";
                     try (Connection connection_update = DriverManager.getConnection(
                             ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
                                     ConfigBdd.getPort()
@@ -292,11 +289,11 @@ public class Main extends JavaPlugin implements Listener {
                         try (PreparedStatement statement2_select = connection_update
                                 .prepareStatement(requet_Update_sql2)) {
                             statement2_select.setString(1, "ban");
-                            statement2_select.setString(2, "0");
+                            statement2_select.setInt(2, ban);
                             statement2_select.setString(3, "motif_tempban");
-                            statement2_select.setString(4, "null");
+                            statement2_select.setString(4, motif_tempban);
                             statement2_select.setString(5, "temp_ban");
-                            statement2_select.setString(6, "null");
+                            statement2_select.setString(6, temp_ban);
                             statement2_select.setString(7, uuidPlayers);
                             statement2_select.executeUpdate();
                         }
@@ -314,10 +311,8 @@ public class Main extends JavaPlugin implements Listener {
 
             
         if (temp_mute.equals("null") == true && mute == 1) {
-            ListMutePlayer.setMutePlayer(uuidPlayers);
-            ListMutePlayer.setMutePlayerMotif(uuidPlayers, motif_mute);
-        } else if (temp_mute.equals("null") == false && mute == 1) {
-
+            DataPlayersFiles.setMuteAndMotif(uuidPlayers, mute, motif_mute, dataPlayer);
+        } else if (temp_mute.equals("null") == false && mute == 1) {      
             Calendar dateTimeNow1 = Calendar.getInstance();
             Date dateTimeZone1 = dateTimeNow1.getTime();
 
@@ -325,6 +320,9 @@ public class Main extends JavaPlugin implements Listener {
             Date dateTime_temp_mute1 = dateAndTime1.getDateFromBddToCompare(temp_mute);
 
             if (dateTimeZone1.after(dateTime_temp_mute1)) {
+            mute =0;
+            motif_tempmute = "null";
+            temp_mute="null";
                 try (Connection connection_update = DriverManager.getConnection(
                         ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
                                 ConfigBdd.getPort()
@@ -337,11 +335,11 @@ public class Main extends JavaPlugin implements Listener {
                     try (PreparedStatement statement2_select = connection_update
                             .prepareStatement(requet_Update_sql2)) {
                         statement2_select.setString(1, "mute");
-                        statement2_select.setString(2, "0");
+                        statement2_select.setInt(2, mute);
                         statement2_select.setString(3, "motif_tempmute");
-                        statement2_select.setString(4, "null");
+                        statement2_select.setString(4, motif_tempmute);
                         statement2_select.setString(5, "temp_mute");
-                        statement2_select.setString(6, "null");
+                        statement2_select.setString(6, temp_mute);
                         statement2_select.setString(7, uuidPlayers);
                         statement2_select.executeUpdate();
                     }
@@ -349,19 +347,7 @@ public class Main extends JavaPlugin implements Listener {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                if (ListMutePlayer.getMutePlayer(uuidPlayers)!= 0) {
-                    ListMutePlayer.removeMutePlayer(uuidPlayers);
-                }
-                if (ListMutePlayer.getMutePlayerMotif(uuidPlayers)!= null) {
-                    ListMutePlayer.removeMutePlayerMotif(uuidPlayers);
-                }
-
-             
-                
-
-            } else {
-                ListMutePlayer.setMutePlayer(uuidPlayers);
-                ListMutePlayer.setMutePlayerMotif(uuidPlayers, motif_tempmute);
+                DataPlayersFiles.setMuteTempMuteAndMotif(uuidPlayers, mute, temp_mute, motif_tempmute, dataPlayer);
             }
 
             long endTime = System.nanoTime();
@@ -463,14 +449,14 @@ public class Main extends JavaPlugin implements Listener {
         //Enleve l'ip du joueur de la List
         DataListIp.removeFileOrPlayers(uuidPlayers, ipPlayers);
         // If player is online
-        if(DataPlayersFiles.getIsOnline(uuidPlayers,chemainFiles)==true){
-            DataPlayersFiles.setIsOnline(uuidPlayers,false,chemainFiles);
+        if(DataPlayersFiles.getIsOnline(uuidPlayers,dataPlayer)==true){
+            DataPlayersFiles.setIsOnline(uuidPlayers,false,dataPlayer);
         }       
         // List tentative pass
         ListWrongPasswordTentative.setRemovePlayer(uuid);
         // List mute
-        ListMutePlayer.removeMutePlayerMotif(uuid);
-        ListMutePlayer.removeMutePlayer(uuid);
+       /*  ListMutePlayer.removeMutePlayerMotif(uuid);
+        ListMutePlayer.removeMutePlayer(uuid); */
         // Fin test de vitesse
         long endTime = System.nanoTime();
         System.out.println("Test de vitesse quit : " + (endTime - startTime) * Math.pow(10, -6) + " ms");
@@ -480,11 +466,17 @@ public class Main extends JavaPlugin implements Listener {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent p_envent) {
         final Player player = p_envent.getPlayer();
-        String uuid = getUuidHash(player);
+        String uuidPlayers = getUuidHash(player);
 
-        if (ListMutePlayer.getMutePlayer(uuid) == 1) {
+        if (DataPlayersFiles.getMute(uuidPlayers, dataPlayer) == 1) {
+            String message="null";
             p_envent.setCancelled(true);
-            player.sendMessage(ListMutePlayer.getMutePlayerMotif(uuid));
+            if(DataPlayersFiles.getMotifMute(uuidPlayers, dataPlayer).equals("null")){
+                message = DataPlayersFiles.getMotifTempMute(uuidPlayers, dataPlayer);
+            }else{
+                message = DataPlayersFiles.getMotifMute(uuidPlayers, dataPlayer);
+            }
+            player.sendMessage(message);
         } else {
             p_envent.setCancelled(false);
         }

@@ -11,9 +11,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
-import fr.loirelique.lpsecurity.List.ListMutePlayer;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageUnmute;
+import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
 
 public class CommandUnmute implements CommandExecutor {
 
@@ -28,7 +28,7 @@ public class CommandUnmute implements CommandExecutor {
 
                 if (args.length >= 2) {
                     String pseudo = args[0];
-                    String uuid = Main.plugin.getUuidHash(pseudo);
+                    String uuidPlayers = Main.plugin.getUuidHash(pseudo);
                     int mute = 2;
 
                     StringBuilder builder = new StringBuilder();
@@ -37,7 +37,7 @@ public class CommandUnmute implements CommandExecutor {
                         String ar = Main.plugin.sansAccent(args[i].replace(" ' ", " \' "));
                         builder.append(ar).append(" ");
                     }
-                    String msg = builder.toString();
+                    String motif_unmute = builder.toString();
 
                     try (Connection connection_register = DriverManager.getConnection(
                             ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
@@ -48,7 +48,7 @@ public class CommandUnmute implements CommandExecutor {
                                 + ConfigBdd.getTable1() + " WHERE uuid=?";
                         try (PreparedStatement statement2_select = connection_register
                                 .prepareStatement(requet_Select_sql2)) {
-                            statement2_select.setString(1, uuid);
+                            statement2_select.setString(1, uuidPlayers);
 
                             try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                                 while (resultat_requete_select.next()) {
@@ -61,6 +61,7 @@ public class CommandUnmute implements CommandExecutor {
                     }
 
                     if (mute == 1) {
+                        mute = 0 ;
                         try (Connection connection_update = DriverManager.getConnection(
                                 ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
                                         ConfigBdd.getPort()
@@ -73,10 +74,10 @@ public class CommandUnmute implements CommandExecutor {
                             try (PreparedStatement statement2_select = connection_update
                                     .prepareStatement(requet_Update_sql2)) {
                                 statement2_select.setString(1, "mute");
-                                statement2_select.setString(2, "0");
+                                statement2_select.setInt(2, mute);
                                 statement2_select.setString(3, "motif_unmute");
-                                statement2_select.setString(4, msg);
-                                statement2_select.setString(5, uuid);
+                                statement2_select.setString(4, motif_unmute);
+                                statement2_select.setString(5, uuidPlayers);
                                 statement2_select.executeUpdate();
                             }
 
@@ -84,13 +85,10 @@ public class CommandUnmute implements CommandExecutor {
                             e.printStackTrace();
                         }
 
-                        ListMutePlayer.removeMutePlayer(uuid);
-                        ListMutePlayer.removeMutePlayerMotif(uuid);
+                        DataPlayersFiles.setUnmuteAndMotif(uuidPlayers, mute, motif_unmute, Main.plugin.dataPlayer);
                         p.sendMessage(MessageUnmute.setColorUnmute() + "[" + pseudo + "] " + MessageUnmute.getUnmute());
                         errorCommande = true;
                     } else if (mute == 0) {              
-                        ListMutePlayer.removeMutePlayer(uuid);
-                        ListMutePlayer.removeMutePlayerMotif(uuid);
                         p.sendMessage(MessageUnmute.setColorAlreadyUnmute() + "[" + pseudo + "] "
                                 + MessageUnmute.getAlreadyUnmute());
                         errorCommande = true;
