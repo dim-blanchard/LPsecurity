@@ -52,7 +52,6 @@ import fr.loirelique.lpsecurity.Command.CommandUnban;
 import fr.loirelique.lpsecurity.Command.CommandUnmute;
 import fr.loirelique.lpsecurity.Command.CommandWarn;
 import fr.loirelique.lpsecurity.List.ListWarningDegresAndMotifs;
-import fr.loirelique.lpsecurity.List.ListWrongPasswordTentative;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageKick;
 import fr.loirelique.lpsecurity.String.MessageLogin;
@@ -61,6 +60,7 @@ import fr.loirelique.lpsecurity.Usefull.DateAndTime;
 import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
 import fr.loirelique.lpsecurity.Usefull.DataFolder;
 import fr.loirelique.lpsecurity.Usefull.DataListIp;
+import fr.loirelique.lpsecurity.Usefull.DataListPlayers;
 
 /**
  * Information sur la class!LPSECURITY
@@ -74,6 +74,7 @@ public class Main extends JavaPlugin implements Listener {
     public String dataList = "/DataList";
     public String dataListSupport = "/DataList/Support";
     public String dataListIp = "/DataList/Ip";
+    public String dataListPlayers = "/DataList/Players" ;
 
     //
     public static Main plugin;
@@ -153,6 +154,7 @@ public class Main extends JavaPlugin implements Listener {
         DataFolder.create(dataList);
         DataFolder.create(dataListSupport);
         DataFolder.create(dataListIp);
+        DataFolder.create(dataListPlayers);
 
         Bukkit.getConsoleSender().sendMessage("     §4__   __");
         Bukkit.getConsoleSender().sendMessage("§4|   |__) (    §l§2LPsecurity §l§4v1.0 §l§8(by LoiRelique)");
@@ -367,13 +369,15 @@ public class Main extends JavaPlugin implements Listener {
     public void playerJoinServer(PlayerJoinEvent p_event) {
         // Variable utile
         final Player p = p_event.getPlayer();
-        String uuid = getUuidHash(p);
+        String uuidPlayers = getUuidHash(p);
         String uuidRequet = "";
 
         // Début test de vitesse
         long startTime = System.nanoTime();
         // Ajoue Player à la listePlayer
-        listPlayer.put(uuid, p);
+        DataListPlayers.setFile(uuidPlayers,p);
+        listPlayer.put(uuidPlayers, p);
+
 
         // On fait un requet qui récupère l'uuid du joueur et on le cherche dans la base
         // de donnée.
@@ -385,7 +389,7 @@ public class Main extends JavaPlugin implements Listener {
             String requet_Select_sql1 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
             try (PreparedStatement statement1_select = connection_select
                     .prepareStatement(requet_Select_sql1)) {
-                statement1_select.setString(1, uuid);
+                statement1_select.setString(1, uuidPlayers);
 
                 try (ResultSet resultat_requete_select = statement1_select.executeQuery()) {
                     while (resultat_requete_select.next()) {
@@ -398,12 +402,10 @@ public class Main extends JavaPlugin implements Listener {
             e.printStackTrace();
         }
         // Si l'uuid du joueur est égale à un uuid deja enregistrer.
-        if (uuid.equals(uuidRequet)) {
+        if (uuidPlayers.equals(uuidRequet)) {
             setTaskBlockSpawn(p);
             setTaskLoginTime(p);
             MessageLogin.sendLogin(p);
-            ListWrongPasswordTentative.setNewPlayer(uuid);
-            System.out.println(ListWrongPasswordTentative.getNumberTentativeOfPlayer(uuid));
 
         } // Si l'uuid du joueur n'est pas égale à un uuid deja enregistrer.
         else {
@@ -449,18 +451,23 @@ public class Main extends JavaPlugin implements Listener {
         if (listPlayer.get(uuid) != null) {
             getListPlayerRemove(uuid);
         }
+        if (DataListPlayers.getObjectPlayers(uuidPlayers)!=null) {
+            DataListPlayers.removeObjectPlayers(uuidPlayers);
+        }
 
         //Enleve l'ip du joueur de la List
         DataListIp.removeFileOrPlayers(uuidPlayers, ipPlayers);
         // If player is online
         if(DataPlayersFiles.getIsOnline(uuidPlayers,dataPlayer)==true){
             DataPlayersFiles.setIsOnline(uuidPlayers,false,dataPlayer);
-        }       
+        }
+        if(DataPlayersFiles.getIsLogin(uuidPlayers,dataPlayer)==true){
+            DataPlayersFiles.setIsLogin(uuidPlayers, false,dataPlayer);
+        }          
         // List tentative pass
-        ListWrongPasswordTentative.setRemovePlayer(uuid);
+        DataPlayersFiles.setNumberTentativeLogin(uuidPlayers, 0, Main.plugin.dataPlayer);
         // List mute
-       /*  ListMutePlayer.removeMutePlayerMotif(uuid);
-        ListMutePlayer.removeMutePlayer(uuid); */
+
         // Fin test de vitesse
         long endTime = System.nanoTime();
         System.out.println("Test de vitesse quit : " + (endTime - startTime) * Math.pow(10, -6) + " ms");
@@ -492,7 +499,7 @@ public class Main extends JavaPlugin implements Listener {
       public void onCommand( PlayerCommandPreprocessEvent p_envent) {
       if (p_envent.getMessage().equals("/stop")) {
         final File folder = new File(Main.plugin.getDataFolder().toString(), dataPlayer);
-        DataPlayersFiles.setIsOnlineFalse(folder);
+        DataPlayersFiles.defaultInfosPlayers(folder);
       }
       }
 
@@ -501,7 +508,7 @@ public class Main extends JavaPlugin implements Listener {
         System.out.println(event.getCommand());
         if (event.getCommand().equals("stop")) {
             final File folder = new File(Main.plugin.getDataFolder().toString(), dataPlayer);
-            DataPlayersFiles.setIsOnlineFalse(folder);
+            DataPlayersFiles.defaultInfosPlayers(folder);
         }
 
      }

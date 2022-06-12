@@ -12,9 +12,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
-import fr.loirelique.lpsecurity.List.ListWrongPasswordTentative;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageLogin;
+import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
 
 public class CommandLogin implements CommandExecutor {
 
@@ -28,7 +28,7 @@ public class CommandLogin implements CommandExecutor {
             if (cmd.getName().equalsIgnoreCase("login")) { // Si c'est la commande "login" qui a été tapée:
 
                 if (args.length == 1) {
-                    String uuid = Main.plugin.getUuidHash(p);
+                    String uuidPlayers = Main.plugin.getUuidHash(p);
                     String bddUuid = "";
 
                     try (Connection connection_login = DriverManager.getConnection(
@@ -41,7 +41,7 @@ public class CommandLogin implements CommandExecutor {
                         String requet_Select_sql3 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
                         try (PreparedStatement statement2_select = connection_login
                                 .prepareStatement(requet_Select_sql3)) {
-                            statement2_select.setString(1, uuid);
+                            statement2_select.setString(1, uuidPlayers);
 
                             try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                                 while (resultat_requete_select.next()) {
@@ -54,7 +54,7 @@ public class CommandLogin implements CommandExecutor {
                         e.printStackTrace();
                     }
 
-                    if (uuid.equals(bddUuid)) {
+                    if (uuidPlayers.equals(bddUuid)) {
                         String bddPassword = "";
                         String password = Main.plugin.getHash(args[0]);
 
@@ -69,7 +69,7 @@ public class CommandLogin implements CommandExecutor {
                             String requet_Select_sql2 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
                             try (PreparedStatement statement2_select = connection_register
                                     .prepareStatement(requet_Select_sql2)) {
-                                statement2_select.setObject(1, uuid);
+                                statement2_select.setObject(1, uuidPlayers);
 
                                 try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                                     while (resultat_requete_select.next()) {
@@ -82,38 +82,43 @@ public class CommandLogin implements CommandExecutor {
                             e.printStackTrace();
                         }
 
-                        if (password.equals(bddPassword)) {
-
-                            if (Main.plugin.getTaskRegisterTime(p) != null) {
-                                Bukkit.getScheduler().cancelTask(Main.plugin.getTaskRegisterTime(p));
-                                Main.plugin.getTaskRegisterTimeRemove(p);
+                        if (DataPlayersFiles.getIsLogin(uuidPlayers, Main.plugin.dataPlayer)==false) {
+                            if (password.equals(bddPassword)) {
+                                Boolean isLogin = true;
+                                DataPlayersFiles.setIsLogin(uuidPlayers, isLogin, Main.plugin.dataPlayer);
+    
+                                if (Main.plugin.getTaskRegisterTime(p) != null) {
+                                    Bukkit.getScheduler().cancelTask(Main.plugin.getTaskRegisterTime(p));
+                                    Main.plugin.getTaskRegisterTimeRemove(p);
+                                }
+                                if (Main.plugin.getTaskLoginTime(p) != null) {
+                                    Bukkit.getScheduler().cancelTask(Main.plugin.getTaskLoginTime(p));
+                                    Main.plugin.getTaskLoginTimeRemove(p);
+                                }
+                                if (Main.plugin.getTaskBlockSpawn(p) != null) {
+                                    Bukkit.getScheduler().cancelTask(Main.plugin.getTaskBlockSpawn(p));
+                                    Main.plugin.getTaskBlockSpawnRemove(p);
+                                }
+    
+                                MessageLogin.sendAfterLogin(p);
+                                DataPlayersFiles.setNumberTentativeLogin(uuidPlayers, 0, Main.plugin.dataPlayer);
+                                
+                                errorCommande = true;
+    
+                            } else {
+                                DataPlayersFiles.setNumberTentativeLogin(uuidPlayers, (DataPlayersFiles.getNumberTentativeLogin(uuidPlayers, Main.plugin.dataPlayer)+1), Main.plugin.dataPlayer);
+                                if (DataPlayersFiles.getNumberTentativeLogin(uuidPlayers, Main.plugin.dataPlayer)>= MessageLogin.getWrongPassTentativeNumber()) {
+                                    p.kickPlayer(MessageLogin.getWrongPassTentativeKick());
+                                }
+                                p.sendMessage(MessageLogin.getWrongLoginPass());
+                                errorCommande = true;
+    
                             }
-                            if (Main.plugin.getTaskLoginTime(p) != null) {
-                                Bukkit.getScheduler().cancelTask(Main.plugin.getTaskLoginTime(p));
-                                Main.plugin.getTaskLoginTimeRemove(p);
-                            }
-                            if (Main.plugin.getTaskBlockSpawn(p) != null) {
-                                Bukkit.getScheduler().cancelTask(Main.plugin.getTaskBlockSpawn(p));
-                                Main.plugin.getTaskBlockSpawnRemove(p);
-                            }
-
-                            MessageLogin.sendAfterLogin(p);
-                            ListWrongPasswordTentative.setRemovePlayer(uuid);
-                            
+                        }else{
                             errorCommande = true;
-
-                        } else {
-
-                           
-                            System.out.println(ListWrongPasswordTentative.getNumberTentativeOfPlayer(uuid));
-                            ListWrongPasswordTentative.incrementNumberTentativeOfPlayer(uuid);
-                            if (ListWrongPasswordTentative.getNumberTentativeOfPlayer(uuid)>= MessageLogin.getWrongPassTentativeNumber()) {
-                                p.kickPlayer(MessageLogin.getWrongPassTentativeKick());
-                            }
-                            p.sendMessage(MessageLogin.getWrongLoginPass());
-                            errorCommande = true;
-
+                            p.sendMessage(MessageLogin.getAlreadyLogin());
                         }
+                        
 
                     } else {
                        

@@ -39,6 +39,7 @@ public class DataPlayersFiles {
 
             fileConfiguration.set("isOnline", false);
             fileConfiguration.set("isLogin", false);
+            fileConfiguration.set("number_tentative_login",0);
             try {
                 fileConfiguration.save(file);
             } catch (IOException e1) {
@@ -62,7 +63,6 @@ public class DataPlayersFiles {
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
         if (file.exists() == true) {
-            System.out.println("Update Data Player");
             fileConfiguration.set("ban", ban);
             fileConfiguration.set("motif_ban", motif_ban);
             fileConfiguration.set("motif_unban", motif_unban);
@@ -92,7 +92,7 @@ public class DataPlayersFiles {
     }
 
 /////////////////////////////////////////////////////
-    public static void setIsOnlineFalse(File f){
+    public static void defaultInfosPlayers(File f){
  
         if(f.isDirectory()){       
             //lister le contenu du répertoire
@@ -101,7 +101,7 @@ public class DataPlayersFiles {
             for (String tmp : files) {
                File file = new File(f, tmp);
                //suppression récursive
-               setIsOnlineFalse(file);
+               defaultInfosPlayers(file);
             }            
         }else{
         //si il est un fichier, supprimez-le
@@ -110,12 +110,11 @@ public class DataPlayersFiles {
         String nameFile = f.getName();
 
         final File file = new File(chemainFile, nameFile);
-        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
-
-        Boolean isOnline = false;
-        
+        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);        
         if (file.exists() == true) {
-            fileConfiguration.set("isOnline", isOnline);
+            fileConfiguration.set("isOnline", false);
+            fileConfiguration.set("isLogin", false);
+            fileConfiguration.set("number_tentative_login", 0);
             try {
                 fileConfiguration.save(file);
             } catch (IOException e1) {
@@ -135,7 +134,6 @@ public class DataPlayersFiles {
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
         if (file.exists() == true) {
-            System.out.println("Update Data Player");
             fileConfiguration.set("isOnline", isOnline);
             try {
                 fileConfiguration.save(file);
@@ -153,7 +151,6 @@ public class DataPlayersFiles {
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
         if (file.exists() == true) {
-            System.out.println("Update Data Player");
             fileConfiguration.set("isLogin", isLogin);
             try {
                 fileConfiguration.save(file);
@@ -173,8 +170,7 @@ public class DataPlayersFiles {
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
         if (file.exists() == true) {
-            System.out.println("Get IsLogin or not.");
-            isLogin = (Boolean) fileConfiguration.get("islogin");
+            isLogin = (Boolean) fileConfiguration.get("isLogin");
         }
         return isLogin;
     }
@@ -186,11 +182,46 @@ public class DataPlayersFiles {
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
         if (file.exists() == true) {
-            System.out.println("Get IsOnline or not.");
             isOnline = (Boolean) fileConfiguration.get("isOnline");
         }
         return isOnline;
     }
+
+    /////////////////////////////////////
+
+    public static int getNumberTentativeLogin(String uuidPlayers, String chemainFiles) {
+        int numberTentativeLogin = 0;
+        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
+        final String nameFile = uuidPlayers + ".yml";
+        final File file = new File(chemainFile, nameFile);
+        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        if (file.exists() == true) {
+            numberTentativeLogin = fileConfiguration.getInt("number_tentative_login");
+        }
+        return numberTentativeLogin;
+    }
+    public static void setNumberTentativeLogin(String uuidPlayers, int numberTentativeLogin, String chemainFiles) {
+
+        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
+        final String nameFile = uuidPlayers + ".yml";
+        final File file = new File(chemainFile, nameFile);
+        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        if (file.exists() == true) {
+            fileConfiguration.set("number_tentative_login", numberTentativeLogin);
+            try {
+                fileConfiguration.save(file);
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        }
+    }
+
+
+
+
+
+
 
     /*
      * HISTORIQUE SANCTION SECTION MUTE

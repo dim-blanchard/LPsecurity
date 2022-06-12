@@ -69,4 +69,9 @@ public class MessageLogin {
         int tentativeNumber = Integer.parseInt(Main.plugin.getConfig().getString("string.number_tentative_login"));
         return tentativeNumber;
     }
+
+    public static String getAlreadyLogin() {
+        String alreadyLogin = Main.plugin.getConfig().getString("string.already_login");
+        return alreadyLogin;
+    }
 }
