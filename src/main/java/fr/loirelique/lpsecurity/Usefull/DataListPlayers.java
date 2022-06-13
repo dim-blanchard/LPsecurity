@@ -23,8 +23,14 @@ public class DataListPlayers {
             if (getObjectPlayers(uuidPlayers).equals(null)) {
                 List<HashMap<String,Player>>listPlayers=new ArrayList<HashMap<String,Player>>();
                 listPlayers = getDataFile();
-                System.out.println(listPlayers);
-                listPlayers.get(0).put(uuidPlayers,p);
+                if (listPlayers.get(0)==null) {
+                    listPlayers.remove(0);
+                    listPlayers.add(new HashMap<String,Player>());
+                    listPlayers.get(0).put(uuidPlayers, p);
+                }else{
+                    System.out.println(listPlayers);
+                    listPlayers.get(0).put(uuidPlayers,p);
+                }      
                 fileConfiguration.set("list",listPlayers);
                 try {
                     fileConfiguration.save(file);
@@ -97,7 +103,7 @@ public class DataListPlayers {
         if (file.exists() == true) {
             listPlayers = (List<HashMap<String, Player>>) fileConfiguration.getList("list");
             if (listPlayers.get(0).get(uuidPlayers)!=null) {
-                listPlayers.get(0).get(uuidPlayers).remove();
+                listPlayers.get(0).remove(uuidPlayers);
                 fileConfiguration.set("list",listPlayers);
                 try {
                     fileConfiguration.save(file);
