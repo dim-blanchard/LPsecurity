@@ -20,7 +20,7 @@ public class DataListPlayers {
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
         if (file.exists() == true) {
             System.out.println("[LPsecurity] File " + nameFile + " Exists.");
-            if (getObjectPlayers(uuidPlayers).equals(null)) {
+            if (getObjectPlayers(uuidPlayers).equals(null) == true) {
                 List<HashMap<String,Player>>listPlayers=new ArrayList<HashMap<String,Player>>();
                 listPlayers = getDataFile();
                 if (listPlayers.get(0)==null) {
@@ -78,7 +78,7 @@ public class DataListPlayers {
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
         if (file.exists() == true) {
             listPlayers = (List<HashMap<String, Player>>) fileConfiguration.getList("list");
-            if (listPlayers.get(0)!=null) {
+            if (listPlayers.get(0).size()!=0) {
                 if (listPlayers.get(0).get(uuidPlayers)==null) {
                     return objectPlayers=null;
                 }else{

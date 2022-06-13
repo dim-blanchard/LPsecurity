@@ -451,9 +451,7 @@ public class Main extends JavaPlugin implements Listener {
         if (listPlayer.get(uuid) != null) {
             getListPlayerRemove(uuid);
         }
-        if (DataListPlayers.getObjectPlayers(uuidPlayers)!=null) {
-            DataListPlayers.removeObjectPlayers(uuidPlayers);
-        }
+
 
         //Enleve l'ip du joueur de la List
         DataListIp.removeFileOrPlayers(uuidPlayers, ipPlayers);
@@ -468,6 +466,9 @@ public class Main extends JavaPlugin implements Listener {
         DataPlayersFiles.setNumberTentativeLogin(uuidPlayers, 0, Main.plugin.dataPlayer);
         // List mute
 
+        if (DataListPlayers.getObjectPlayers(uuidPlayers)!=null) {
+            DataListPlayers.removeObjectPlayers(uuidPlayers);
+        }
         // Fin test de vitesse
         long endTime = System.nanoTime();
         System.out.println("Test de vitesse quit : " + (endTime - startTime) * Math.pow(10, -6) + " ms");

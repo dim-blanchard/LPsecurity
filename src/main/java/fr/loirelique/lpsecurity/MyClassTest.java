@@ -1,7 +1,12 @@
 package fr.loirelique.lpsecurity;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 public class MyClassTest {
 
@@ -362,8 +367,9 @@ public class MyClassTest {
   
 
     public static void main(String args[]) {
-
-      
+        
+ 
+        
 /* 
     
         final File folder = new File("C:/Users/Master/Desktop/Erizia-spigot-1.8.8/Spigot-1.8.8-serveur/plugins/LPsecurity", "DataPlayer");
