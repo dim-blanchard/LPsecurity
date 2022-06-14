@@ -33,7 +33,6 @@ import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
-
 import fr.loirelique.lpsecurity.Command.CommandBan;
 import fr.loirelique.lpsecurity.Command.CommandCreateSupport;
 import fr.loirelique.lpsecurity.Command.CommandHistorique;
@@ -69,12 +68,12 @@ import fr.loirelique.lpsecurity.Usefull.DataListPlayers;
 
 public class Main extends JavaPlugin implements Listener {
 
-    //Chemain des fichies ressource.
+    // Chemain des fichies ressource.
     public String dataPlayer = "/DataPlayer";
     public String dataList = "/DataList";
     public String dataListSupport = "/DataList/Support";
     public String dataListIp = "/DataList/Ip";
-    public String dataListPlayers = "/DataList/Players" ;
+    public String dataListPlayers = "/DataList/Players";
 
     //
     public static Main plugin;
@@ -136,19 +135,16 @@ public class Main extends JavaPlugin implements Listener {
 
         CommandExecutor commandCreateSupport = new CommandCreateSupport();
         getCommand("createsupport").setExecutor(commandCreateSupport);
-         
+
         CommandExecutor commandRemovesupport = new CommandRemovesupport();
         getCommand("removesupport").setExecutor(commandRemovesupport);
-         
+
         CommandExecutor commandListSupport = new CommandListSupport();
         getCommand("listsupport").setExecutor(commandListSupport);
 
         CommandExecutor commandJoinSupport = new CommandJoinSupport();
         getCommand("joinsupport").setExecutor(commandJoinSupport);
 
-        
-    
-       
         ListWarningDegresAndMotifs.initializeList();
         DataFolder.create(dataPlayer);
         DataFolder.create(dataList);
@@ -161,11 +157,7 @@ public class Main extends JavaPlugin implements Listener {
         Bukkit.getConsoleSender().sendMessage("§4|__ |   __)   §l§8Running on Spigot 1.8.8");
         Bukkit.getConsoleSender().sendMessage("");
 
-
-      
-
     }
-
 
     /**
      * EVENT ON DISABLE PLUGIN
@@ -187,14 +179,14 @@ public class Main extends JavaPlugin implements Listener {
         int ban = 2;
         String motif_ban = "null";
         String motif_unban = "null";
-        
+
         String temp_ban = "null";
         String motif_tempban = "null";
 
         int mute = 2;
         String motif_mute = "null";
         String motif_unmute = "null";
-    
+
         String temp_mute = "null";
         String motif_tempmute = "null";
 
@@ -213,7 +205,7 @@ public class Main extends JavaPlugin implements Listener {
                         + ConfigBdd.getDatabase1()
                         + "?characterEncoding=latin1&useConfigs=maxPerformance",
                 ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-            String requet_Select_sql2 ="SELECT  historique_sanctions->>'$.motif_kick',historique_sanctions->>'$.motif_warn',historique_sanctions->>'$.warn', historique_sanctions->>'$.ban', historique_sanctions->>'$.temp_ban', historique_sanctions->>'$.motif_tempban',historique_sanctions->>'$.motif_unban' ,historique_sanctions->>'$.motif_ban', historique_sanctions->>'$.mute', historique_sanctions->>'$.motif_unmute', historique_sanctions->>'$.motif_mute', historique_sanctions->>'$.motif_tempmute', historique_sanctions->>'$.temp_mute' FROM "
+            String requet_Select_sql2 = "SELECT  historique_sanctions->>'$.motif_kick',historique_sanctions->>'$.motif_warn',historique_sanctions->>'$.warn', historique_sanctions->>'$.ban', historique_sanctions->>'$.temp_ban', historique_sanctions->>'$.motif_tempban',historique_sanctions->>'$.motif_unban' ,historique_sanctions->>'$.motif_ban', historique_sanctions->>'$.mute', historique_sanctions->>'$.motif_unmute', historique_sanctions->>'$.motif_mute', historique_sanctions->>'$.motif_tempmute', historique_sanctions->>'$.temp_mute' FROM "
                     + ConfigBdd.getTable1() + " WHERE uuid=?";
             try (PreparedStatement statement2_select = connection_register
                     .prepareStatement(requet_Select_sql2)) {
@@ -228,7 +220,6 @@ public class Main extends JavaPlugin implements Listener {
                         temp_ban = resultat_requete_select.getString("historique_sanctions->>'$.temp_ban'");
                         motif_tempban = resultat_requete_select.getString("historique_sanctions->>'$.motif_tempban'");
 
-                        
                         mute = resultat_requete_select.getInt("historique_sanctions->>'$.mute'");
                         motif_mute = resultat_requete_select.getString("historique_sanctions->>'$.motif_mute'");
                         motif_unmute = resultat_requete_select.getString("historique_sanctions->>'$.motif_unmute'");
@@ -240,7 +231,7 @@ public class Main extends JavaPlugin implements Listener {
                         motif_warn = resultat_requete_select.getString("historique_sanctions->>'$.motif_warn'");
 
                         motif_kick = resultat_requete_select.getString("historique_sanctions->>'$.motif_kick'");
-                        
+
                     }
                 }
             }
@@ -250,75 +241,76 @@ public class Main extends JavaPlugin implements Listener {
                     "La base de donné n'est pas en ligne merci de reitérer plus tard.");
         }
 
-        DataPlayersFiles.updateHistoriqueSanctions(uuidPlayers, ban, motif_ban, motif_unban, temp_ban, motif_tempban, mute, motif_mute, motif_unmute, temp_mute, motif_tempmute, motif_kick, warn, motif_warn,dataPlayer);
+        DataPlayersFiles.updateHistoriqueSanctions(uuidPlayers, ban, motif_ban, motif_unban, temp_ban, motif_tempban,
+                mute, motif_mute, motif_unmute, temp_mute, motif_tempmute, motif_kick, warn, motif_warn, dataPlayer);
 
-            if (ban == 0) {
-                // On test si le joueur et deja en ligne avec le même uuid(Générer avec le
-                // pseudo + un préfixe de salage en MD5).
+        if (ban == 0) {
+            // On test si le joueur et deja en ligne avec le même uuid(Générer avec le
+            // pseudo + un préfixe de salage en MD5).
 
-                if (DataPlayersFiles.getIsOnline(uuidPlayers,dataPlayer)==true) {
-                    p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                                MessageKick.getKickOnline());
-                }else{
-                    DataPlayersFiles.setIsOnline(uuidPlayers, true,dataPlayer);
-                                            // On vérifie si le nombre d'ip similaire connecter ne depasse pas la
-                        // configuration donner.
-                    //Cree le fichier verifie sil existe compare la taille kick le joueur en fonction du nombre d'ip similaire utiliser
-                    DataListIp.setFile(uuidPlayers, ipPlayers,p_event);
-                }
-            }          
-
-            if (temp_ban.equals("null") == true && ban == 1) {
+            if (DataPlayersFiles.getIsOnline(uuidPlayers, dataPlayer) == true) {
                 p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                        motif_ban);
-            } else if (temp_ban.equals("null") == false && ban == 1) {
+                        MessageKick.getKickOnline());
+            } else {
+                DataPlayersFiles.setIsOnline(uuidPlayers, true, dataPlayer);
+                // On vérifie si le nombre d'ip similaire connecter ne depasse pas la
+                // configuration donner.
+                // Cree le fichier verifie sil existe compare la taille kick le joueur en
+                // fonction du nombre d'ip similaire utiliser
+                DataListIp.setFile(uuidPlayers, ipPlayers, p_event);
+            }
+        }
 
-                Calendar dateTimeNow = Calendar.getInstance();
-                Date dateTimeZone = dateTimeNow.getTime();
+        if (temp_ban.equals("null") == true && ban == 1) {
+            p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
+                    motif_ban);
+        } else if (temp_ban.equals("null") == false && ban == 1) {
 
-                DateAndTime dateAndTime = new DateAndTime();
-                Date dateTime_temp_ban = dateAndTime.getDateFromBddToCompare(temp_ban);
+            Calendar dateTimeNow = Calendar.getInstance();
+            Date dateTimeZone = dateTimeNow.getTime();
 
-                if (dateTimeZone.after(dateTime_temp_ban)) {
-                    ban = 0;
-                    motif_tempban = "null";
-                    temp_ban = "null";
-                    try (Connection connection_update = DriverManager.getConnection(
-                            ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
-                                    ConfigBdd.getPort()
-                                    + "/"
-                                    + ConfigBdd.getDatabase1()
-                                    + "?characterEncoding=latin1&useConfigs=maxPerformance",
-                            ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-                        String requet_Update_sql2 = "UPDATE " + ConfigBdd.getTable1() +
-                                " SET historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')),, historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')),historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) WHERE uuid=?";
-                        try (PreparedStatement statement2_select = connection_update
-                                .prepareStatement(requet_Update_sql2)) {
-                            statement2_select.setString(1, "ban");
-                            statement2_select.setInt(2, ban);
-                            statement2_select.setString(3, "motif_tempban");
-                            statement2_select.setString(4, motif_tempban);
-                            statement2_select.setString(5, "temp_ban");
-                            statement2_select.setString(6, temp_ban);
-                            statement2_select.setString(7, uuidPlayers);
-                            statement2_select.executeUpdate();
-                        }
+            DateAndTime dateAndTime = new DateAndTime();
+            Date dateTime_temp_ban = dateAndTime.getDateFromBddToCompare(temp_ban);
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
+            if (dateTimeZone.after(dateTime_temp_ban)) {
+                ban = 0;
+                motif_tempban = "null";
+                temp_ban = "null";
+                try (Connection connection_update = DriverManager.getConnection(
+                        ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
+                                ConfigBdd.getPort()
+                                + "/"
+                                + ConfigBdd.getDatabase1()
+                                + "?characterEncoding=latin1&useConfigs=maxPerformance",
+                        ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
+                    String requet_Update_sql2 = "UPDATE " + ConfigBdd.getTable1() +
+                            " SET historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')),, historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')),historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) WHERE uuid=?";
+                    try (PreparedStatement statement2_select = connection_update
+                            .prepareStatement(requet_Update_sql2)) {
+                        statement2_select.setString(1, "ban");
+                        statement2_select.setInt(2, ban);
+                        statement2_select.setString(3, "motif_tempban");
+                        statement2_select.setString(4, motif_tempban);
+                        statement2_select.setString(5, "temp_ban");
+                        statement2_select.setString(6, temp_ban);
+                        statement2_select.setString(7, uuidPlayers);
+                        statement2_select.executeUpdate();
                     }
-                } else {
-                    String dateTemp_ban = dateAndTime.getDateForPlayer(dateAndTime.getDateFromBddToCompare(temp_ban));
-                    p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                            "Bannie jusqu'au: " + dateTemp_ban + " Raison: " + motif_tempban);
-                }
 
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                String dateTemp_ban = dateAndTime.getDateForPlayer(dateAndTime.getDateFromBddToCompare(temp_ban));
+                p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
+                        "Bannie jusqu'au: " + dateTemp_ban + " Raison: " + motif_tempban);
             }
 
-            
+        }
+
         if (temp_mute.equals("null") == true && mute == 1) {
             DataPlayersFiles.setMuteAndMotif(uuidPlayers, mute, motif_mute, dataPlayer);
-        } else if (temp_mute.equals("null") == false && mute == 1) {      
+        } else if (temp_mute.equals("null") == false && mute == 1) {
             Calendar dateTimeNow1 = Calendar.getInstance();
             Date dateTimeZone1 = dateTimeNow1.getTime();
 
@@ -326,9 +318,9 @@ public class Main extends JavaPlugin implements Listener {
             Date dateTime_temp_mute1 = dateAndTime1.getDateFromBddToCompare(temp_mute);
 
             if (dateTimeZone1.after(dateTime_temp_mute1)) {
-            mute =0;
-            motif_tempmute = "null";
-            temp_mute="null";
+                mute = 0;
+                motif_tempmute = "null";
+                temp_mute = "null";
                 try (Connection connection_update = DriverManager.getConnection(
                         ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
                                 ConfigBdd.getPort()
@@ -375,9 +367,8 @@ public class Main extends JavaPlugin implements Listener {
         // Début test de vitesse
         long startTime = System.nanoTime();
         // Ajoue Player à la listePlayer
-        DataListPlayers.setFile(uuidPlayers,p);
+        DataListPlayers.setFile(uuidPlayers, p);
         listPlayer.put(uuidPlayers, p);
-
 
         // On fait un requet qui récupère l'uuid du joueur et on le cherche dans la base
         // de donnée.
@@ -429,7 +420,7 @@ public class Main extends JavaPlugin implements Listener {
         final Player p = p_event.getPlayer();
         String uuid = getUuidHash(p);
         String uuidPlayers = getUuidHash(p);
-        String ipPlayers= p.getAddress().getHostString();
+        String ipPlayers = p.getAddress().getHostString();
         // Début test de vitesse
         long startTime = System.nanoTime();
 
@@ -452,21 +443,20 @@ public class Main extends JavaPlugin implements Listener {
             getListPlayerRemove(uuid);
         }
 
-
-        //Enleve l'ip du joueur de la List
+        // Enleve l'ip du joueur de la List
         DataListIp.removeFileOrPlayers(uuidPlayers, ipPlayers);
         // If player is online
-        if(DataPlayersFiles.getIsOnline(uuidPlayers,dataPlayer)==true){
-            DataPlayersFiles.setIsOnline(uuidPlayers,false,dataPlayer);
+        if (DataPlayersFiles.getIsOnline(uuidPlayers, dataPlayer) == true) {
+            DataPlayersFiles.setIsOnline(uuidPlayers, false, dataPlayer);
         }
-        if(DataPlayersFiles.getIsLogin(uuidPlayers,dataPlayer)==true){
-            DataPlayersFiles.setIsLogin(uuidPlayers, false,dataPlayer);
-        }          
+        if (DataPlayersFiles.getIsLogin(uuidPlayers, dataPlayer) == true) {
+            DataPlayersFiles.setIsLogin(uuidPlayers, false, dataPlayer);
+        }
         // List tentative pass
         DataPlayersFiles.setNumberTentativeLogin(uuidPlayers, 0, Main.plugin.dataPlayer);
         // List mute
 
-        if (DataListPlayers.getObjectPlayers(uuidPlayers)!=null) {
+        if (DataListPlayers.getObjectPlayers(uuidPlayers) != null) {
             DataListPlayers.removeObjectPlayers(uuidPlayers);
         }
         // Fin test de vitesse
@@ -481,39 +471,37 @@ public class Main extends JavaPlugin implements Listener {
         String uuidPlayers = getUuidHash(player);
 
         if (DataPlayersFiles.getMute(uuidPlayers, dataPlayer) == 1) {
-            String message="null";
+            String message = "null";
             p_envent.setCancelled(true);
-            if(DataPlayersFiles.getMotifMute(uuidPlayers, dataPlayer).equals("null")){
+            if (DataPlayersFiles.getMotifMute(uuidPlayers, dataPlayer).equals("null")) {
                 message = DataPlayersFiles.getMotifTempMute(uuidPlayers, dataPlayer);
-            }else{
+            } else {
                 message = DataPlayersFiles.getMotifMute(uuidPlayers, dataPlayer);
             }
-            player.sendMessage("Mute: "+ message);
+            player.sendMessage("Mute: " + message);
         } else {
             p_envent.setCancelled(false);
         }
-    
+
     }
 
-    
-      @EventHandler
-      public void onCommand( PlayerCommandPreprocessEvent p_envent) {
-      if (p_envent.getMessage().equals("/stop")) {
-        final File folder = new File(Main.plugin.getDataFolder().toString(), dataPlayer);
-        DataPlayersFiles.defaultInfosPlayers(folder);
-      }
-      }
+    @EventHandler
+    public void onCommand(PlayerCommandPreprocessEvent p_envent) {
+        if (p_envent.getMessage().equals("/stop")) {
+            final File folder = new File(Main.plugin.getDataFolder().toString(), dataPlayer);
+            DataPlayersFiles.defaultInfosPlayers(folder);
+        }
+    }
 
-     @EventHandler
-     public void ServerCommandEvent(ServerCommandEvent event){
+    @EventHandler
+    public void ServerCommandEvent(ServerCommandEvent event) {
         System.out.println(event.getCommand());
         if (event.getCommand().equals("stop")) {
             final File folder = new File(Main.plugin.getDataFolder().toString(), dataPlayer);
             DataPlayersFiles.defaultInfosPlayers(folder);
         }
 
-     }
-
+    }
 
     /**
      * Getter de tache register.
