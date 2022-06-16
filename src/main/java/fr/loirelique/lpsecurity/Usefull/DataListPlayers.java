@@ -48,7 +48,6 @@ public class DataListPlayers {
             try {
                 fileConfiguration.save(file);
             } catch (IOException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
             System.out.println("[LPsecurity] File " + nameFile + " Was Create.");

@@ -43,7 +43,6 @@ public class DataPlayersFiles {
             try {
                 fileConfiguration.save(file);
             } catch (IOException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
             System.out.println("[LPsecurity] File Data Players Was Create.");
@@ -84,7 +83,6 @@ public class DataPlayersFiles {
             try {
                 fileConfiguration.save(file);
             } catch (IOException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
         }
@@ -118,7 +116,6 @@ public class DataPlayersFiles {
             try {
                 fileConfiguration.save(file);
             } catch (IOException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
         }
@@ -138,7 +135,6 @@ public class DataPlayersFiles {
             try {
                 fileConfiguration.save(file);
             } catch (IOException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
         }
@@ -155,7 +151,6 @@ public class DataPlayersFiles {
             try {
                 fileConfiguration.save(file);
             } catch (IOException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
         }
@@ -211,7 +206,6 @@ public class DataPlayersFiles {
             try {
                 fileConfiguration.save(file);
             } catch (IOException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
         }
@@ -241,7 +235,6 @@ public class DataPlayersFiles {
             try {
                 fileConfiguration.save(file);
             } catch (IOException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
         }
@@ -263,7 +256,6 @@ public class DataPlayersFiles {
             try {
                 fileConfiguration.save(file);
             } catch (IOException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
         }
@@ -283,7 +275,6 @@ public class DataPlayersFiles {
             try {
                 fileConfiguration.save(file);
             } catch (IOException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
         }
@@ -303,7 +294,6 @@ public class DataPlayersFiles {
             try {
                 fileConfiguration.save(file);
             } catch (IOException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
         }

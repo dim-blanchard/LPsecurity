@@ -487,17 +487,31 @@ public class Main extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent p_envent) {
+        Player p = p_envent.getPlayer();
+        String uuidPlayers = getUuidHash(p);
         if (p_envent.getMessage().equals("/stop")) {
-            final File folder = new File(Main.plugin.getDataFolder().toString(), dataPlayer);
+            final File folder = new File(getDataFolder().toString(), dataPlayer);
             DataPlayersFiles.defaultInfosPlayers(folder);
         }
+        if (DataPlayersFiles.getIsLogin(uuidPlayers, dataPlayer)==false){
+            String message = p_envent.getMessage();         
+            if(message.subSequence(0, message.length()).equals("/login")|p_envent.getMessage().equals("/register")){
+                p.sendMessage("condition /login");
+            }else{
+                p_envent.setCancelled(true);
+                p.sendMessage("condition else");
+            }
+        }else if (DataPlayersFiles.getIsLogin(uuidPlayers, dataPlayer)==true){
+            p_envent.setCancelled(false);
+        }
+
+
     }
 
     @EventHandler
     public void ServerCommandEvent(ServerCommandEvent event) {
-        System.out.println(event.getCommand());
         if (event.getCommand().equals("stop")) {
-            final File folder = new File(Main.plugin.getDataFolder().toString(), dataPlayer);
+            final File folder = new File(getDataFolder().toString(), dataPlayer);
             DataPlayersFiles.defaultInfosPlayers(folder);
         }
 

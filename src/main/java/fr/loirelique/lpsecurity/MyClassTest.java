@@ -1,13 +1,5 @@
 package fr.loirelique.lpsecurity;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-
 public class MyClassTest {
 
     /*

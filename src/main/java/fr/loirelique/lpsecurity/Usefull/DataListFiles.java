@@ -30,7 +30,6 @@ public class DataListFiles {
                 fileConfiguration.save(file);
                 System.out.println("[LPsecurity] File Data List Support Was Update.");
             } catch (IOException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
 
@@ -55,7 +54,6 @@ public class DataListFiles {
             try {
                 fileConfiguration.save(file);
             } catch (IOException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
             System.out.println("[LPsecurity] File Data List Support Was Create.");
