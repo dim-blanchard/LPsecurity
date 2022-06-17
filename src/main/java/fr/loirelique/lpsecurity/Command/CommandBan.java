@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import fr.loirelique.lpsecurity.Main;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageBan;
+import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
 
 public class CommandBan implements CommandExecutor {
 
@@ -27,7 +28,7 @@ public class CommandBan implements CommandExecutor {
 
                     if (args.length >= 2) {
                         String pseudo = args[0];
-                        String uuid = Main.plugin.getUuidHash(pseudo);
+                        String uuidPlayers = Main.plugin.getUuidHash(pseudo);
                         int ban = 2;
 
                         try (Connection connection_register = DriverManager.getConnection(
@@ -38,7 +39,7 @@ public class CommandBan implements CommandExecutor {
                             String requet_Select_sql2 = "SELECT historique_sanctions->>'$.ban' FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
                             try (PreparedStatement statement2_select = connection_register
                                     .prepareStatement(requet_Select_sql2)) {
-                                statement2_select.setString(1, uuid);
+                                statement2_select.setString(1, uuidPlayers);
 
                                 try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                                     while (resultat_requete_select.next()) {
@@ -73,7 +74,7 @@ public class CommandBan implements CommandExecutor {
                                     statement2_select.setInt(2, 1);
                                     statement2_select.setString(3, "motif_ban");
                                     statement2_select.setString(4, motif_ban);
-                                    statement2_select.setString(5, uuid);
+                                    statement2_select.setString(5, uuidPlayers);
                                     statement2_select.executeUpdate();
                                 }
 
@@ -83,8 +84,8 @@ public class CommandBan implements CommandExecutor {
 
                         
                             p.sendMessage(MessageBan.setColorBan() + "[" + pseudo + "] " + MessageBan.getBan());
-                            if (Main.plugin.getListOnlinePlayer(uuid) == "1") {
-                                Player player = Main.plugin.getListPlayer(uuid);
+                            if (DataPlayersFiles.getIsOnline(uuidPlayers, Main.plugin.dataPlayer) == true ) {
+                                Player player = Main.plugin.getListPlayer(uuidPlayers);
                                 player.kickPlayer("Bannie:" + motif_ban);
                             }
                             errorCommande = true;
