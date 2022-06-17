@@ -56,7 +56,7 @@ public class CommandBan implements CommandExecutor {
                                 String ar = Main.plugin.sansAccent(args[i].replace(" ' ", " \' "));
                                 builder.append(ar).append(" ");
                             }
-                            String msg = builder.toString();
+                            String motif_ban = builder.toString();
 
                             try (Connection connection_update = DriverManager.getConnection(
                                     ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
@@ -70,9 +70,9 @@ public class CommandBan implements CommandExecutor {
                                 try (PreparedStatement statement2_select = connection_update
                                         .prepareStatement(requet_Update_sql2)) {
                                     statement2_select.setString(1, "ban");
-                                    statement2_select.setString(2, "1");
+                                    statement2_select.setInt(2, 1);
                                     statement2_select.setString(3, "motif_ban");
-                                    statement2_select.setString(4, msg);
+                                    statement2_select.setString(4, motif_ban);
                                     statement2_select.setString(5, uuid);
                                     statement2_select.executeUpdate();
                                 }
@@ -81,10 +81,11 @@ public class CommandBan implements CommandExecutor {
                                 e.printStackTrace();
                             }
 
+                        
                             p.sendMessage(MessageBan.setColorBan() + "[" + pseudo + "] " + MessageBan.getBan());
                             if (Main.plugin.getListOnlinePlayer(uuid) == "1") {
                                 Player player = Main.plugin.getListPlayer(uuid);
-                                player.kickPlayer("Bannie:" + msg);
+                                player.kickPlayer("Bannie:" + motif_ban);
                             }
                             errorCommande = true;
                         }

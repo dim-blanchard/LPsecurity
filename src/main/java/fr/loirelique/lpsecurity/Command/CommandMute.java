@@ -64,7 +64,6 @@ public class CommandMute implements CommandExecutor {
                                 builder.append(ar).append(" ");
                             }
                             String motif_mute = builder.toString();
-                            mute = 1;
 
                             try (Connection connection_update = DriverManager.getConnection(
                                     ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
@@ -78,7 +77,7 @@ public class CommandMute implements CommandExecutor {
                                 try (PreparedStatement statement2_select = connection_update
                                         .prepareStatement(requet_Update_sql2)) {
                                     statement2_select.setString(1, "mute");
-                                    statement2_select.setInt(2, mute);
+                                    statement2_select.setInt(2, 1);
                                     statement2_select.setString(3, "motif_mute");
                                     statement2_select.setString(4, motif_mute);
                                     statement2_select.setString(5, uuidPlayers);

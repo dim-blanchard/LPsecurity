@@ -1,5 +1,8 @@
 package fr.loirelique.lpsecurity;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class MyClassTest {
 
     /*
@@ -359,11 +362,34 @@ public class MyClassTest {
   
 
     public static void main(String args[]) {
-        
-        String message = "/register dhfdhdthd";
+
+        String name ="Dimitri";
+        String username="LoiRelique";
+
+        ArrayList<Object> listObject = new ArrayList<Object>();
+
+        Tclass test = new Tclass("Julien", "JulianoXV");
+
+        listObject.add(test);
+        listObject.add(new Tclass(name, username));
+    
+        Tclass test2 = (Tclass) listObject.get(1);
+        System.out.println(test2.getName());
+
+
+
+
+
+
+
+
+
+
+
+ /*        String message = "/register dhfdhdthd";
 
         String []testmessage = message.split(" ");
-        System.out.println(testmessage[0]);
+        System.out.println(testmessage[0]); */
 /* 
     
         final File folder = new File("C:/Users/Master/Desktop/Erizia-spigot-1.8.8/Spigot-1.8.8-serveur/plugins/LPsecurity", "DataPlayer");
