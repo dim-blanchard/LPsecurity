@@ -469,43 +469,51 @@ public class Main extends JavaPlugin implements Listener {
     public void onChat(AsyncPlayerChatEvent p_envent) {
         final Player player = p_envent.getPlayer();
         String uuidPlayers = getUuidHash(player);
-
-        if (DataPlayersFiles.getMute(uuidPlayers, dataPlayer) == 1) {
-            String message = "null";
+        
+        if(DataPlayersFiles.getIsLogin(uuidPlayers, dataPlayer) == false){
             p_envent.setCancelled(true);
-            if (DataPlayersFiles.getMotifMute(uuidPlayers, dataPlayer).equals("null")) {
-                message = DataPlayersFiles.getMotifTempMute(uuidPlayers, dataPlayer);
+            player.sendMessage("Identifie toi pour parler.");
+        }else if(DataPlayersFiles.getIsLogin(uuidPlayers, dataPlayer)==true){
+            if(DataPlayersFiles.getMute(uuidPlayers, dataPlayer) == 1) {
+                String message = "null";
+                p_envent.setCancelled(true);
+                if (DataPlayersFiles.getMotifMute(uuidPlayers, dataPlayer).equals("null")) {
+                    message = DataPlayersFiles.getMotifTempMute(uuidPlayers, dataPlayer);
+                } else {
+                    message = DataPlayersFiles.getMotifMute(uuidPlayers, dataPlayer);
+                }
+                player.sendMessage("Mute: " + message);
             } else {
-                message = DataPlayersFiles.getMotifMute(uuidPlayers, dataPlayer);
+                p_envent.setCancelled(false);
             }
-            player.sendMessage("Mute: " + message);
-        } else {
-            p_envent.setCancelled(false);
-        }
+        } 
+
+
 
     }
 
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent p_envent) {
         Player p = p_envent.getPlayer();
-        String uuidPlayers = getUuidHash(p);
-        if (p_envent.getMessage().equals("/stop")) {
-            final File folder = new File(getDataFolder().toString(), dataPlayer);
-            DataPlayersFiles.defaultInfosPlayers(folder);
-        }
+        String uuidPlayers = getUuidHash(p); 
+        String message = p_envent.getMessage();
+        String []messageSplit = message.split(" ");
+        String messageSplit0 = messageSplit[0];
         if (DataPlayersFiles.getIsLogin(uuidPlayers, dataPlayer)==false){
-            String message = p_envent.getMessage();         
-            if(message.subSequence(0, message.length()).equals("/login")|p_envent.getMessage().equals("/register")){
+            if(messageSplit0.equals("/login")==true|messageSplit0.equals("/register")==true){
                 p.sendMessage("condition /login");
+                p_envent.setCancelled(false);
             }else{
                 p_envent.setCancelled(true);
-                p.sendMessage("condition else");
+                p.sendMessage("Identifie toi pour entrer une commande.");
             }
         }else if (DataPlayersFiles.getIsLogin(uuidPlayers, dataPlayer)==true){
             p_envent.setCancelled(false);
+            if (messageSplit0.equals("/stop")) {
+                final File folder = new File(getDataFolder().toString(), dataPlayer);
+                DataPlayersFiles.defaultInfosPlayers(folder);}
         }
-
-
+    
     }
 
     @EventHandler

@@ -360,8 +360,10 @@ public class MyClassTest {
 
     public static void main(String args[]) {
         
- 
-        
+        String message = "/register dhfdhdthd";
+
+        String []testmessage = message.split(" ");
+        System.out.println(testmessage[0]);
 /* 
     
         final File folder = new File("C:/Users/Master/Desktop/Erizia-spigot-1.8.8/Spigot-1.8.8-serveur/plugins/LPsecurity", "DataPlayer");
