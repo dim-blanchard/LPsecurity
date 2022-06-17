@@ -34,15 +34,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import fr.loirelique.lpsecurity.Command.CommandBan;
-import fr.loirelique.lpsecurity.Command.CommandCreateSupport;
 import fr.loirelique.lpsecurity.Command.CommandHistorique;
-import fr.loirelique.lpsecurity.Command.CommandJoinSupport;
 import fr.loirelique.lpsecurity.Command.CommandKick;
-import fr.loirelique.lpsecurity.Command.CommandListSupport;
 import fr.loirelique.lpsecurity.Command.CommandLogin;
 import fr.loirelique.lpsecurity.Command.CommandMute;
 import fr.loirelique.lpsecurity.Command.CommandRegister;
-import fr.loirelique.lpsecurity.Command.CommandRemovesupport;
 import fr.loirelique.lpsecurity.Command.CommandResetHistorique;
 
 import fr.loirelique.lpsecurity.Command.CommandTempban;
@@ -50,6 +46,10 @@ import fr.loirelique.lpsecurity.Command.CommandTempmute;
 import fr.loirelique.lpsecurity.Command.CommandUnban;
 import fr.loirelique.lpsecurity.Command.CommandUnmute;
 import fr.loirelique.lpsecurity.Command.CommandWarn;
+import fr.loirelique.lpsecurity.List.CommandCreateSupport;
+import fr.loirelique.lpsecurity.List.CommandJoinSupport;
+import fr.loirelique.lpsecurity.List.CommandListSupport;
+import fr.loirelique.lpsecurity.List.CommandRemovesupport;
 import fr.loirelique.lpsecurity.List.ListWarningDegresAndMotifs;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageKick;
