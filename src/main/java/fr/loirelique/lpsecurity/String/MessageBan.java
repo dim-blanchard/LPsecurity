@@ -9,11 +9,11 @@ public class MessageBan {
 
     public static String getBan() {
         String ban = Main.plugin.getConfig().getString("string.ban");
+        ban = new String(ban.getBytes(), StandardCharsets.UTF_8);
         return ban;
     }
 
-    public static String getErrorBan() {
-        
+    public static String getErrorBan() {     
         String errorBan = Main.plugin.getConfig().getString("string.error_ban");
         errorBan = new String( errorBan.getBytes(), StandardCharsets.UTF_8);
         return errorBan;
@@ -21,11 +21,15 @@ public class MessageBan {
 
     public static String getAlreadyBan() {
         String alreadyBan = Main.plugin.getConfig().getString("string.already_ban");
+        alreadyBan = new String( alreadyBan.getBytes(), StandardCharsets.UTF_8);
         return alreadyBan;
     }
 
+
+
     public static String setColorBan() {
         String colorBan = Main.plugin.getConfig().getString("string.color_ban");
+        colorBan = new String( colorBan.getBytes(), StandardCharsets.UTF_8);
         return colorBan;
     }
 
@@ -37,6 +41,7 @@ public class MessageBan {
 
     public static String setColorAlreadyBan() {
         String colorAlreadyBan = Main.plugin.getConfig().getString("string.color_already_ban");
+        colorAlreadyBan = new String( colorAlreadyBan.getBytes(), StandardCharsets.UTF_8);
         return colorAlreadyBan;
     }
 }
