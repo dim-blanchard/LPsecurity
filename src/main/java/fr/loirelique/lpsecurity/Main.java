@@ -762,15 +762,4 @@ public class Main extends JavaPlugin implements Listener {
         return pattern.matcher(strTemp).replaceAll("");
     }
 
-    public String getListOnlinePlayer(String uuid) {
-        String test = null;
-
-        if (listOnlinePlayer.get(uuid) != null) {
-            test = "1";
-        } else {
-            test = null;
-        }
-        return test;
-    }
-
 }
