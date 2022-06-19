@@ -85,7 +85,6 @@ public class Main extends JavaPlugin implements Listener {
     // Liste des joueurs. Liste d'ip similaire en fonction du joueur. Liste des
     // joueurs en Ligne.
     private HashMap<String, Player> listPlayer = new HashMap<String, Player>();
-    private static HashMap<String, Integer> listOnlinePlayer = new HashMap<String, Integer>();
 
     /**
      * EVENT ON ENBALBLE PLUGIN
@@ -151,6 +150,8 @@ public class Main extends JavaPlugin implements Listener {
         DataFolder.create(dataListSupport);
         DataFolder.create(dataListIp);
         DataFolder.create(dataListPlayers);
+
+        System.out.println(DataListPlayers.getObjectPlayers("a6a9d1f3cd91aef61e7da3324a31a676"));
 
         Bukkit.getConsoleSender().sendMessage("     §4__   __");
         Bukkit.getConsoleSender().sendMessage("§4|   |__) (    §l§2LPsecurity §l§4v1.0 §l§8(by LoiRelique)");
@@ -444,7 +445,9 @@ public class Main extends JavaPlugin implements Listener {
         }
 
         // Enleve l'ip du joueur de la List
-        DataListIp.removeFileOrPlayers(uuidPlayers, ipPlayers);
+        if (DataListIp.getFileIp(ipPlayers)!=null) {
+            DataListIp.removeFileOrPlayers(uuidPlayers, ipPlayers);
+        }    
         // If player is online
         if (DataPlayersFiles.getIsOnline(uuidPlayers, dataPlayer) == true) {
             DataPlayersFiles.setIsOnline(uuidPlayers, false, dataPlayer);

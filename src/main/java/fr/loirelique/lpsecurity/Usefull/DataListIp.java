@@ -21,7 +21,6 @@ public class DataListIp {
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
         if (file.exists() == true) {
-            System.out.println("Get uuid from ip list");
             value = (List<String>) fileConfiguration.getList("list");
         }
         return value;
@@ -42,13 +41,9 @@ public class DataListIp {
                 System.out.println(ipPlayers);
                 String getIp = ip.get(i);
                 if (getIp.equals(uuidPlayers)==true) {
-                    testip=true;
-                    System.out.println(testip);               
-                }else{
-                    System.out.println(testip);
+                    testip=true;               
                 }
             }
-            System.out.println(testip);
             if (testip==false) {
                 if (ip.size()==MessageKick.getKickOverIp()) {
                    p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
