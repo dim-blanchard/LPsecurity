@@ -360,6 +360,8 @@ public class Main extends JavaPlugin implements Listener {
      */
     @EventHandler
     public void playerJoinServer(PlayerJoinEvent p_event) {
+        
+
         // Variable utile
         final Player p = p_event.getPlayer();
         String uuidPlayers = getUuidHash(p);
@@ -370,6 +372,7 @@ public class Main extends JavaPlugin implements Listener {
         // Ajoue Player à la listePlayer
         DataListPlayers.setFile(uuidPlayers, p);
         listPlayer.put(uuidPlayers, p);
+        System.out.println(listPlayer.get("a6a9d1f3cd91aef61e7da3324a31a676"));
 
         // On fait un requet qui récupère l'uuid du joueur et on le cherche dans la base
         // de donnée.
