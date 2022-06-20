@@ -85,6 +85,7 @@ public class CommandBan implements CommandExecutor {
                         
                             p.sendMessage(MessageBan.setColorBan() + "[" + pseudo + "] " + MessageBan.getBan());
                             if (DataPlayersFiles.getIsOnline(uuidPlayers, Main.plugin.dataPlayer) == true ) {
+                                ///////////////////////////////////////////////////////////
                                 Player player = Main.plugin.getListPlayer(uuidPlayers);
                                 player.kickPlayer("Bannie:" + motif_ban);
                             }
