@@ -22,8 +22,8 @@ public class DataListFiles {
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
         if (file.exists() == true) {
             System.out.println("[LPsecurity] File Data List Support Exists.");
-            List player = new ArrayList<String>();
-            player = fileConfiguration.getList("list");
+            List<String> player = new ArrayList<String>();
+            player =  fileConfiguration.getList("list");
             player.add(uuidPlayers + "&" + Players);
             fileConfiguration.set("list", player);
             try {

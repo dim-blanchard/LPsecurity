@@ -1,7 +1,6 @@
 package fr.loirelique.lpsecurity.Usefull;
 
 import java.io.File;
-import java.io.IOException;
 
 import fr.loirelique.lpsecurity.Main;
 
