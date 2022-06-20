@@ -23,7 +23,7 @@ public class DataListFiles {
         if (file.exists() == true) {
             System.out.println("[LPsecurity] File Data List Support Exists.");
             List<String> player = new ArrayList<String>();
-            player =  fileConfiguration.getList("list");
+            player =  (List<String>) fileConfiguration.getList("list");
             player.add(uuidPlayers + "&" + Players);
             fileConfiguration.set("list", player);
             try {
