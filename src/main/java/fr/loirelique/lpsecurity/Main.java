@@ -1,16 +1,13 @@
 package fr.loirelique.lpsecurity;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -110,8 +107,9 @@ public class Main extends JavaPlugin implements Listener {
         CommandExecutor commandUnban = new CommandUnban();
         getCommand("unban").setExecutor(commandUnban);
 
-        CommandExecutor commandTempban = new CommandTempban();
+        TabExecutor commandTempban = new CommandTempban();
         getCommand("tempban").setExecutor(commandTempban);
+        getCommand("tempban").setTabCompleter(commandTempban);
 
         CommandExecutor commandHistorique = new CommandHistorique();
         getCommand("historique").setExecutor(commandHistorique);
@@ -148,13 +146,12 @@ public class Main extends JavaPlugin implements Listener {
         getCommand("joinsupport").setExecutor(commandJoinSupport);
 
         ListWarningDegresAndMotifs.initializeList();
+        DateAndTime.initializeList();
         DataFolder.create(dataPlayer);
         DataFolder.create(dataList);
         DataFolder.create(dataListSupport);
         DataFolder.create(dataListIp);
         DataFolder.create(dataListPlayers);
-
-        System.out.println(DataListPlayers.getObjectPlayers("a6a9d1f3cd91aef61e7da3324a31a676"));
 
         Bukkit.getConsoleSender().sendMessage("     §4__   __");
         Bukkit.getConsoleSender().sendMessage("§4|   |__) (    §l§2LPsecurity §l§4v1.0 §l§8(by LoiRelique)");

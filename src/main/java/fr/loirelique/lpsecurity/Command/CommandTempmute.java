@@ -16,6 +16,7 @@ import fr.loirelique.lpsecurity.String.MessageTempmute;
 import fr.loirelique.lpsecurity.Usefull.DataListPlayers;
 import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
 import fr.loirelique.lpsecurity.Usefull.DateAndTime;
+import fr.loirelique.lpsecurity.Usefull.TestString;
 
 public class CommandTempmute implements CommandExecutor {
 
@@ -31,20 +32,17 @@ public class CommandTempmute implements CommandExecutor {
                     int mute = 2;
 
                     String uuidPlayers = Main.plugin.getUuidHash(args[0]);
-                    DateAndTime dateAndTime = new DateAndTime();
-
                     int donneTemps = 0;
                     String typeTemps = "";
                     String temp_mute = "";
 
-                    if (dateAndTime.testChaineNumber(args[1]) == false) {
+                    if (TestString.isNumber(args[1]) == false) {
                         p.sendMessage("Le nombre de temps donner ne dois comporter que des chiffres.");
                         errorCommande = true;
-                    } else if (dateAndTime.testChaineNumber(args[1]) == true) {
+                    } else if (TestString.isNumber(args[1]) == true) {
                         donneTemps = Integer.parseInt(args[1]);
                         typeTemps = args[2];
-                        temp_mute = dateAndTime
-                                .getDateForBdd(dateAndTime.getDateFromCommand(donneTemps, typeTemps));
+                        temp_mute = DateAndTime.getDateToString(donneTemps, typeTemps);
 
                         StringBuilder builder = new StringBuilder();
                         for (int i = 3; i < args.length; i++) {

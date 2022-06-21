@@ -360,4 +360,54 @@ public class DataPlayersFiles {
         return value;
     }
 
+    
+    public static void setBanAndMotif(String uuidPlayers, String motif_ban) {
+        final String chemainFile = Main.plugin.getDataFolder().toString()+Main.plugin.dataPlayer;
+        final String nameFile = uuidPlayers + ".yml";
+        final File file = new File(chemainFile, nameFile);
+        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        if (file.exists() == true) {
+            fileConfiguration.set("ban", 1);
+            fileConfiguration.set("motif_ban", motif_ban);
+            try {
+                fileConfiguration.save(file);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    public static void setUnbanAndMotif(String uuidPlayers, String motif_unban) {
+        final String chemainFile = Main.plugin.getDataFolder().toString()+Main.plugin.dataPlayer;
+        final String nameFile = uuidPlayers + ".yml";
+        final File file = new File(chemainFile, nameFile);
+        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        if (file.exists() == true) {
+            fileConfiguration.set("ban", 0);
+            fileConfiguration.set("motif_unban", motif_unban);
+            try {
+                fileConfiguration.save(file);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    public static void setBanAndTempBanMotif(String uuidPlayers, String motif_tempban, String temp_ban) {
+        final String chemainFile = Main.plugin.getDataFolder().toString()+Main.plugin.dataPlayer;
+        final String nameFile = uuidPlayers + ".yml";
+        final File file = new File(chemainFile, nameFile);
+        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        if (file.exists() == true) {
+            fileConfiguration.set("ban", 1);
+            fileConfiguration.set("temp_ban", temp_ban);
+            fileConfiguration.set("motif_tempban", motif_tempban);
+            try {
+                fileConfiguration.save(file);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
 }

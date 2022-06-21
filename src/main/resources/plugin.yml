@@ -24,12 +24,12 @@ commands:
 
   tempban:
     description: Description de la commande.(LPsecurity)
-    usage: §e/tempban [Nom du joueur] [Temps <Année> <Mois> <Jours> <Heures> <Minutes>] [Raison]
+    usage: §e/tempban [Nom du joueur] [Temps] [<Minutes> <Heures> <Jours> <Mois>] [Raison non null]
     permission: lpsecurity.tempban  
   
   unban:
     description: Description de la commande.(LPsecurity)
-    usage: §§e/unban [Nom du joueur] [Raison]
+    usage: §e/unban [Nom du joueur] [Raison]
     permission: lpsecurity.unban
 
   resethistorique:

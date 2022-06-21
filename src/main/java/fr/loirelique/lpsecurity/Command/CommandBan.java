@@ -28,18 +28,19 @@ public class CommandBan implements CommandExecutor {
                         ban = RequestBan.getBan(uuidPlayers);
                         if (ban == 0) {
                             //Motif Builder.
-                            String motif_ban = MotifBuilder.getMotif(args);
+                            String motif_ban = MotifBuilder.getMotif(args,1);
                             //Request SQL Update.
                             RequestBan.setBanAndMotif(uuidPlayers, motif_ban);
-                            //Exclusion du joueur.
-                            if (DataPlayersFiles.getIsOnline(uuidPlayers, Main.plugin.dataPlayer) == true ){Player player = DataListPlayers.getObjectPlayers(uuidPlayers);player.kickPlayer("Bannie:" + motif_ban);}
-                            //Message d'exclusion
+                            //Data Player Update.
+                            DataPlayersFiles.setBanAndMotif(uuidPlayers, motif_ban);
+                            //Kick player.
+                            if (DataPlayersFiles.getIsOnline(uuidPlayers, Main.plugin.dataPlayer) == true ){Player player = DataListPlayers.getObjectPlayers(uuidPlayers);player.kickPlayer("Bannie: " + motif_ban);}
+                            //Message Kick.
                             p.sendMessage(MessageBan.setColorBan() + "[" + args[0] + "] " + MessageBan.getBan());
-                            //True pour commande bien éxécuté.
                             return true;
                         }
                         if (ban == 1) {p.sendMessage(MessageBan.setColorAlreadyBan() + "[" + args[0] + "] " + MessageBan.getAlreadyBan());return true;}
-                    }else{p.sendMessage(MessageBan.setColorErrorBan() + MessageBan.getErrorBan()); return true;}
+                    }else{p.sendMessage(MessageBan.setColorErrorBan() + MessageBan.getErrorBan()); return false;}
                 }
             }else{p.sendMessage("Pas la permission.");return true;}
         }else{return false;}   
