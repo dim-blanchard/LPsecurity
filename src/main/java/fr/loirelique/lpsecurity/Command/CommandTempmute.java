@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import fr.loirelique.lpsecurity.Main;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageTempmute;
+import fr.loirelique.lpsecurity.Usefull.DataListPlayers;
 import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
 import fr.loirelique.lpsecurity.Usefull.DateAndTime;
 
@@ -28,10 +29,10 @@ public class CommandTempmute implements CommandExecutor {
 
                 if (args.length >= 2) {
                     int mute = 2;
-                    String pseudo = args[0];
-                    String uuidPlayers = Main.plugin.getUuidHash(pseudo);
-                    System.out.println(args[0]);
+
+                    String uuidPlayers = Main.plugin.getUuidHash(args[0]);
                     DateAndTime dateAndTime = new DateAndTime();
+
                     int donneTemps = 0;
                     String typeTemps = "";
                     String temp_mute = "";
@@ -102,14 +103,16 @@ public class CommandTempmute implements CommandExecutor {
                                 e.printStackTrace();
                             }
                             DataPlayersFiles.setMuteTempMuteAndMotif(uuidPlayers, mute, temp_mute, motif_tempmute, Main.plugin.dataPlayer);
-                            p.sendMessage(MessageTempmute.setColorTempmute() + "[" + pseudo + "] "
+                            p.sendMessage(MessageTempmute.setColorTempmute() + "[" + args[0] + "] "
                                     + MessageTempmute.getTempmute());
-                            Player player = Main.plugin.getListPlayer(uuidPlayers);
-                            player.sendMessage(motif_tempmute);
+                            if (DataPlayersFiles.getIsOnline(uuidPlayers, Main.plugin.dataPlayer) == true ) {
+                            Player player = DataListPlayers.getObjectPlayers(uuidPlayers);                              
+                            player.sendMessage("Mute temporaire:" + motif_tempmute);
+                            }
                             errorCommande = true;
 
                         } else if (mute == 1) {
-                            p.sendMessage(MessageTempmute.setColoralreadyTempmute() + "[" + pseudo + "] "
+                            p.sendMessage(MessageTempmute.setColoralreadyTempmute() + "[" + args[0] + "] "
                                     + MessageTempmute.getAlreadyTempmute());
                             errorCommande = true;
                         }

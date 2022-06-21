@@ -27,10 +27,8 @@ public class CommandUnmute implements CommandExecutor {
             if (cmd.getName().equalsIgnoreCase("unmute")) { // Si c'est la commande "banish" qui a été tapée:
 
                 if (args.length >= 2) {
-                    String pseudo = args[0];
-                    String uuidPlayers = Main.plugin.getUuidHash(pseudo);
                     int mute = 2;
-
+                    String uuidPlayers = Main.plugin.getUuidHash( args[0]);
                     StringBuilder builder = new StringBuilder();
                     for (int i = 1; i < args.length; i++) {
 
@@ -61,7 +59,6 @@ public class CommandUnmute implements CommandExecutor {
                     }
 
                     if (mute == 1) {
-                        mute = 0 ;
                         try (Connection connection_update = DriverManager.getConnection(
                                 ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
                                         ConfigBdd.getPort()
@@ -74,7 +71,7 @@ public class CommandUnmute implements CommandExecutor {
                             try (PreparedStatement statement2_select = connection_update
                                     .prepareStatement(requet_Update_sql2)) {
                                 statement2_select.setString(1, "mute");
-                                statement2_select.setInt(2, mute);
+                                statement2_select.setInt(2, 0);
                                 statement2_select.setString(3, "motif_unmute");
                                 statement2_select.setString(4, motif_unmute);
                                 statement2_select.setString(5, uuidPlayers);
@@ -85,11 +82,11 @@ public class CommandUnmute implements CommandExecutor {
                             e.printStackTrace();
                         }
 
-                        DataPlayersFiles.setUnmuteAndMotif(uuidPlayers, mute, motif_unmute, Main.plugin.dataPlayer);
-                        p.sendMessage(MessageUnmute.setColorUnmute() + "[" + pseudo + "] " + MessageUnmute.getUnmute());
+                        DataPlayersFiles.setUnmuteAndMotif(uuidPlayers,0, motif_unmute, Main.plugin.dataPlayer);
+                        p.sendMessage(MessageUnmute.setColorUnmute() + "[" +  args[0] + "] " + MessageUnmute.getUnmute());
                         errorCommande = true;
                     } else if (mute == 0) {              
-                        p.sendMessage(MessageUnmute.setColorAlreadyUnmute() + "[" + pseudo + "] "
+                        p.sendMessage(MessageUnmute.setColorAlreadyUnmute() + "[" +  args[0] + "] "
                                 + MessageUnmute.getAlreadyUnmute());
                         errorCommande = true;
                     }

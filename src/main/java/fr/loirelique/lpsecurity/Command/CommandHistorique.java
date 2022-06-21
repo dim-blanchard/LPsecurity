@@ -23,7 +23,7 @@ public class CommandHistorique implements CommandExecutor {
                 if (cmd.getName().equalsIgnoreCase("historique")) { 
                     errorCommande = false;
                     if (args.length == 1) {
-                        String uuid = Main.plugin.getUuidHash(args[0]);
+                        String uuidPlayers = Main.plugin.getUuidHash(args[0]);
                         String motif_ban = "null";
                         String motif_tempban = "null";
                         String motif_unban = "null";
@@ -42,7 +42,7 @@ public class CommandHistorique implements CommandExecutor {
                         String requet_Select_sql2 = "SELECT   historique_sanctions->>'$.ban',historique_sanctions->>'$.warn',historique_sanctions->>'$.motif_ban',historique_sanctions->>'$.motif_tempban',historique_sanctions->>'$.motif_unban',historique_sanctions->>'$.motif_kick',historique_sanctions->>'$.motif_warn',historique_sanctions->>'$.motif_mute',historique_sanctions->>'$.motif_unmute',historique_sanctions->>'$.motif_tempmute' FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
                         try (PreparedStatement statement2_select = connection_register
                                 .prepareStatement(requet_Select_sql2)) {
-                            statement2_select.setString(1, uuid);
+                            statement2_select.setString(1, uuidPlayers);
 
                             try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                                 while (resultat_requete_select.next()) {

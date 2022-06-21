@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import fr.loirelique.lpsecurity.Main;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageBan;
+import fr.loirelique.lpsecurity.Usefull.DataListPlayers;
 import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
 
 public class CommandBan implements CommandExecutor {
@@ -85,8 +86,7 @@ public class CommandBan implements CommandExecutor {
                         
                             p.sendMessage(MessageBan.setColorBan() + "[" + pseudo + "] " + MessageBan.getBan());
                             if (DataPlayersFiles.getIsOnline(uuidPlayers, Main.plugin.dataPlayer) == true ) {
-                                ///////////////////////////////////////////////////////////
-                                Player player = Main.plugin.getListPlayer(uuidPlayers);
+                                Player player = DataListPlayers.getObjectPlayers(uuidPlayers);                              
                                 player.kickPlayer("Bannie:" + motif_ban);
                             }
                             errorCommande = true;

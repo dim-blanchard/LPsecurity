@@ -26,17 +26,15 @@ public class CommandUnban implements CommandExecutor {
             if (cmd.getName().equalsIgnoreCase("unban")) { // Si c'est la commande "banish" qui a été tapée:
 
                 if (args.length >= 2) {
-                    String pseudo = args[0];
-                    String uuid = Main.plugin.getUuidHash(pseudo);
                     int ban = 2;
-
+                    String uuidPlayers = Main.plugin.getUuidHash(args[0]);      
                     StringBuilder builder = new StringBuilder();
                     for (int i = 1; i < args.length; i++) {
-
                         String ar = Main.plugin.sansAccent(args[i].replace(" ' ", " \' "));
                         builder.append(ar).append(" ");
                     }
-                    String msg = builder.toString();
+
+                    String motif_unban = builder.toString();
 
                     try (Connection connection_register = DriverManager.getConnection(
                             ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
@@ -46,7 +44,7 @@ public class CommandUnban implements CommandExecutor {
                         String requet_Select_sql2 = "SELECT historique_sanctions->>'$.ban' FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
                         try (PreparedStatement statement2_select = connection_register
                                 .prepareStatement(requet_Select_sql2)) {
-                            statement2_select.setString(1, uuid);
+                            statement2_select.setString(1, uuidPlayers);
 
                             try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                                 while (resultat_requete_select.next()) {
@@ -71,10 +69,10 @@ public class CommandUnban implements CommandExecutor {
                             try (PreparedStatement statement2_select = connection_update
                                     .prepareStatement(requet_Update_sql2)) {
                                 statement2_select.setString(1, "ban");
-                                statement2_select.setString(2, "0");
+                                statement2_select.setInt(2, 1);
                                 statement2_select.setString(3, "motif_unban");
-                                statement2_select.setString(4, msg);
-                                statement2_select.setString(5, uuid);
+                                statement2_select.setString(4, motif_unban);
+                                statement2_select.setString(5, uuidPlayers);
                                 statement2_select.executeUpdate();
                             }
 
@@ -82,10 +80,10 @@ public class CommandUnban implements CommandExecutor {
                             e.printStackTrace();
                         }
 
-                        p.sendMessage(MessageUnban.setColorUnban() + "[" + pseudo + "] " + MessageUnban.getUnban());
+                        p.sendMessage(MessageUnban.setColorUnban() + "[" + args[0] + "] " + MessageUnban.getUnban());
                         errorCommande = true;
                     } else if (ban == 0) {
-                        p.sendMessage(MessageUnban.setColorAlreadyUnban() + "[" + pseudo + "] "
+                        p.sendMessage(MessageUnban.setColorAlreadyUnban() + "[" + args[0] + "] "
                                 + MessageUnban.getAlreadyUnban());
                         errorCommande = true;
                     }

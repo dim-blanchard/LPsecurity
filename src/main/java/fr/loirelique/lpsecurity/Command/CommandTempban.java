@@ -13,6 +13,8 @@ import org.bukkit.entity.Player;
 import fr.loirelique.lpsecurity.Main;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageTempban;
+import fr.loirelique.lpsecurity.Usefull.DataListPlayers;
+import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
 import fr.loirelique.lpsecurity.Usefull.DateAndTime;
 
 public class CommandTempban implements CommandExecutor {
@@ -27,9 +29,7 @@ public class CommandTempban implements CommandExecutor {
 
                 if (args.length >= 2) {
                     int ban = 2;
-
-                    String pseudo = args[0];
-                    String uuid = Main.plugin.getUuidHash(pseudo);
+                    String uuidPlayers = Main.plugin.getUuidHash(args[0]);
 
                     DateAndTime dateAndTime = new DateAndTime();
                     int donneTemps = 0;
@@ -51,7 +51,7 @@ public class CommandTempban implements CommandExecutor {
                             String ar = Main.plugin.sansAccent(args[i].replace(" ' ", " \' "));
                             builder.append(ar).append(" ");
                         }
-                        String msg = builder.toString();
+                        String motif_tempban = builder.toString();
 
                         try (Connection connection_register = DriverManager.getConnection(
                                 ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
@@ -62,7 +62,7 @@ public class CommandTempban implements CommandExecutor {
                                     + ConfigBdd.getTable1() + " WHERE uuid=?";
                             try (PreparedStatement statement2_select = connection_register
                                     .prepareStatement(requet_Select_sql2)) {
-                                statement2_select.setString(1, uuid);
+                                statement2_select.setString(1, uuidPlayers);
 
                                 try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                                     while (resultat_requete_select.next()) {
@@ -88,12 +88,12 @@ public class CommandTempban implements CommandExecutor {
                                 try (PreparedStatement statement2_select = connection_update
                                         .prepareStatement(requet_Update_sql2)) {
                                     statement2_select.setString(1, "ban");
-                                    statement2_select.setString(2, "1");
+                                    statement2_select.setInt(2, 1);
                                     statement2_select.setString(3, "temp_ban");
                                     statement2_select.setString(4, bddDateString);
                                     statement2_select.setString(5, "motif_tempban");
-                                    statement2_select.setString(6, msg);
-                                    statement2_select.setString(7, uuid);
+                                    statement2_select.setString(6, motif_tempban);
+                                    statement2_select.setString(7, uuidPlayers);
                                     statement2_select.executeUpdate();
                                 }
 
@@ -101,14 +101,17 @@ public class CommandTempban implements CommandExecutor {
                                 e.printStackTrace();
                             }
 
-                            p.sendMessage(MessageTempban.setColorTempban() + "[" + pseudo + "] "
+                            p.sendMessage(MessageTempban.setColorTempban() + "[" + args[0] + "] "
                                     + MessageTempban.getTempban());
-                            Player player = Main.plugin.getListPlayer(uuid);
-                            player.kickPlayer(msg);
+                            if (DataPlayersFiles.getIsOnline(uuidPlayers, Main.plugin.dataPlayer) == true ) {
+                                Player player = DataListPlayers.getObjectPlayers(uuidPlayers);                              
+                                player.kickPlayer("Banniessement temporaire:" + motif_tempban);
+                            }
+
                             errorCommande = true;
 
                         } else if (ban == 1) {
-                            p.sendMessage(MessageTempban.setColoralreadyTempban() + "[" + pseudo + "] "
+                            p.sendMessage(MessageTempban.setColoralreadyTempban() + "[" + args[0] + "] "
                                     + MessageTempban.getAlreadyTempban());
                             errorCommande = true;
                         }

@@ -1,13 +1,16 @@
 package fr.loirelique.lpsecurity;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -157,7 +160,8 @@ public class Main extends JavaPlugin implements Listener {
         Bukkit.getConsoleSender().sendMessage("§4|   |__) (    §l§2LPsecurity §l§4v1.0 §l§8(by LoiRelique)");
         Bukkit.getConsoleSender().sendMessage("§4|__ |   __)   §l§8Running on Spigot 1.8.8");
         Bukkit.getConsoleSender().sendMessage("");
-
+   
+        
     }
 
     /**
@@ -528,7 +532,6 @@ public class Main extends JavaPlugin implements Listener {
             final File folder = new File(getDataFolder().toString(), dataPlayer);
             DataPlayersFiles.defaultInfosPlayers(folder);
         }
-
     }
 
     /**

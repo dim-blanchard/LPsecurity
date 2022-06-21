@@ -11,6 +11,8 @@ import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
+import fr.loirelique.lpsecurity.Usefull.DataListPlayers;
+import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
 
 public class CommandKick implements CommandExecutor {
 
@@ -50,7 +52,10 @@ public class CommandKick implements CommandExecutor {
                             statement1_insert.executeUpdate();
                         }
                         p.sendMessage("Le joueur "+ args[0]+" à était exclue de la communauté de serveur.");
-                        Main.plugin.getListPlayer(uuidPlayers).kickPlayer("Motif Kick: "+ motif_kick);;
+                        if (DataPlayersFiles.getIsOnline(uuidPlayers, Main.plugin.dataPlayer)==true) {
+                            Player player = DataListPlayers.getObjectPlayers(uuidPlayers);
+                            player.kickPlayer("Motif Kick: "+ motif_kick); 
+                        }
 
                     } catch (Exception e) {
                         e.printStackTrace();

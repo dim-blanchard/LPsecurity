@@ -16,6 +16,7 @@ import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageLogin;
 import fr.loirelique.lpsecurity.String.MessageRegister;
 import fr.loirelique.lpsecurity.Usefull.DataListIp;
+import fr.loirelique.lpsecurity.Usefull.DataListPlayers;
 import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
 
 public class CommandRegister implements CommandExecutor {
@@ -32,8 +33,6 @@ public class CommandRegister implements CommandExecutor {
                     String uuidPlayers = Main.plugin.getUuidHash(p);
                     String ipPlayers= p.getAddress().getHostString();
                     String bddUuid = "";
-                    Player player = Main.plugin.getListPlayer(uuidPlayers);
-                    
 
                     try (Connection connection_register = DriverManager.getConnection(
                             ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
@@ -56,8 +55,7 @@ public class CommandRegister implements CommandExecutor {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        player = Main.plugin.getListPlayer(uuidPlayers);
-                        player.kickPlayer("La base de donné n'est pas en ligne merci de reitérer.");
+                        p.kickPlayer("La base de donné n'est pas en ligne merci de reitérer.");  
                     }
 
                     if (uuidPlayers.equals(bddUuid)) {
@@ -86,8 +84,7 @@ public class CommandRegister implements CommandExecutor {
                             DataPlayersFiles.updateHistoriqueSanctions(uuidPlayers, ban, motif_ban, motif_unban,
                                     temp_ban, motif_tempban, mute, motif_mute, motif_unmute, temp_mute, motif_tempmute,
                                     motif_kick, warn, motif_warn, Main.plugin.dataPlayer);
-                            DataListIp.setFile(uuidPlayers, ipPlayers,player);
-
+                            DataListIp.setFile(uuidPlayers, ipPlayers,p);
                             try (Connection connection_addPlayer = DriverManager.getConnection(
                                     ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort()
                                             + "/"

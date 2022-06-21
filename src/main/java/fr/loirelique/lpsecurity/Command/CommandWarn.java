@@ -29,11 +29,10 @@ public class CommandWarn implements TabExecutor {
             if (cmd.getName().equalsIgnoreCase("warn")) { // Si c'est la commande "banish" qui a été tapée:
 
                 if (args.length >= 2) {
-                    String pseudo = args[0];
-                    String uuid = Main.plugin.getUuidHash(pseudo);
-                    boolean condition = false;
                     int ban = 2;
-                    int warn = 0;
+                    int warn = 2;
+                    String uuidPlayers = Main.plugin.getUuidHash(args[0]);
+                    boolean condition = false;                    
                     String motifInsert = args[1];              
 
                     try (Connection connection_register = DriverManager.getConnection(
@@ -45,7 +44,7 @@ public class CommandWarn implements TabExecutor {
                                 + ConfigBdd.getTable1() + " WHERE uuid=?";
                         try (PreparedStatement statement2_select = connection_register
                                 .prepareStatement(requet_Select_sql2)) {
-                            statement2_select.setString(1, uuid);
+                            statement2_select.setString(1, uuidPlayers);
 
                             try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
                                 while (resultat_requete_select.next()) {
@@ -93,7 +92,7 @@ public class CommandWarn implements TabExecutor {
                         try (PreparedStatement statement2_select = connection_update1
                                 .prepareStatement(requet_Update_sql2)) {
                             statement2_select.setString(1, "ban");
-                            statement2_select.setString(2, "1");
+                            statement2_select.setInt(2, 1);
                             statement2_select.setString(3, "motif_ban");
                             statement2_select.setString(4, ListWarningDegresAndMotifs.getMotifs(motifInsert));
                             statement2_select.setString(5, "warn");
@@ -101,7 +100,7 @@ public class CommandWarn implements TabExecutor {
                             statement2_select.setString(7, "motif_warn");
                             statement2_select.setString(8, ListWarningDegresAndMotifs.getMotifs(motifInsert));
        
-                            statement2_select.setString(9, uuid);
+                            statement2_select.setString(9, uuidPlayers);
                             statement2_select.executeUpdate();
                         }
 
@@ -109,7 +108,7 @@ public class CommandWarn implements TabExecutor {
                         e.printStackTrace();
                     }
 
-                    p.sendMessage(MessageWarn.setColorWarnAndBan() + "[" + pseudo + "] " + MessageWarn.getWarnAndBan());
+                    p.sendMessage(MessageWarn.setColorWarnAndBan() + "[" + args[0] + "] " + MessageWarn.getWarnAndBan());
                     errorCommande = true;
 
                     }else if (condition == false && ban == 0) {
@@ -129,7 +128,7 @@ public class CommandWarn implements TabExecutor {
                             statement2_select.setString(2, Integer.toString(warn));
                             statement2_select.setString(3, "motif_warn");
                             statement2_select.setString(4, ListWarningDegresAndMotifs.getMotifs(motifInsert));
-                            statement2_select.setString(5, uuid);
+                            statement2_select.setString(5,  uuidPlayers);
                             statement2_select.executeUpdate();
                         }
 
@@ -137,11 +136,11 @@ public class CommandWarn implements TabExecutor {
                         e.printStackTrace();
                     }
 
-                    p.sendMessage(MessageWarn.setColorWarn() + "[" + pseudo + "] " + MessageWarn.getWarn());
+                    p.sendMessage(MessageWarn.setColorWarn() + "[" + args[0] + "] " + MessageWarn.getWarn());
                     errorCommande = true;
 
                     }else{
-                        p.sendMessage(MessageWarn.setColorAlreadyWarnAndBan() + "[" + pseudo + "] "
+                        p.sendMessage(MessageWarn.setColorAlreadyWarnAndBan() + "[" + args[0] + "] "
                         + MessageWarn.getAlreadyWarnAndBan());
                           errorCommande = true;
                     }
