@@ -38,7 +38,7 @@ public class CommandUnban implements CommandExecutor {
                         }else if (ban == 0) {p.sendMessage(MessageUnban.setColorAlreadyUnban() + "[" + args[0] + "] "+ MessageUnban.getAlreadyUnban());return true;}
                     }else {p.sendMessage(MessageUnban.setColorErrorUnban() + MessageUnban.getErrorUnban());return false;}
                 }
-            }
+            }else{p.sendMessage("Pas la permission"); return true;}
         }else{return false;}
         return false;
     }

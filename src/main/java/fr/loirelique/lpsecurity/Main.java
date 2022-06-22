@@ -55,6 +55,8 @@ import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageKick;
 import fr.loirelique.lpsecurity.String.MessageLogin;
 import fr.loirelique.lpsecurity.String.MessageRegister;
+import fr.loirelique.lpsecurity.String.MessageTempban;
+import fr.loirelique.lpsecurity.String.MessageTempmute;
 import fr.loirelique.lpsecurity.Usefull.DateAndTime;
 import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
 import fr.loirelique.lpsecurity.Usefull.DataFolder;
@@ -120,8 +122,9 @@ public class Main extends JavaPlugin implements Listener {
         CommandExecutor commandMute = new CommandMute();
         getCommand("mute").setExecutor(commandMute);
 
-        CommandExecutor commandTempmute = new CommandTempmute();
+        TabExecutor commandTempmute = new CommandTempmute();
         getCommand("tempmute").setExecutor(commandTempmute);
+        getCommand("tempmute").setTabCompleter(commandTempmute);
 
         CommandExecutor commandUnmute = new CommandUnmute();
         getCommand("unmute").setExecutor(commandUnmute);
@@ -147,6 +150,8 @@ public class Main extends JavaPlugin implements Listener {
 
         ListWarningDegresAndMotifs.initializeList();
         DateAndTime.initializeList();
+        MessageTempban.initializelist();
+        MessageTempmute.initializelist();
         DataFolder.create(dataPlayer);
         DataFolder.create(dataList);
         DataFolder.create(dataListSupport);
@@ -157,8 +162,7 @@ public class Main extends JavaPlugin implements Listener {
         Bukkit.getConsoleSender().sendMessage("§4|   |__) (    §l§2LPsecurity §l§4v1.0 §l§8(by LoiRelique)");
         Bukkit.getConsoleSender().sendMessage("§4|__ |   __)   §l§8Running on Spigot 1.8.8");
         Bukkit.getConsoleSender().sendMessage("");
-   
-        
+       
     }
 
     /**
@@ -311,7 +315,7 @@ public class Main extends JavaPlugin implements Listener {
         }
 
         if (temp_mute.equals("null") == true && mute == 1) {
-            DataPlayersFiles.setMuteAndMotif(uuidPlayers, mute, motif_mute, dataPlayer);
+            DataPlayersFiles.setMuteAndMotif(uuidPlayers, motif_mute);
         } else if (temp_mute.equals("null") == false && mute == 1) {
             Calendar dateTimeNow1 = Calendar.getInstance();
             Date dateTimeZone1 = dateTimeNow1.getTime();
@@ -347,7 +351,7 @@ public class Main extends JavaPlugin implements Listener {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                DataPlayersFiles.setMuteTempMuteAndMotif(uuidPlayers, mute, temp_mute, motif_tempmute, dataPlayer);
+                DataPlayersFiles.setUnmuteTempMuteAndMotif(uuidPlayers);
             }
 
             long endTime = System.nanoTime();
@@ -373,7 +377,6 @@ public class Main extends JavaPlugin implements Listener {
         // Ajoue Player à la listePlayer
         DataListPlayers.setFile(uuidPlayers, p);
         listPlayer.put(uuidPlayers, p);
-        System.out.println(listPlayer.get("a6a9d1f3cd91aef61e7da3324a31a676"));
 
         // On fait un requet qui récupère l'uuid du joueur et on le cherche dans la base
         // de donnée.

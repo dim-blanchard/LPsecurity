@@ -26,55 +26,54 @@ public class CommandTempban implements TabExecutor {
             Player p = (Player) sender;// On récupère le joueur.
             if (p.hasPermission("lpsecurity.tempban")) {
                 if (cmd.getName().equalsIgnoreCase("tempban")) { // Si c'est la commande "banish" qui a été tapée:
-                    if (args.length >= 2) {
+                    if (args.length >= 3) {
                         int ban = 2;
                         String uuidPlayers = Main.plugin.getUuidHash(args[0]);
 
-                        if (TestString.isNumber(args[1])==false) {p.sendMessage("Le nombre de temps donner ne dois comporter que des chiffres.");return true;
+                        if (TestString.isNumber(args[1])==false) {p.sendMessage("§dLe nombre de temps donner ne dois comporter que des chiffres.");return true;
                         }else if(TestString.isNumber(args[1])==true) {
                             int donneTemps = Integer.parseInt(args[1]);
                             String typeTemps = args[2];                       
-                            if (typeTemps.length()==0){
-                                p.sendMessage(MessageTempban.setColorErrorTempban() + MessageTempban.getErrorTempban());
-                                return false;
-                            }else{
                             String temp_ban = DateAndTime.getDateToString(donneTemps, typeTemps);
+                            //Motif builder
                             String motif_tempban = MotifBuilder.getMotif(args, 3);
-                            
-                            //Request Sql Select.
-                            ban = RequestBan.getBan(uuidPlayers);
-                                if (ban == 0) {
-                                    if (motif_tempban.length()==0) {
-                                        p.sendMessage(MessageTempban.setColorErrorTempban() + MessageTempban.getErrorTempban());return false;
-                                    }else{
-                                    //Request Sql Update.
-                                    RequestTempban.setBanAndTempBanMotif(uuidPlayers, motif_tempban, temp_ban);
-                                    //Data Player Update.
-                                    DataPlayersFiles.setBanAndTempBanMotif(uuidPlayers, motif_tempban , temp_ban);
-                                    //Valid Message Tempban. 
-                                    p.sendMessage(MessageTempban.setColorTempban() + "[" + args[0] + "] "+ MessageTempban.getTempban());
-                                    //Message Kick
-                                    if (DataPlayersFiles.getIsOnline(uuidPlayers, Main.plugin.dataPlayer) == true ) {
-                                        Player player = DataListPlayers.getObjectPlayers(uuidPlayers);                              
-                                        player.kickPlayer("Banniessement temporaire: " + motif_tempban);
-                                    }
-                                    return true;  
-                                    }                             
-                                }else if(ban == 1){p.sendMessage(MessageTempban.setColoralreadyTempban() + "[" + args[0] + "] "+ MessageTempban.getAlreadyTempban());return true;}
-                        }
+                            if (temp_ban.equals("error")==true) {p.sendMessage(MessageTempban.setColorErrorTempban() + MessageTempban.getErrorTempban());return false;
+                            }else if (motif_tempban.length()==0) {p.sendMessage(MessageTempban.setColorErrorTempban() + MessageTempban.getErrorTempban());return false;
+                            }else{
+                                //Request Sql Select.
+                                ban = RequestBan.getBan(uuidPlayers);
+                                    if (ban == 0) {
+                                        //Request Sql Update.
+                                        RequestTempban.setBanAndTempBanMotif(uuidPlayers, motif_tempban, temp_ban);
+                                        //Data Player Update.
+                                        DataPlayersFiles.setBanAndTempBanMotif(uuidPlayers, motif_tempban , temp_ban);
+                                         //Valid Message Tempban. 
+                                        p.sendMessage(MessageTempban.setColorTempban() + "[" + args[0] + "] "+ MessageTempban.getTempban());
+                                        //Message Kick
+                                        if (DataPlayersFiles.getIsOnline(uuidPlayers, Main.plugin.dataPlayer) == true ) {
+                                            Player player = DataListPlayers.getObjectPlayers(uuidPlayers);                              
+                                            player.kickPlayer("Banniessement temporaire: " + motif_tempban);
+                                        }
+                                        return true;                              
+                                    }else if(ban == 1){p.sendMessage(MessageTempban.setColoralreadyTempban() + "[" + args[0] + "] "+ MessageTempban.getAlreadyTempban());return true;}                       
                             }
+                        }
          
                     }else{p.sendMessage(MessageTempban.setColorErrorTempban() + MessageTempban.getErrorTempban());return false;}
                 }
-            }
+            }else{p.sendMessage("Pas la permission"); return true;}
         }else{return false;}
     return false;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if (args.length == 3) {
+        if (args.length == 2) {
+            return DateAndTime.getListNumber();
+        }else if (args.length == 3) {
             return DateAndTime.getListTypeTemps();
+        }else if (args.length == 4) {
+            return MessageTempban.getListDefaultReasonMessage();
         }
         return null;
     }

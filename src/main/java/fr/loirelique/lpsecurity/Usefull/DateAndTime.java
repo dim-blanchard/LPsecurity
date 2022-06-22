@@ -10,19 +10,24 @@ import java.util.Locale;
 
 public class DateAndTime {
 
-    private static ArrayList<String> listTypeTemps = new ArrayList<String>();   
+    private static ArrayList<String> listTypeTemps = new ArrayList<String>(); 
+    private static ArrayList<String> listNumber = new ArrayList<String>(); 
     
-
-
     public static void initializeList() {
         listTypeTemps.add("Jours");
         listTypeTemps.add("Mois");
         listTypeTemps.add("Heures");
         listTypeTemps.add("Minutes");
-    }
 
+        for (int i = 1 ; i <= 100; i++) {
+            listNumber.add(Integer.toString(i));
+        }
+    }
     public static ArrayList<String> getListTypeTemps() {
         return listTypeTemps;
+    }  
+    public static ArrayList<String> getListNumber() {
+        return listNumber;
     }
 
 
@@ -53,7 +58,6 @@ public class DateAndTime {
     public static String getDateToString(int donneTemps, String typeTemps) {
             Calendar dateOfTheDay = Calendar.getInstance();
             Date date = dateOfTheDay.getTime();
-            String value="";
             if (typeTemps.equals("Jours")) {
                 dateOfTheDay.add(Calendar.DATE, donneTemps);
                 date = dateOfTheDay.getTime();
@@ -67,8 +71,10 @@ public class DateAndTime {
                 dateOfTheDay.add(Calendar.MINUTE, donneTemps);
                 date = dateOfTheDay.getTime();
             }else if (!typeTemps.equals("Jours") && !typeTemps.equals("Mois") && !typeTemps.equals("Heures") && !typeTemps.equals("Minutes")) {
-                return value;
+                return "error";
             }
             return date.toString();        
     }
+
+
 }

@@ -4,8 +4,6 @@ version: 1.0
 description: Ce plugin incorport la sécurité du serveur au niveau des joueurs et de leurs compte utilisateur ainsi qu'une partie sanction.
 author: LoiRelique
 
-
-
 commands:
   register:
     description: Permet d'enregister son mdp à la premiere connection.(LPsecurity)

@@ -1,6 +1,7 @@
 package fr.loirelique.lpsecurity.String;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 import fr.loirelique.lpsecurity.Main;
 
@@ -40,6 +41,16 @@ public class MessageTempban {
         String colorAlreadyTempban = Main.plugin.getConfig().getString("string.color_already_tempban");
         colorAlreadyTempban = new String(colorAlreadyTempban.getBytes(), StandardCharsets.UTF_8);
         return colorAlreadyTempban;
+    }
+
+    private static ArrayList<String> listDefaultReasonMessage = new ArrayList<String>(); 
+    public static void initializelist() {
+         String defaultReason=Main.plugin.getConfig().getString("string.default_reason_tempban");
+        defaultReason = new String(defaultReason.getBytes(), StandardCharsets.UTF_8);
+        listDefaultReasonMessage.add(defaultReason);
+    }
+    public static ArrayList<String> getListDefaultReasonMessage() {
+        return listDefaultReasonMessage;
     }
 
 }

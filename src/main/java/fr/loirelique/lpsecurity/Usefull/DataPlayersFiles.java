@@ -39,7 +39,7 @@ public class DataPlayersFiles {
 
             fileConfiguration.set("isOnline", false);
             fileConfiguration.set("isLogin", false);
-            fileConfiguration.set("number_tentative_login",0);
+            fileConfiguration.set("number_tentative_login", 0);
             try {
                 fileConfiguration.save(file);
             } catch (IOException e1) {
@@ -89,39 +89,38 @@ public class DataPlayersFiles {
 
     }
 
-/////////////////////////////////////////////////////
-    public static void defaultInfosPlayers(File f){
- 
-        if(f.isDirectory()){       
-            //lister le contenu du répertoire
-            String files[] = f.list();
-       
-            for (String tmp : files) {
-               File file = new File(f, tmp);
-               //suppression récursive
-               defaultInfosPlayers(file);
-            }            
-        }else{
-        //si il est un fichier, supprimez-le
-            
-        final String chemainFile = Main.plugin.getDataFolder().toString() + Main.plugin.dataPlayer;
-        String nameFile = f.getName();
+    /////////////////////////////////////////////////////
+    public static void defaultInfosPlayers(File f) {
 
-        final File file = new File(chemainFile, nameFile);
-        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);        
-        if (file.exists() == true) {
-            fileConfiguration.set("isOnline", false);
-            fileConfiguration.set("isLogin", false);
-            fileConfiguration.set("number_tentative_login", 0);
-            try {
-                fileConfiguration.save(file);
-            } catch (IOException e1) {
-                e1.printStackTrace();
+        if (f.isDirectory()) {
+            // lister le contenu du répertoire
+            String files[] = f.list();
+
+            for (String tmp : files) {
+                File file = new File(f, tmp);
+                // suppression récursive
+                defaultInfosPlayers(file);
+            }
+        } else {
+            // si il est un fichier, supprimez-le
+
+            final String chemainFile = Main.plugin.getDataFolder().toString() + Main.plugin.dataPlayer;
+            String nameFile = f.getName();
+
+            final File file = new File(chemainFile, nameFile);
+            final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
+            if (file.exists() == true) {
+                fileConfiguration.set("isOnline", false);
+                fileConfiguration.set("isLogin", false);
+                fileConfiguration.set("number_tentative_login", 0);
+                try {
+                    fileConfiguration.save(file);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
         }
-        }
-      }
-  
+    }
 
     //////////////////////////////////////////////////////////////////
     public static void setIsOnline(String uuidPlayers, Boolean isOnline, String chemainFiles) {
@@ -195,6 +194,7 @@ public class DataPlayersFiles {
         }
         return numberTentativeLogin;
     }
+
     public static void setNumberTentativeLogin(String uuidPlayers, int numberTentativeLogin, String chemainFiles) {
 
         final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
@@ -210,12 +210,6 @@ public class DataPlayersFiles {
             }
         }
     }
-
-
-
-
-
-
 
     /*
      * HISTORIQUE SANCTION SECTION MUTE
@@ -242,14 +236,14 @@ public class DataPlayersFiles {
     }
 
     public static void setMuteTempMuteAndMotif(String uuidPlayers,
-            int mute, String temp_mute, String motif_tempmute, String chemainFiles) {
+            String temp_mute, String motif_tempmute) {
 
-        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
+        final String chemainFile = Main.plugin.getDataFolder().toString() + Main.plugin.dataPlayer;
         final String nameFile = uuidPlayers + ".yml";
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
         if (file.exists() == true) {
-            fileConfiguration.set("mute", mute);
+            fileConfiguration.set("mute", 1);
             fileConfiguration.set("temp_mute", temp_mute);
             fileConfiguration.set("motif_tempmute", motif_tempmute);
 
@@ -262,15 +256,34 @@ public class DataPlayersFiles {
 
     }
 
-    public static void setMuteAndMotif(String uuidPlayers,
-            int mute, String motif_mute, String chemainFiles) {
-
-        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
+    public static void setUnmuteTempMuteAndMotif(String uuidPlayers) {
+        final String chemainFile = Main.plugin.getDataFolder().toString() + Main.plugin.dataPlayer;
         final String nameFile = uuidPlayers + ".yml";
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
         if (file.exists() == true) {
-            fileConfiguration.set("mute", mute);
+            fileConfiguration.set("mute", 0);
+            fileConfiguration.set("temp_mute", "null");
+            fileConfiguration.set("motif_tempmute", "null");
+            fileConfiguration.set("motif_unmute", "UnMute au fils du temps.");
+            try {
+                fileConfiguration.save(file);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+    }
+
+    public static void setMuteAndMotif(String uuidPlayers,
+            String motif_mute) {
+
+        final String chemainFile = Main.plugin.getDataFolder().toString() + Main.plugin.dataPlayer;
+        final String nameFile = uuidPlayers + ".yml";
+        final File file = new File(chemainFile, nameFile);
+        final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
+        if (file.exists() == true) {
+            fileConfiguration.set("mute", 1);
             fileConfiguration.set("motif_mute", motif_mute);
             try {
                 fileConfiguration.save(file);
@@ -282,14 +295,14 @@ public class DataPlayersFiles {
     }
 
     public static void setUnmuteAndMotif(String uuidPlayers,
-            int mute, String motif_unmute, String chemainFiles) {
+            String motif_unmute) {
 
-        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
+        final String chemainFile = Main.plugin.getDataFolder().toString() + Main.plugin.dataPlayer;
         final String nameFile = uuidPlayers + ".yml";
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
         if (file.exists() == true) {
-            fileConfiguration.set("mute", mute);
+            fileConfiguration.set("mute", 0);
             fileConfiguration.set("motif_unmute", motif_unmute);
             try {
                 fileConfiguration.save(file);
@@ -360,9 +373,8 @@ public class DataPlayersFiles {
         return value;
     }
 
-    
     public static void setBanAndMotif(String uuidPlayers, String motif_ban) {
-        final String chemainFile = Main.plugin.getDataFolder().toString()+Main.plugin.dataPlayer;
+        final String chemainFile = Main.plugin.getDataFolder().toString() + Main.plugin.dataPlayer;
         final String nameFile = uuidPlayers + ".yml";
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
@@ -378,7 +390,7 @@ public class DataPlayersFiles {
     }
 
     public static void setUnbanAndMotif(String uuidPlayers, String motif_unban) {
-        final String chemainFile = Main.plugin.getDataFolder().toString()+Main.plugin.dataPlayer;
+        final String chemainFile = Main.plugin.getDataFolder().toString() + Main.plugin.dataPlayer;
         final String nameFile = uuidPlayers + ".yml";
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
@@ -394,7 +406,7 @@ public class DataPlayersFiles {
     }
 
     public static void setBanAndTempBanMotif(String uuidPlayers, String motif_tempban, String temp_ban) {
-        final String chemainFile = Main.plugin.getDataFolder().toString()+Main.plugin.dataPlayer;
+        final String chemainFile = Main.plugin.getDataFolder().toString() + Main.plugin.dataPlayer;
         final String nameFile = uuidPlayers + ".yml";
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);

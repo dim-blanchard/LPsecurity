@@ -38,8 +38,7 @@ public class CommandBan implements CommandExecutor {
                             //Message Kick.
                             p.sendMessage(MessageBan.setColorBan() + "[" + args[0] + "] " + MessageBan.getBan());
                             return true;
-                        }
-                        if (ban == 1) {p.sendMessage(MessageBan.setColorAlreadyBan() + "[" + args[0] + "] " + MessageBan.getAlreadyBan());return true;}
+                        }else if (ban == 1) {p.sendMessage(MessageBan.setColorAlreadyBan() + "[" + args[0] + "] " + MessageBan.getAlreadyBan());return true;}
                     }else{p.sendMessage(MessageBan.setColorErrorBan() + MessageBan.getErrorBan()); return false;}
                 }
             }else{p.sendMessage("Pas la permission.");return true;}
