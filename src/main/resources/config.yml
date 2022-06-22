@@ -94,8 +94,9 @@ string:
   error_register: La commande n'a pas été executer.
 #Kick
   #Avant la connection d'un joueur.
-  kick_ip: Ip trop de fois similaire pour plusiseurs personne. 
-  kick_over_ip:  #Nombre d'ip similaire connecter à la fois au serveur.
+  kick_ip: §5Ip trop de fois similaire pour plusiseurs personne. 
+  #Nombre d'ip similaire connecter à la fois au serveur.
+  kick_over_ip: 2 
   kick_online: Joueur deja en ligne.
   kick_ban: Tu es Bannie.
   #Message d'inactiviter pour l'enregistrement ou l'identification d'un joueur.

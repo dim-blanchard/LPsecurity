@@ -16,7 +16,7 @@ public class DataListIp {
     /////////////////////////////////////////
     public static List<String> getFileIp(String nameFiles) {
         List<String> value = new ArrayList<String>();
-        final String chemainFile = Main.plugin.getDataFolder().toString() +"/DataList/Ip";
+        final String chemainFile = Main.plugin.getDataFolder().toString() +Main.plugin.dataListIp;
         final String nameFile = nameFiles + ".yml";
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
@@ -27,7 +27,7 @@ public class DataListIp {
     }
 
     public static void setFile(String uuidPlayers, String ipPlayers, AsyncPlayerPreLoginEvent p_event) {
-        final String chemainFile = Main.plugin.getDataFolder().toString() + "/DataList/Ip";
+        final String chemainFile = Main.plugin.getDataFolder().toString() + Main.plugin.dataListIp;
         final String nameFile = ipPlayers + ".yml";
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
@@ -48,6 +48,7 @@ public class DataListIp {
                 if (ip.size()==MessageKick.getKickOverIp()) {
                    p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
                                                 MessageKick.getKickIp());
+                    DataPlayersFiles.setIsOnline(uuidPlayers, false, Main.plugin.dataPlayer);
                 }else{
                 ip.add(uuidPlayers);
                 fileConfiguration.set("list",ip);
@@ -63,7 +64,7 @@ public class DataListIp {
             
         } else {
             System.out.println("[LPsecurity] File Data List Ip Not Exists.");
-            final List ip = new ArrayList<String>();
+            final List<String> ip = new ArrayList<String>();
             ip.add(uuidPlayers);
             fileConfiguration.set("list", ip);
             try {
@@ -79,7 +80,7 @@ public class DataListIp {
 
     public static void removeFileOrPlayers(String uuidPlayers, String ipPlayers) {
 
-        final String chemainFile = Main.plugin.getDataFolder().toString() + "/DataList/Ip";
+        final String chemainFile = Main.plugin.getDataFolder().toString() + Main.plugin.dataListIp;
         final String nameFile = ipPlayers + ".yml";
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
@@ -87,7 +88,6 @@ public class DataListIp {
         if (file.exists() == true) {
             List<String> Listip = new ArrayList<String>();
             Listip = getFileIp(ipPlayers);
-
             for(int i=0;i<Listip.size();i++){
                 String getIp = Listip.get(i);
                 if (getIp.equals(uuidPlayers)==true) {
@@ -95,8 +95,14 @@ public class DataListIp {
                 }
             }
             if (Listip.size()==0) {
-                //file.delete();
-            }else{             
+                fileConfiguration.set("list", Listip);
+                try {
+                    fileConfiguration.save(file);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }else{           
                 fileConfiguration.set("list",Listip);
                 try {
                     fileConfiguration.save(file);
@@ -110,7 +116,7 @@ public class DataListIp {
     }
 
     public static void setFile(String uuidPlayers, String ipPlayers, Player p_event) {
-        final String chemainFile = Main.plugin.getDataFolder().toString() + "/DataList/Ip";
+        final String chemainFile = Main.plugin.getDataFolder().toString() + Main.plugin.dataListIp;
         final String nameFile = ipPlayers + ".yml";
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);

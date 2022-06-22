@@ -84,10 +84,6 @@ public class Main extends JavaPlugin implements Listener {
     private HashMap<String, Integer> listTacheLogin = new HashMap<String, Integer>();
     private HashMap<String, Integer> listTacheSpawnBlock = new HashMap<String, Integer>();
 
-    // Liste des joueurs. Liste d'ip similaire en fonction du joueur. Liste des
-    // joueurs en Ligne.
-    private HashMap<String, Player> listPlayer = new HashMap<String, Player>();
-
     /**
      * EVENT ON ENBALBLE PLUGIN
      */
@@ -376,7 +372,7 @@ public class Main extends JavaPlugin implements Listener {
         long startTime = System.nanoTime();
         // Ajoue Player à la listePlayer
         DataListPlayers.setFile(uuidPlayers, p);
-        listPlayer.put(uuidPlayers, p);
+
 
         // On fait un requet qui récupère l'uuid du joueur et on le cherche dans la base
         // de donnée.
@@ -446,10 +442,6 @@ public class Main extends JavaPlugin implements Listener {
             Bukkit.getScheduler().cancelTask(getTaskBlockSpawn(p));
             getTaskBlockSpawnRemove(p);
         }
-        // List vidage cache
-        if (listPlayer.get(uuid) != null) {
-            getListPlayerRemove(uuid);
-        }
 
         // Enleve l'ip du joueur de la List
         if (DataListIp.getFileIp(ipPlayers)!=null) {
@@ -511,7 +503,6 @@ public class Main extends JavaPlugin implements Listener {
         String messageSplit0 = messageSplit[0];
         if (DataPlayersFiles.getIsLogin(uuidPlayers, dataPlayer)==false){
             if(messageSplit0.equals("/login")==true|messageSplit0.equals("/register")==true){
-                p.sendMessage("condition /login");
                 p_envent.setCancelled(false);
             }else{
                 p_envent.setCancelled(true);
@@ -674,19 +665,6 @@ public class Main extends JavaPlugin implements Listener {
 
     }
 
-    /**
-     * Getter ajout Player à la listePlayer en fonction du l'UUID.
-     */
-    public Player getListPlayer(String uuid) {
-        return listPlayer.get(uuid);
-    }
-
-    /**
-     * Methode de suppression Player à la listePlayer en fonction du l'UUID.
-     */
-    public void getListPlayerRemove(String uuid) {
-        listPlayer.remove(uuid);
-    }
 
     /**
      * Getter création d'un UUID Player.
