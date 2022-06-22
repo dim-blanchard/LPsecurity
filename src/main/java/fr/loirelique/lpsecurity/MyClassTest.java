@@ -1,7 +1,5 @@
 package fr.loirelique.lpsecurity;
 
-import java.util.ArrayList;
-import java.util.function.Consumer;
 
 public class MyClassTest {
 
