@@ -8,6 +8,26 @@ public class ListSupport {
 
     private static HashMap<String, HashMap<String, Player>> listSupport = new HashMap<String, HashMap<String, Player>>();
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     public static boolean creatSupport(String nomSupport, Player player, String uuidPlayers) {
         boolean error = false;
         Object lisObject[] = listSupport.keySet().toArray();
