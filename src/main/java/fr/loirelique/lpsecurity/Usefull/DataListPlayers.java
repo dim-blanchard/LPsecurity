@@ -54,6 +54,7 @@ public class DataListPlayers {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static List<HashMap<String, Player>> getDataFile() {
         String nameFile = "Players.yml";
         List<HashMap<String, Player>> listPlayers = new ArrayList<HashMap<String, Player>>();
@@ -67,6 +68,7 @@ public class DataListPlayers {
         return listPlayers;
     }
 
+    @SuppressWarnings("unchecked")
     public static boolean testObjectPlayers(String uuidPlayers) {
         List<HashMap<String, Player>> listPlayers = new ArrayList<HashMap<String, Player>>();
         String nameFile = "Players.yml";
@@ -93,6 +95,7 @@ public class DataListPlayers {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static Player getObjectPlayers(String uuidPlayers) {
         List<HashMap<String, Player>> listPlayers = new ArrayList<HashMap<String, Player>>();
         String nameFile = "Players.yml";
@@ -122,6 +125,7 @@ public class DataListPlayers {
         return objectPlayers;
     }
 
+    @SuppressWarnings("unchecked")
     public static void removeObjectPlayers(String uuidPlayers) {
         List<HashMap<String, Player>> listPlayers = new ArrayList<HashMap<String, Player>>();
         String nameFile = "Players.yml";

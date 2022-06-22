@@ -1,20 +1,13 @@
 package fr.loirelique.lpsecurity.Command;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.junit.runner.Request;
 
 import fr.loirelique.lpsecurity.Main;
 import fr.loirelique.lpsecurity.Request.RequestMute;
 import fr.loirelique.lpsecurity.Request.RequestUnmute;
-import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageUnmute;
 import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
 import fr.loirelique.lpsecurity.Usefull.MotifBuilder;

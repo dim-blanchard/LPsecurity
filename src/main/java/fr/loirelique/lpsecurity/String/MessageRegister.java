@@ -25,6 +25,7 @@ public class MessageRegister {
         return registertemps;
     }
 
+    @Deprecated
     public static void sendRegister(Player p) {
         String player_name = p.getName();
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),

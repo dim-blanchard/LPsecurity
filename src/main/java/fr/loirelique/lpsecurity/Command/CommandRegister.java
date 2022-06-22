@@ -16,7 +16,6 @@ import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageLogin;
 import fr.loirelique.lpsecurity.String.MessageRegister;
 import fr.loirelique.lpsecurity.Usefull.DataListIp;
-import fr.loirelique.lpsecurity.Usefull.DataListPlayers;
 import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
 
 public class CommandRegister implements CommandExecutor {

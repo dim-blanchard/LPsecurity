@@ -17,7 +17,7 @@ import fr.loirelique.lpsecurity.String.MessageLogin;
 import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
 
 public class CommandLogin implements CommandExecutor {
-
+    
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         // C'est un joueur qui a effectué la commande
@@ -100,6 +100,7 @@ public class CommandLogin implements CommandExecutor {
                                     Main.plugin.getTaskBlockSpawnRemove(p);
                                 }
     
+                                
                                 MessageLogin.sendAfterLogin(p);
                                 DataPlayersFiles.setNumberTentativeLogin(uuidPlayers, 0, Main.plugin.dataPlayer);
                                 

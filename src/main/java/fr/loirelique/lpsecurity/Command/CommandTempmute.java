@@ -25,41 +25,46 @@ public class CommandTempmute implements TabExecutor {
         if (sender instanceof Player) {
             Player p = (Player) sender;// On récupère le joueur.
             if (p.hasPermission("lpsecurity.tempmute")) {
-                if (cmd.getName().equalsIgnoreCase("tempmute")) { // Si c'est la commande "banish" qui a été tapée:
+                if (cmd.getName().equalsIgnoreCase("tempmute")) { // Si c'est la commande "tempmute" qui a été tapée:
                     if (args.length >= 3) {
                         int mute = 2;
                         String uuidPlayers = Main.plugin.getUuidHash(args[0]);
-                        int donneTemps = 0;
-                        String typeTemps = "";
-                        String temp_mute = "";
-                        if (TestString.isNumber(args[1]) == false){p.sendMessage("Le nombre de temps donner ne dois comporter que des chiffres.");return true;
-                        }else if (TestString.isNumber(args[1]) == true) {
-                            donneTemps = Integer.parseInt(args[1]);
-                            typeTemps = args[2];
-                            temp_mute = DateAndTime.getDateToString(donneTemps, typeTemps);
-                            //Motif Builder.
+
+                        if (TestString.isNumber(args[1])==false) {p.sendMessage("§dLe nombre de temps donner ne dois comporter que des chiffres.");return true;
+                        }else if(TestString.isNumber(args[1])==true) {
+                            int donneTemps = Integer.parseInt(args[1]);
+                            String typeTemps = args[2];                       
+                            String temp_mute = DateAndTime.getDateToString(donneTemps, typeTemps);
+                            //Motif builder
                             String motif_tempmute = MotifBuilder.getMotif(args, 3);
-                            //Request Sql Select.
-                            mute = RequestMute.getMute(uuidPlayers);
-                            if (mute == 0) {
-                                //Request Sql Update.
-                                RequestTempmute.setMuteAndTempMuteMotif(uuidPlayers, temp_mute, motif_tempmute);
-                                //Data Player Update.
-                                DataPlayersFiles.setMuteTempMuteAndMotif(uuidPlayers ,temp_mute, motif_tempmute);
-                                //Valid Message.
-                                p.sendMessage(MessageTempmute.setColorTempmute() + "[" + args[0] + "] "+ MessageTempmute.getTempmute());
-                                //Mute Message.
-                                if (DataPlayersFiles.getIsOnline(uuidPlayers, Main.plugin.dataPlayer) == true ) {Player player = DataListPlayers.getObjectPlayers(uuidPlayers);player.sendMessage("Mute temporaire:" + motif_tempmute);}
-                                return true;
-                            }else if (mute == 1) {p.sendMessage(MessageTempmute.setColoralreadyTempmute() + "[" + args[0] + "] "+ MessageTempmute.getAlreadyTempmute());return true;} 
+                            if (temp_mute.equals("error")==true) {p.sendMessage(MessageTempmute.setColorErrorTempmute() + MessageTempmute.getErrorTempmute());return false;
+                            }else if (motif_tempmute.length()==0) {p.sendMessage(MessageTempmute.setColorErrorTempmute() + MessageTempmute.getErrorTempmute());return false;
+                            }else{
+                                //Request Sql Select.
+                                mute = RequestMute.getMute(uuidPlayers);
+                                    if (mute == 0) {
+                                        //Request Sql Update.
+                                        RequestTempmute.setMuteAndTempMuteMotif(uuidPlayers, temp_mute, motif_tempmute);
+                                        //Data Player Update.
+                                        DataPlayersFiles.setMuteTempMuteAndMotif(uuidPlayers, temp_mute, motif_tempmute);
+                                         //Valid Message Tempmute. 
+                                        p.sendMessage(MessageTempmute.setColorTempmute() + "[" + args[0] + "] "+ MessageTempmute.getTempmute());
+                                        //Message Mute.
+                                        if (DataPlayersFiles.getIsOnline(uuidPlayers, Main.plugin.dataPlayer) == true ) {
+                                            Player player = DataListPlayers.getObjectPlayers(uuidPlayers);                              
+                                            player.sendMessage("Mute temporaire: " + motif_tempmute);
+                                        }
+                                        return true;                              
+                                    }else if(mute == 1){p.sendMessage(MessageTempmute.setColoralreadyTempmute() + "[" + args[0] + "] "+ MessageTempmute.getAlreadyTempmute());return true;}                       
+                            }
                         }
-                    }else {p.sendMessage(MessageTempmute.setColorErrorTempmute() + MessageTempmute.getErrorTempmute());return false;}
-                }else {p.sendMessage(MessageTempmute.setColorErrorTempmute() + MessageTempmute.getErrorTempmute());return false;}
+         
+                    }else{p.sendMessage(MessageTempmute.setColorErrorTempmute() + MessageTempmute.getErrorTempmute());return false;}
+                }
             }else{p.sendMessage("Pas la permission"); return true;}
         }else{return false;}
-        return false;
+    return false;
     }
-
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
@@ -73,5 +78,6 @@ public class CommandTempmute implements TabExecutor {
         return null;
     }
 }
+
 
   

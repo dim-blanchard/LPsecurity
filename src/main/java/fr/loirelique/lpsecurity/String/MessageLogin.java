@@ -55,6 +55,7 @@ public class MessageLogin {
         return afterLoginSubtitles;
     }
 
+    @Deprecated
     public static void sendLogin(Player p) {
         String player_name = p.getName();
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
@@ -62,6 +63,7 @@ public class MessageLogin {
         p.sendTitle(MessageLogin.getLoginTitle(), MessageLogin.getLoginSubtitles());
     }
 
+    @Deprecated
     public static void sendAfterLogin(Player p) {
         String player_name = p.getName();
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "title " + player_name + " times 10 20 10 ");

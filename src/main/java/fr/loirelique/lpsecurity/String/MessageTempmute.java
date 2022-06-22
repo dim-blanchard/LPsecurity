@@ -32,7 +32,7 @@ public class MessageTempmute {
     }
 
     public static String getErrorTempmute() {
-        String errorTempmute = Main.plugin.getConfig().getString("string.error_tempute");
+        String errorTempmute = Main.plugin.getConfig().getString("string.error_tempmute");
         errorTempmute = new String(errorTempmute.getBytes(), StandardCharsets.UTF_8);
         return errorTempmute;
     }

@@ -14,7 +14,7 @@ import fr.loirelique.lpsecurity.Main;
 public class DataListFiles {
 
      
-
+    @SuppressWarnings("unchecked")
     public static void supportJoin(String chemainFiles, String nameSupport, String uuidPlayers, String Players) {
         final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
         final String nameFile = nameSupport + ".yml";
@@ -48,7 +48,7 @@ public class DataListFiles {
             System.out.println("[LPsecurity] File Data List Support Exists.");
         } else {
             System.out.println("[LPsecurity] File Data List Support Not Exists.");
-            final List player = new ArrayList<String>();
+            final List<String> player = new ArrayList<String>();
             player.add(uuidPlayers + "&" + Players);
             fileConfiguration.set("list", player);
             try {
@@ -61,31 +61,28 @@ public class DataListFiles {
     }
 
     /////////////////////////////////////////
-    public static List getKeyList(String nameFiles, String key, String chemainFiles) {
-        List value = new ArrayList<String>();
+    @SuppressWarnings("unchecked")
+    public static List<String> getKeyList(String nameFiles, String key, String chemainFiles) {
+        List<String> value = new ArrayList<String>();
         final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
         final String nameFile = nameFiles + ".yml";
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
         if (file.exists() == true) {
-            System.out.println("Get String key");
-            value = fileConfiguration.getList(key);
+            value = (List<String>) fileConfiguration.getList(key);
         }
         return value;
     }
 
     ///////////////////////
-    public static HashMap getSupport(String nameFiles) {
+    public static HashMap<String,String> getSupport(String nameFiles) {
         HashMap<String, String> myMap = new HashMap<String, String>();
         String test = "null";
-        List value = new ArrayList<String>();
         final String chemainFile = Main.plugin.getDataFolder().toString() + "/DataList/Support";
         final String nameFile = nameFiles + ".yml";
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
         if (file.exists() == true) {
-            System.out.println("Get String key");
-            value = fileConfiguration.getList("list");
         }
         test = fileConfiguration.get("list").toString();
         test = test.substring(1, (test.length() - 1));
@@ -103,19 +100,20 @@ public class DataListFiles {
         return myMap;
     }
 
+/*     @SuppressWarnings("unchecked")
     public static boolean setListSupport(String nameFiles, String key, String chemainFiles) {
         boolean error = false;
         HashMap<String, String> myMap = new HashMap<String, String>();
         String str = "null";
-        List value = new ArrayList<String>();
+        List<String> value = new ArrayList<String>();
         final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
         final String nameFile = nameFiles + ".yml";
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
         if (file.exists() == true) {
             System.out.println("Get String key");
-            value = fileConfiguration.getList(key);
-        }
+            value = (List<String>) fileConfiguration.getList(key);
+        
         str = fileConfiguration.get(key).toString();
         str = str.substring(1, (str.length() - 1));
         str = str.replaceAll(" ", "");
@@ -127,10 +125,10 @@ public class DataListFiles {
             myMap.put(keyValue[0], keyValue[1]);
 
             System.out.println(keyValue[0] + "" + keyValue[1]);
-        }
+        }}
 
         return error;
-    }
+    } */
 
    
 
