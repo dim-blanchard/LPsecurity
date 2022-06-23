@@ -32,44 +32,13 @@ public class CommandHistorique implements CommandExecutor {
                         String motif_warn = "null";
                         String motif_unmute = "null";
                         String motif_tempmute = "null";
-                        String ban = "0";
-                        String warn = "0";
-                        try (Connection connection_register = DriverManager.getConnection(
-                            ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
-                                    + ConfigBdd.getDatabase1()
-                                    + "?characterEncoding=latin1&useConfigs=maxPerformance",
-                            ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-                        String requet_Select_sql2 = "SELECT   historique_sanctions->>'$.ban',historique_sanctions->>'$.warn',historique_sanctions->>'$.motif_ban',historique_sanctions->>'$.motif_tempban',historique_sanctions->>'$.motif_unban',historique_sanctions->>'$.motif_kick',historique_sanctions->>'$.motif_warn',historique_sanctions->>'$.motif_mute',historique_sanctions->>'$.motif_unmute',historique_sanctions->>'$.motif_tempmute' FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
-                        try (PreparedStatement statement2_select = connection_register
-                                .prepareStatement(requet_Select_sql2)) {
-                            statement2_select.setString(1, uuidPlayers);
+                        int ban = 0;
+                        int warn = 0;
 
-                            try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
-                                while (resultat_requete_select.next()) {
-                                   // ban = resultat_requete_select.getInt("ban");
-                                   motif_ban = resultat_requete_select.getString("historique_sanctions->>'$.motif_ban'");
-                                   motif_tempban = resultat_requete_select.getString("historique_sanctions->>'$.motif_tempban'");
-                                   motif_unban = resultat_requete_select.getString("historique_sanctions->>'$.motif_unban'");
-
-                                   motif_mute = resultat_requete_select.getString("historique_sanctions->>'$.motif_mute'");
-                                   motif_tempmute = resultat_requete_select.getString("historique_sanctions->>'$.motif_tempmute'");
-                                   motif_unmute = resultat_requete_select.getString("historique_sanctions->>'$.motif_unmute'");
-
-                                   motif_kick = resultat_requete_select.getString("historique_sanctions->>'$.motif_kick'");
-                                   motif_warn = resultat_requete_select.getString("historique_sanctions->>'$.motif_warn'");
-
-                                   ban = resultat_requete_select.getString("historique_sanctions->>'$.ban'");
-                                   warn = resultat_requete_select.getString("historique_sanctions->>'$.warn'"); 
-                                }   
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                        if (!ban.equals("0")) {
+                        if (ban!=0) {
                             p.sendMessage("["+args[0]+"]"+" Ban: "+ban);
                         }
-                        if (!warn.equals("0")) {
+                        if (warn!=0) {
                             p.sendMessage("["+args[0]+"]"+" Warn: "+warn);
                         }
                         if (!motif_ban.equals("null")) {
