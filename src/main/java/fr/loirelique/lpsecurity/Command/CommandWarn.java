@@ -1,9 +1,5 @@
 package fr.loirelique.lpsecurity.Command;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,148 +10,74 @@ import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
 import fr.loirelique.lpsecurity.List.ListWarningDegresAndMotifs;
-import fr.loirelique.lpsecurity.String.ConfigBdd;
+import fr.loirelique.lpsecurity.Request.RequestHistoriqueSanction;
+import fr.loirelique.lpsecurity.Request.RequestWarn;
 import fr.loirelique.lpsecurity.String.MessageWarn;
+import fr.loirelique.lpsecurity.Usefull.DataListPlayers;
+import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
 
 public class CommandWarn implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         // C'est un joueur qui a effectué la commande
-        boolean errorCommande = false;
         if (sender instanceof Player) {
-            Player p = (Player) sender;// On récupère le joueur.
+            Player p = (Player) sender;
+            if (p.hasPermission("lpsecurity.warn")) {
+                if (cmd.getName().equalsIgnoreCase("warn")) { // Si c'est la commande "warn" qui a été tapée:
+                    if (args.length == 2 ) {
+                        String uuidPlayers = Main.plugin.getUuidHash(args[0]);
+                        boolean condition = false;                    
+                        String motif_warn = args[1]; 
 
-            if (cmd.getName().equalsIgnoreCase("warn")) { // Si c'est la commande "banish" qui a été tapée:
+                        //Request Sql Select
+                        RequestHistoriqueSanction requet = new RequestHistoriqueSanction(uuidPlayers);
+                        int ban = requet.getBan();
+                        int warn = requet.getWarn();
 
-                if (args.length >= 2) {
-                    int ban = 2;
-                    int warn = 2;
-                    String uuidPlayers = Main.plugin.getUuidHash(args[0]);
-                    boolean condition = false;                    
-                    String motifInsert = args[1];              
-
-                    try (Connection connection_register = DriverManager.getConnection(
-                            ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
-                                    + ConfigBdd.getDatabase1()
-                                    + "?characterEncoding=latin1&useConfigs=maxPerformance",
-                            ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-                        String requet_Select_sql2 = "SELECT historique_sanctions->>'$.ban',historique_sanctions->>'$.warn' FROM "
-                                + ConfigBdd.getTable1() + " WHERE uuid=?";
-                        try (PreparedStatement statement2_select = connection_register
-                                .prepareStatement(requet_Select_sql2)) {
-                            statement2_select.setString(1, uuidPlayers);
-
-                            try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
-                                while (resultat_requete_select.next()) {
-                                    ban = resultat_requete_select.getInt("historique_sanctions->>'$.ban'");
-                                    warn = resultat_requete_select.getInt("historique_sanctions->>'$.warn'");
-                                }
-                            }
+                        //Get degres of motifs.
+                        if (motif_warn.equals(MessageWarn.getMotifWarnLvl1())) {
+                            warn += ListWarningDegresAndMotifs.getDegres(motif_warn);
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    if (motifInsert.equals(MessageWarn.getMotifWarnLvl1())) {
-                        warn += ListWarningDegresAndMotifs.getDegres(motifInsert);
-                    }
-                    if (motifInsert.equals(MessageWarn.getMotifWarnLvl2())) {
-                        warn += ListWarningDegresAndMotifs.getDegres(motifInsert);
-                    }
-                    if (motifInsert.equals(MessageWarn.getMotifWarnLvl3())) {
-                        warn += ListWarningDegresAndMotifs.getDegres(motifInsert);
-                    }
-                    if (warn >= ListWarningDegresAndMotifs.getWarnDegresMax()) {
-                        condition = true;
-                    }else{
-                        condition = false;
-                    }
-                    if (condition == true && ban ==1) {
-                        p.sendMessage("joueur bannie regarder l'historique de sanctions.");
-                    }
-                    if (condition == false && ban ==1) {
-                        p.sendMessage("joueur bannie regarder l'historique de sanctions");
-                    }
-                    
-                    if (condition == true && ban == 0) {
-                        //Bannie
-                        try (Connection connection_update1 = DriverManager.getConnection(
-                            ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
-                                    ConfigBdd.getPort()
-                                    + "/"
-                                    + ConfigBdd.getDatabase1()
-                                    + "?characterEncoding=latin1&useConfigs=maxPerformance",
-                            ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-                        String requet_Update_sql2 = "UPDATE " + ConfigBdd.getTable1() +
-                                " SET historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')), historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')), historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')), historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,''))  WHERE uuid=?";
-                        try (PreparedStatement statement2_select = connection_update1
-                                .prepareStatement(requet_Update_sql2)) {
-                            statement2_select.setString(1, "ban");
-                            statement2_select.setInt(2, 1);
-                            statement2_select.setString(3, "motif_ban");
-                            statement2_select.setString(4, ListWarningDegresAndMotifs.getMotifs(motifInsert));
-                            statement2_select.setString(5, "warn");
-                            statement2_select.setString(6, Integer.toString(warn));
-                            statement2_select.setString(7, "motif_warn");
-                            statement2_select.setString(8, ListWarningDegresAndMotifs.getMotifs(motifInsert));
-       
-                            statement2_select.setString(9, uuidPlayers);
-                            statement2_select.executeUpdate();
+                        if (motif_warn.equals(MessageWarn.getMotifWarnLvl2())) {
+                            warn += ListWarningDegresAndMotifs.getDegres(motif_warn);
+                        }
+                        if (motif_warn.equals(MessageWarn.getMotifWarnLvl3())) {
+                            warn += ListWarningDegresAndMotifs.getDegres(motif_warn);
                         }
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                        //Condition of degres.
+                        if (warn >= ListWarningDegresAndMotifs.getWarnDegresMax()) {condition = true;}
+                        else{condition = false;}
 
-                    p.sendMessage(MessageWarn.setColorWarnAndBan() + "[" + args[0] + "] " + MessageWarn.getWarnAndBan());
-                    errorCommande = true;
-
-                    }else if (condition == false && ban == 0) {
-                        //warn 
-                        try (Connection connection_update2 = DriverManager.getConnection(
-                            ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
-                                    ConfigBdd.getPort()
-                                    + "/"
-                                    + ConfigBdd.getDatabase1()
-                                    + "?characterEncoding=latin1&useConfigs=maxPerformance",
-                            ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-                        String requet_Update_sql2 = "UPDATE " + ConfigBdd.getTable1() +
-                                " SET historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')), historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) WHERE uuid=?";
-                        try (PreparedStatement statement2_select = connection_update2
-                                .prepareStatement(requet_Update_sql2)) {
-                            statement2_select.setString(1, "warn");
-                            statement2_select.setString(2, Integer.toString(warn));
-                            statement2_select.setString(3, "motif_warn");
-                            statement2_select.setString(4, ListWarningDegresAndMotifs.getMotifs(motifInsert));
-                            statement2_select.setString(5,  uuidPlayers);
-                            statement2_select.executeUpdate();
+                        //Test of condition
+                        if (condition == true && ban ==1) {
+                            p.sendMessage(MessageWarn.setColorAlreadyWarnAndBan() + "[" + args[0] + "] "
+                            + MessageWarn.getAlreadyWarnAndBan());
+                            return true;
+                        }else if (condition == false && ban ==1) {
+                            p.sendMessage("Le joueur est bannie les warn ne fonctionne plus.");
+                        }       
+                        //If the condition was true and ban zero the player is ban 1 and kick if islogin true.
+                        if (condition == true && ban == 0) {
+                            RequestWarn.setWarnBanAndMotifs(uuidPlayers,warn,motif_warn);
+                            if (DataPlayersFiles.getIsOnline(uuidPlayers, Main.plugin.dataPlayer)==true) {Player player = DataListPlayers.getObjectPlayers(uuidPlayers);player.kickPlayer("Motif Warn: "+ ListWarningDegresAndMotifs.getMotifs(motif_warn));}    
+                            p.sendMessage(MessageWarn.setColorWarnAndBan() + "[" + args[0] + "] " + MessageWarn.getWarnAndBan());
+                            return true;
+                        
+                        //If the condition was false and ban zero the player is warn incrementation.
+                        }else if (condition == false && ban == 0) { 
+                            RequestWarn.setWarnAndMotif(uuidPlayers, warn, motif_warn);
+                            if (DataPlayersFiles.getIsOnline(uuidPlayers, Main.plugin.dataPlayer)==true) {Player player = DataListPlayers.getObjectPlayers(uuidPlayers);player.sendMessage("Motif Warn: "+ ListWarningDegresAndMotifs.getMotifs(motif_warn));}
+                            p.sendMessage(MessageWarn.setColorWarn() + "[" + args[0] + "] " + MessageWarn.getWarn());
+                            return true;
                         }
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    p.sendMessage(MessageWarn.setColorWarn() + "[" + args[0] + "] " + MessageWarn.getWarn());
-                    errorCommande = true;
-
-                    }else{
-                        p.sendMessage(MessageWarn.setColorAlreadyWarnAndBan() + "[" + args[0] + "] "
-                        + MessageWarn.getAlreadyWarnAndBan());
-                          errorCommande = true;
-                    }
-
+                    }else{p.sendMessage(MessageWarn.setColorErrorWarn() + MessageWarn.getErrorWarn());return false;}
                 }
-                if (errorCommande == true) {
-                    errorCommande = true;
-                } else if (errorCommande == false) {
-                    errorCommande = false;
-                    p.sendMessage(MessageWarn.setColorErrorWarn() + MessageWarn.getErrorWarn());
-                }
-
-            }
-        }
-        return errorCommande;
+            }else{p.sendMessage("Pas la permission");return true;} 
+        }else{return false;}
+        return false;
     }
 
     @Override

@@ -37,7 +37,7 @@ public class CommandUnmute implements CommandExecutor {
                             return true;
                         }else if(mute == 0){p.sendMessage(MessageUnmute.setColorAlreadyUnmute() + "[" +  args[0] + "] " + MessageUnmute.getAlreadyUnmute());return true;}
                     }else{p.sendMessage(MessageUnmute.setColorErrorUnmute() + MessageUnmute.getErrorUnmute());return false;}
-                }else{p.sendMessage(MessageUnmute.setColorErrorUnmute() + MessageUnmute.getErrorUnmute());return false;}
+                }
             }else{p.sendMessage("Pas la permission"); return true;}
         }else{return false;}
     return false;

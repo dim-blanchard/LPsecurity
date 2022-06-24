@@ -7,8 +7,7 @@ import java.sql.ResultSet;
 
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 
-public class RequestHistorique {
-    
+public class RequestHistoriqueSanction {
     private String motif_ban ="null" ;
     public String getMotif_ban() {return motif_ban;}
     public void setMotif_ban(String motif_ban) {this.motif_ban = motif_ban;}
@@ -42,25 +41,33 @@ public class RequestHistorique {
     public String getMotif_tempmute() {return motif_tempmute;}
     public void setMotif_tempmute(String motif_tempmute) {this.motif_tempmute = motif_tempmute;}
 
-    private int ban =0 ;
+    private int ban = 0 ;
     public int getBan() {return ban;}
     public void setBan(int ban) {this.ban = ban;}
 
-    private int warn =0;
+    private int warn = 0;
     public int getWarn() {return warn;}
     public void setWarn(int warn) {this.warn = warn;}
 
-    private int mute =0;
+    private int mute = 0;
     public int getMute() {return mute;}
     public void setMute(int mute) {this.mute = mute;}
 
-    public RequestHistorique(String uuidPlayers) {
+    private String tempmute ="null";
+    public String getTempmute() {return tempmute;}
+    public void setTempmute(String tempmute) {this.tempmute = tempmute;}
+
+    private String tempban="null";
+    public String getTempban() {return tempban;}
+    public void setTempban(String tempban) {this.tempban = tempban;}
+
+    public RequestHistoriqueSanction(String uuidPlayers) {
                 try (Connection connection = DriverManager.getConnection(
                 ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
                         + ConfigBdd.getDatabase1()
                         + "?characterEncoding=latin1&useConfigs=maxPerformance",
                 ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-            String requet_Select_sql2 = "SELECT  historique_sanctions->>'$.mute', historique_sanctions->>'$.ban',historique_sanctions->>'$.warn',historique_sanctions->>'$.motif_ban',historique_sanctions->>'$.motif_tempban',historique_sanctions->>'$.motif_unban',historique_sanctions->>'$.motif_kick',historique_sanctions->>'$.motif_warn',historique_sanctions->>'$.motif_mute',historique_sanctions->>'$.motif_unmute',historique_sanctions->>'$.motif_tempmute' FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
+            String requet_Select_sql2 = "SELECT historique_sanctions->>'$.temp_ban',historique_sanctions->>'$.temp_mute', historique_sanctions->>'$.mute', historique_sanctions->>'$.ban',historique_sanctions->>'$.warn',historique_sanctions->>'$.motif_ban',historique_sanctions->>'$.motif_tempban',historique_sanctions->>'$.motif_unban',historique_sanctions->>'$.motif_kick',historique_sanctions->>'$.motif_warn',historique_sanctions->>'$.motif_mute',historique_sanctions->>'$.motif_unmute',historique_sanctions->>'$.motif_tempmute' FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
             try (PreparedStatement statement2_select = connection
                     .prepareStatement(requet_Select_sql2)) {
                 statement2_select.setString(1, uuidPlayers);
@@ -70,10 +77,12 @@ public class RequestHistorique {
                     setMotif_ban(resultat_requete_select.getString("historique_sanctions->>'$.motif_ban'"));
                     setMotif_tempban(resultat_requete_select.getString("historique_sanctions->>'$.motif_tempban'"));
                     setMotif_unban(resultat_requete_select.getString("historique_sanctions->>'$.motif_unban'"));
+                    setTempban(resultat_requete_select.getString("historique_sanctions->>'$.temp_ban'"));
 
                     setMotif_mute( resultat_requete_select.getString("historique_sanctions->>'$.motif_mute'"));
                     setMotif_tempmute(resultat_requete_select.getString("historique_sanctions->>'$.motif_tempmute'"));;
                     setMotif_unmute(resultat_requete_select.getString("historique_sanctions->>'$.motif_unmute'"));
+                    setTempmute(resultat_requete_select.getString("historique_sanctions->>'$.temp_mute'"));
 
                     setMotif_kick( resultat_requete_select.getString("historique_sanctions->>'$.motif_kick'"));;
                     setMotif_warn(resultat_requete_select.getString("historique_sanctions->>'$.motif_warn'"));
@@ -89,47 +98,6 @@ public class RequestHistorique {
         }
       
     }
-
-
-
-
-
-/*     public void name(String uuidPlayers) {
-
-            try (Connection connection = DriverManager.getConnection(
-                ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
-                        + ConfigBdd.getDatabase1()
-                        + "?characterEncoding=latin1&useConfigs=maxPerformance",
-                ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-            String requet_Select_sql2 = "SELECT   historique_sanctions->>'$.ban',historique_sanctions->>'$.warn',historique_sanctions->>'$.motif_ban',historique_sanctions->>'$.motif_tempban',historique_sanctions->>'$.motif_unban',historique_sanctions->>'$.motif_kick',historique_sanctions->>'$.motif_warn',historique_sanctions->>'$.motif_mute',historique_sanctions->>'$.motif_unmute',historique_sanctions->>'$.motif_tempmute' FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
-            try (PreparedStatement statement2_select = connection
-                    .prepareStatement(requet_Select_sql2)) {
-                statement2_select.setString(1, uuidPlayers);
-
-                try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
-                    while (resultat_requete_select.next()) {
-                    motif_ban = resultat_requete_select.getString("historique_sanctions->>'$.motif_ban'");
-                    motif_tempban = resultat_requete_select.getString("historique_sanctions->>'$.motif_tempban'");
-                    motif_unban = resultat_requete_select.getString("historique_sanctions->>'$.motif_unban'");
-
-                    motif_mute = resultat_requete_select.getString("historique_sanctions->>'$.motif_mute'");
-                    motif_tempmute = resultat_requete_select.getString("historique_sanctions->>'$.motif_tempmute'");
-                    motif_unmute = resultat_requete_select.getString("historique_sanctions->>'$.motif_unmute'");
-
-                    motif_kick = resultat_requete_select.getString("historique_sanctions->>'$.motif_kick'");
-                    motif_warn = resultat_requete_select.getString("historique_sanctions->>'$.motif_warn'");
-
-                    ban = resultat_requete_select.getInt("historique_sanctions->>'$.ban'");
-                    warn = resultat_requete_select.getInt("historique_sanctions->>'$.warn'"); 
-                    }   
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-    } */
 
 
 }

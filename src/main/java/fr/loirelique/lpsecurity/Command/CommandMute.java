@@ -20,7 +20,7 @@ public class CommandMute implements CommandExecutor {
         if (sender instanceof Player) {
             Player p = (Player) sender;// On récupère le joueur.
             if (p.hasPermission("lpsecurity.mute")) {
-                if (cmd.getName().equalsIgnoreCase("mute")) { // Si c'est la commande "banish" qui a été tapée:
+                if (cmd.getName().equalsIgnoreCase("mute")){ // Si c'est la commande "mute" qui a été tapée:
                     if (args.length >= 2) {
                         String uuidPlayers = Main.plugin.getUuidHash(args[0]);
                         int mute = 2;
@@ -40,7 +40,7 @@ public class CommandMute implements CommandExecutor {
                             return true;
                         }else if(mute == 1){p.sendMessage(MessageMute.setColorAlreadyMute() + "[" + args[0] + "] " + MessageMute.getAlreadyMute());return true;}
                     }else{p.sendMessage(MessageMute.setColorErrorMute() + MessageMute.getErrorMute());return false;}
-                }else {p.sendMessage(MessageMute.setColorErrorMute() + MessageMute.getErrorMute());return false;}
+                }
             }else {p.sendMessage("Pas la permission."); return true;}
         }else{return false;}
         return false;
