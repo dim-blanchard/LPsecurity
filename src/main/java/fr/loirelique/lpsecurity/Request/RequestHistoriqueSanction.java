@@ -99,5 +99,7 @@ public class RequestHistoriqueSanction {
       
     }
 
+    public RequestHistoriqueSanction(){ }
+
 
 }

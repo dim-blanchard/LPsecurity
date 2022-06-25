@@ -33,16 +33,16 @@ public class CommandRegister implements CommandExecutor {
                         //If the DataBase Was Online
                         if(requet.isOnline()==false){p.kickPlayer("La base de donné n'est pas en ligne merci de reitérer."); return false;}
                         else{
-                            requet.getAllDatabase(uuidPlayers);
+                            requet.getColomun(uuidPlayers);
                             String uuidPlayersBdd = requet.getUuidPlayers();
 
                             if (uuidPlayers.equals(uuidPlayersBdd)){p.sendMessage(MessageRegister.getwrongRegister());} 
                             else {
                                 if (args[0].equals(args[1]) && args[0].length() >= 8 && args[1].length() >= 8) {
                                     //Data Players Files Update
-                                    DataPlayersFiles.updateHistoriqueSanctions(uuidPlayers, 0, "null", "null",
+                                    DataPlayersFiles.setHistoriqueSanctions(uuidPlayers, 0, "null", "null",
                                     "null", "null", 0, "null", "null", "null", "null",
-                                    "null", 0, "null", Main.plugin.dataPlayer);
+                                    "null", 0, "null");
                                     //??
                                     DataListIp.setFile(uuidPlayers, ipPlayers,p);
 

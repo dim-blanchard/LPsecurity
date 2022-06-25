@@ -25,7 +25,7 @@ public class CommandLogin implements CommandExecutor {
 
                         //Request Sql Select.
                         RequestDatabase requet = new RequestDatabase();
-                        requet.getAllDatabase(uuidPlayers);
+                        requet.getColomun(uuidPlayers);
                         String uuidPlayersbdd = requet.getUuidPlayers();
                         String passwordBdd = requet.getPassword();
                         

@@ -37,7 +37,7 @@ public class DataPlayersFiles {
 
             fileConfiguration.set("motif_kick", "null");
 
-            fileConfiguration.set("isOnline", true);
+            fileConfiguration.set("isOnline", false);
             fileConfiguration.set("isLogin", false);
             fileConfiguration.set("number_tentative_login", 0);
             try {
@@ -49,15 +49,15 @@ public class DataPlayersFiles {
         }
     }
 
-    public static void updateHistoriqueSanctions(String uuidPlayers,
+    public static void setHistoriqueSanctions(String uuidPlayers,
             int ban, String motif_ban, String motif_unban,
             String temp_ban, String motif_tempban,
             int mute, String motif_mute, String motif_unmute,
             String temp_mute, String motif_tempmute,
             String motif_kick,
-            int warn, String motif_warn, String chemainFiles) {
+            int warn, String motif_warn) {
 
-        final String chemainFile = Main.plugin.getDataFolder().toString() + chemainFiles;
+        final String chemainFile = Main.plugin.getDataFolder().toString() + Main.plugin.dataPlayer;
         final String nameFile = uuidPlayers + ".yml";
         final File file = new File(chemainFile, nameFile);
         final YamlConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(file);
