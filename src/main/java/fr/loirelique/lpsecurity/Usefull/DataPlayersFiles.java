@@ -37,7 +37,7 @@ public class DataPlayersFiles {
 
             fileConfiguration.set("motif_kick", "null");
 
-            fileConfiguration.set("isOnline", false);
+            fileConfiguration.set("isOnline", true);
             fileConfiguration.set("isLogin", false);
             fileConfiguration.set("number_tentative_login", 0);
             try {
