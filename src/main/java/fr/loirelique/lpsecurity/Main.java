@@ -51,6 +51,10 @@ import fr.loirelique.lpsecurity.List.CommandJoinSupport;
 import fr.loirelique.lpsecurity.List.CommandListSupport;
 import fr.loirelique.lpsecurity.List.CommandRemovesupport;
 import fr.loirelique.lpsecurity.List.ListWarningDegresAndMotifs;
+import fr.loirelique.lpsecurity.Request.RequestDatabase;
+import fr.loirelique.lpsecurity.Request.RequestHistoriqueSanction;
+import fr.loirelique.lpsecurity.Request.RequestTempban;
+import fr.loirelique.lpsecurity.Request.RequestTempmute;
 import fr.loirelique.lpsecurity.String.ConfigBdd;
 import fr.loirelique.lpsecurity.String.MessageKick;
 import fr.loirelique.lpsecurity.String.MessageLogin;
@@ -148,6 +152,7 @@ public class Main extends JavaPlugin implements Listener {
         DateAndTime.initializeList();
         MessageTempban.initializelist();
         MessageTempmute.initializelist();
+
         DataFolder.create(dataPlayer);
         DataFolder.create(dataList);
         DataFolder.create(dataListSupport);
@@ -175,185 +180,76 @@ public class Main extends JavaPlugin implements Listener {
      */
     @EventHandler
     public void playerBeforeJoinServer(AsyncPlayerPreLoginEvent p_event) {
+
         String uuidPlayers = getUuidHash(p_event);
         String ipPlayers = p_event.getAddress().getHostAddress();
 
-        int ban = 2;
-        String motif_ban = "null";
-        String motif_unban = "null";
+        //Object Request.
+        RequestDatabase requet = new RequestDatabase();
 
-        String temp_ban = "null";
-        String motif_tempban = "null";
-
-        int mute = 2;
-        String motif_mute = "null";
-        String motif_unmute = "null";
-
-        String temp_mute = "null";
-        String motif_tempmute = "null";
-
-        String motif_kick = "null";
-
-        int warn = 2;
-        String motif_warn = "null";
-
-        DataPlayersFiles.create(uuidPlayers, dataPlayer);
-
-        long startTime = System.nanoTime();
-        // On fait une requet dans la base de donnée qui retourne la valeur de la
-        // colomne "ban" en fonction de la colomne "uuid".
-        try (Connection connection_register = DriverManager.getConnection(
-                ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
-                        + ConfigBdd.getDatabase1()
-                        + "?characterEncoding=latin1&useConfigs=maxPerformance",
-                ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-            String requet_Select_sql2 = "SELECT  historique_sanctions->>'$.motif_kick',historique_sanctions->>'$.motif_warn',historique_sanctions->>'$.warn', historique_sanctions->>'$.ban', historique_sanctions->>'$.temp_ban', historique_sanctions->>'$.motif_tempban',historique_sanctions->>'$.motif_unban' ,historique_sanctions->>'$.motif_ban', historique_sanctions->>'$.mute', historique_sanctions->>'$.motif_unmute', historique_sanctions->>'$.motif_mute', historique_sanctions->>'$.motif_tempmute', historique_sanctions->>'$.temp_mute' FROM "
-                    + ConfigBdd.getTable1() + " WHERE uuid=?";
-            try (PreparedStatement statement2_select = connection_register
-                    .prepareStatement(requet_Select_sql2)) {
-                statement2_select.setString(1, uuidPlayers);
-
-                try (ResultSet resultat_requete_select = statement2_select.executeQuery()) {
-                    while (resultat_requete_select.next()) {
-                        ban = resultat_requete_select.getInt("historique_sanctions->>'$.ban'");
-                        motif_ban = resultat_requete_select.getString("historique_sanctions->>'$.motif_ban'");
-                        motif_unban = resultat_requete_select.getString("historique_sanctions->>'$.motif_unban'");
-
-                        temp_ban = resultat_requete_select.getString("historique_sanctions->>'$.temp_ban'");
-                        motif_tempban = resultat_requete_select.getString("historique_sanctions->>'$.motif_tempban'");
-
-                        mute = resultat_requete_select.getInt("historique_sanctions->>'$.mute'");
-                        motif_mute = resultat_requete_select.getString("historique_sanctions->>'$.motif_mute'");
-                        motif_unmute = resultat_requete_select.getString("historique_sanctions->>'$.motif_unmute'");
-
-                        temp_mute = resultat_requete_select.getString("historique_sanctions->>'$.temp_mute'");
-                        motif_tempmute = resultat_requete_select.getString("historique_sanctions->>'$.motif_tempmute'");
-
-                        warn = resultat_requete_select.getInt("historique_sanctions->>'$.warn'");
-                        motif_warn = resultat_requete_select.getString("historique_sanctions->>'$.motif_warn'");
-
-                        motif_kick = resultat_requete_select.getString("historique_sanctions->>'$.motif_kick'");
-
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (requet.isOnline()==false) {
             p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
                     "La base de donné n'est pas en ligne merci de reitérer plus tard.");
-        }
+        }else if(requet.isOnline()==true){
 
-        DataPlayersFiles.updateHistoriqueSanctions(uuidPlayers, ban, motif_ban, motif_unban, temp_ban, motif_tempban,
-                mute, motif_mute, motif_unmute, temp_mute, motif_tempmute, motif_kick, warn, motif_warn, dataPlayer);
+            //Request Sql Select Historique sanctions.
+            requet.getHistoriqueSanction(uuidPlayers);
 
-        if (ban == 0) {
-            // On test si le joueur et deja en ligne avec le même uuid(Générer avec le
-            // pseudo + un préfixe de salage en MD5).
+            int ban = requet.getBan();
+            String motif_ban = requet.getMotif_ban();
+            String motif_unban = requet.getMotif_unban();
 
-            if (DataPlayersFiles.getIsOnline(uuidPlayers, dataPlayer) == true) {
-                p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                        MessageKick.getKickOnline());
-            } else {
-                DataPlayersFiles.setIsOnline(uuidPlayers, true, dataPlayer);
-                // On vérifie si le nombre d'ip similaire connecter ne depasse pas la
-                // configuration donner.
-                // Cree le fichier verifie sil existe compare la taille kick le joueur en
-                // fonction du nombre d'ip similaire utiliser
-                DataListIp.setFile(uuidPlayers, ipPlayers, p_event);
+            String temp_ban = requet.getTempban();
+            String motif_tempban = requet.getMotif_tempban();
+
+            int mute = requet.getMute();
+            String motif_mute = requet.getMotif_mute();
+            String motif_unmute = requet.getMotif_unmute();
+
+            String temp_mute = requet.getTempmute();
+            String motif_tempmute = requet.getMotif_tempmute();
+
+            String motif_kick = requet.getMotif_kick();
+
+            int warn = requet.getWarn();
+            String motif_warn = requet.getMotif_warn();
+
+            long startTime = System.nanoTime();
+            DataPlayersFiles.create(uuidPlayers, dataPlayer);
+
+            DataPlayersFiles.setHistoriqueSanctions(uuidPlayers, ban, motif_ban, motif_unban, temp_ban, motif_tempban,mute, motif_mute, motif_unmute, temp_mute, motif_tempmute, motif_kick, warn, motif_warn);
+            if (ban == 0) {
+                if (DataPlayersFiles.getIsOnline(uuidPlayers, dataPlayer) == true) {p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,MessageKick.getKickOnline());}
+                else{DataPlayersFiles.setIsOnline(uuidPlayers, true, dataPlayer);DataListIp.setFile(uuidPlayers, ipPlayers, p_event);}
+            }
+            if (temp_ban.equals("null") == true && ban == 1) {p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,motif_ban);}
+            else if(temp_ban.equals("null") == false && ban == 1) { 
+                DateAndTime objDateAndTime = new DateAndTime();
+                objDateAndTime.getCalendrier();
+                          
+                Calendar dateTimeNow = Calendar.getInstance();
+                Date dateTimeZone = dateTimeNow.getTime();
+    
+                Date dateTime_temp_ban = DateAndTime.getDateFromBddToCompare(temp_ban);
+    
+                if (dateTimeZone.after(dateTime_temp_ban)) {RequestTempban.setUnBanAndTempBanMotif(uuidPlayers);} 
+                else{String dateTemp_ban = DateAndTime.getDateFormatToString(DateAndTime.getDateFromBddToCompare(temp_ban));p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,"Bannie jusqu'au: " + dateTemp_ban + " Raison: " + motif_tempban);}
+    
+            }
+            if (temp_mute.equals("null") == true && mute == 1) {DataPlayersFiles.setMuteAndMotif(uuidPlayers, motif_mute);} 
+            else if (temp_mute.equals("null") == false && mute == 1) {
+                Calendar dateTimeNow1 = Calendar.getInstance();
+                Date dateTimeZone1 = dateTimeNow1.getTime();
+
+                DateAndTime dateAndTime1 = new DateAndTime();
+                Date dateTime_temp_mute1 = dateAndTime1.getDateFromBddToCompare(temp_mute);
+
+                if (dateTimeZone1.after(dateTime_temp_mute1)) {RequestTempmute.setUnMuteAndTempMuteMotif(uuidPlayers);DataPlayersFiles.setUnmuteTempMuteAndMotif(uuidPlayers);}
+
+                long endTime = System.nanoTime();
+                System.out.println("Test de vitesse before : " + (endTime - startTime) * Math.pow(10, -6) + " ms");
             }
         }
-
-        if (temp_ban.equals("null") == true && ban == 1) {
-            p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                    motif_ban);
-        } else if (temp_ban.equals("null") == false && ban == 1) {
-
-            Calendar dateTimeNow = Calendar.getInstance();
-            Date dateTimeZone = dateTimeNow.getTime();
-
-            DateAndTime dateAndTime = new DateAndTime();
-            Date dateTime_temp_ban = dateAndTime.getDateFromBddToCompare(temp_ban);
-
-            if (dateTimeZone.after(dateTime_temp_ban)) {
-                ban = 0;
-                motif_tempban = "null";
-                temp_ban = "null";
-                try (Connection connection_update = DriverManager.getConnection(
-                        ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
-                                ConfigBdd.getPort()
-                                + "/"
-                                + ConfigBdd.getDatabase1()
-                                + "?characterEncoding=latin1&useConfigs=maxPerformance",
-                        ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-                    String requet_Update_sql2 = "UPDATE " + ConfigBdd.getTable1() +
-                            " SET historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')),, historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')),historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) WHERE uuid=?";
-                    try (PreparedStatement statement2_select = connection_update
-                            .prepareStatement(requet_Update_sql2)) {
-                        statement2_select.setString(1, "ban");
-                        statement2_select.setInt(2, ban);
-                        statement2_select.setString(3, "motif_tempban");
-                        statement2_select.setString(4, motif_tempban);
-                        statement2_select.setString(5, "temp_ban");
-                        statement2_select.setString(6, temp_ban);
-                        statement2_select.setString(7, uuidPlayers);
-                        statement2_select.executeUpdate();
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else {
-                String dateTemp_ban = dateAndTime.getDateForPlayer(dateAndTime.getDateFromBddToCompare(temp_ban));
-                p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
-                        "Bannie jusqu'au: " + dateTemp_ban + " Raison: " + motif_tempban);
-            }
-
-        }
-
-        if (temp_mute.equals("null") == true && mute == 1) {
-            DataPlayersFiles.setMuteAndMotif(uuidPlayers, motif_mute);
-        } else if (temp_mute.equals("null") == false && mute == 1) {
-            Calendar dateTimeNow1 = Calendar.getInstance();
-            Date dateTimeZone1 = dateTimeNow1.getTime();
-
-            DateAndTime dateAndTime1 = new DateAndTime();
-            Date dateTime_temp_mute1 = dateAndTime1.getDateFromBddToCompare(temp_mute);
-
-            if (dateTimeZone1.after(dateTime_temp_mute1)) {
-                mute = 0;
-                motif_tempmute = "null";
-                temp_mute = "null";
-                try (Connection connection_update = DriverManager.getConnection(
-                        ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" +
-                                ConfigBdd.getPort()
-                                + "/"
-                                + ConfigBdd.getDatabase1()
-                                + "?characterEncoding=latin1&useConfigs=maxPerformance",
-                        ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-                    String requet_Update_sql2 = "UPDATE " + ConfigBdd.getTable1() +
-                            " SET historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')),, historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')),historique_sanctions=JSON_SET(historique_sanctions, CONCAT('$.',?), CONCAT('',?,'')) WHERE uuid=?";
-                    try (PreparedStatement statement2_select = connection_update
-                            .prepareStatement(requet_Update_sql2)) {
-                        statement2_select.setString(1, "mute");
-                        statement2_select.setInt(2, mute);
-                        statement2_select.setString(3, "motif_tempmute");
-                        statement2_select.setString(4, motif_tempmute);
-                        statement2_select.setString(5, "temp_mute");
-                        statement2_select.setString(6, temp_mute);
-                        statement2_select.setString(7, uuidPlayers);
-                        statement2_select.executeUpdate();
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                DataPlayersFiles.setUnmuteTempMuteAndMotif(uuidPlayers);
-            }
-
-            long endTime = System.nanoTime();
-            System.out.println("Test de vitesse before : " + (endTime - startTime) * Math.pow(10, -6) + " ms");
-        }
-
     }
 
     /**
