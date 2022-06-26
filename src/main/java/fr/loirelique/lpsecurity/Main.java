@@ -3,6 +3,7 @@ package fr.loirelique.lpsecurity;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -279,7 +280,12 @@ public class Main extends JavaPlugin implements Listener {
                 if (DataPlayersFiles.getMotifMute(uuidPlayers, dataPlayer).equals("null")) { message = DataPlayersFiles.getMotifTempMute(uuidPlayers, dataPlayer);} 
                 else {message = DataPlayersFiles.getMotifMute(uuidPlayers, dataPlayer);}
                 player.sendMessage("Mute: " + message);
-            } else {p_envent.setCancelled(false);}
+            } else {p_envent.setCancelled(false);
+             ArrayList<Player> test = new ArrayList<Player>();
+             test.add(player);
+            
+            }
+
         } 
     }
 

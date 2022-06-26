@@ -1,6 +1,6 @@
 package fr.loirelique.lpsecurity;
 
-import java.util.ArrayList;
+
 
 public class MyClassTest {
 
@@ -507,15 +507,8 @@ public class MyClassTest {
 
     public static void main(String args[]) {
 
-        ArrayList<String> t = new ArrayList<String>();
-        t.add("1");
-        t.add("2");
-        t.add("3");
-        for (String string : t) {
-            System.out.println(string);
-        }
 
-      
+        
 
 /*         String name ="Dimitri";
         String username="LoiRelique";
