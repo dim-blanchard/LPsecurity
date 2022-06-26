@@ -1,4 +1,4 @@
-package fr.loirelique.lpsecurity.Usefull;
+package fr.loirelique.lpsecurity.usefull;
 
 public class TestString {
 /* 

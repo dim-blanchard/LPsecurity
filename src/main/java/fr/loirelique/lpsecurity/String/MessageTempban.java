@@ -1,4 +1,4 @@
-package fr.loirelique.lpsecurity.String;
+package fr.loirelique.lpsecurity.string;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;

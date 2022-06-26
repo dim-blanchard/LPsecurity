@@ -3,10 +3,6 @@ package fr.loirelique.lpsecurity;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -33,39 +29,35 @@ import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
-import fr.loirelique.lpsecurity.Command.CommandBan;
-import fr.loirelique.lpsecurity.Command.CommandHistorique;
-import fr.loirelique.lpsecurity.Command.CommandKick;
-import fr.loirelique.lpsecurity.Command.CommandLogin;
-import fr.loirelique.lpsecurity.Command.CommandMute;
-import fr.loirelique.lpsecurity.Command.CommandRegister;
-import fr.loirelique.lpsecurity.Command.CommandResetHistorique;
-
-import fr.loirelique.lpsecurity.Command.CommandTempban;
-import fr.loirelique.lpsecurity.Command.CommandTempmute;
-import fr.loirelique.lpsecurity.Command.CommandUnban;
-import fr.loirelique.lpsecurity.Command.CommandUnmute;
-import fr.loirelique.lpsecurity.Command.CommandWarn;
-import fr.loirelique.lpsecurity.List.CommandCreateSupport;
-import fr.loirelique.lpsecurity.List.CommandJoinSupport;
-import fr.loirelique.lpsecurity.List.CommandListSupport;
-import fr.loirelique.lpsecurity.List.CommandRemovesupport;
-import fr.loirelique.lpsecurity.List.ListWarningDegresAndMotifs;
-import fr.loirelique.lpsecurity.Request.RequestDatabase;
-import fr.loirelique.lpsecurity.Request.RequestHistoriqueSanction;
-import fr.loirelique.lpsecurity.Request.RequestTempban;
-import fr.loirelique.lpsecurity.Request.RequestTempmute;
-import fr.loirelique.lpsecurity.String.ConfigBdd;
-import fr.loirelique.lpsecurity.String.MessageKick;
-import fr.loirelique.lpsecurity.String.MessageLogin;
-import fr.loirelique.lpsecurity.String.MessageRegister;
-import fr.loirelique.lpsecurity.String.MessageTempban;
-import fr.loirelique.lpsecurity.String.MessageTempmute;
-import fr.loirelique.lpsecurity.Usefull.DateAndTime;
-import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
-import fr.loirelique.lpsecurity.Usefull.DataFolder;
-import fr.loirelique.lpsecurity.Usefull.DataListIp;
-import fr.loirelique.lpsecurity.Usefull.DataListPlayers;
+import fr.loirelique.lpsecurity.command.CommandBan;
+import fr.loirelique.lpsecurity.command.CommandHistorique;
+import fr.loirelique.lpsecurity.command.CommandKick;
+import fr.loirelique.lpsecurity.command.CommandLogin;
+import fr.loirelique.lpsecurity.command.CommandMute;
+import fr.loirelique.lpsecurity.command.CommandRegister;
+import fr.loirelique.lpsecurity.command.CommandResetHistorique;
+import fr.loirelique.lpsecurity.command.CommandTempban;
+import fr.loirelique.lpsecurity.command.CommandTempmute;
+import fr.loirelique.lpsecurity.command.CommandUnban;
+import fr.loirelique.lpsecurity.command.CommandUnmute;
+import fr.loirelique.lpsecurity.command.CommandWarn;
+import fr.loirelique.lpsecurity.list.CommandCreateSupport;
+import fr.loirelique.lpsecurity.list.CommandJoinSupport;
+import fr.loirelique.lpsecurity.list.CommandListSupport;
+import fr.loirelique.lpsecurity.list.CommandRemovesupport;
+import fr.loirelique.lpsecurity.list.ListWarningDegresAndMotifs;
+import fr.loirelique.lpsecurity.sqlrequest.RequestDatabase;
+import fr.loirelique.lpsecurity.string.ConfigBdd;
+import fr.loirelique.lpsecurity.string.MessageKick;
+import fr.loirelique.lpsecurity.string.MessageLogin;
+import fr.loirelique.lpsecurity.string.MessageRegister;
+import fr.loirelique.lpsecurity.string.MessageTempban;
+import fr.loirelique.lpsecurity.string.MessageTempmute;
+import fr.loirelique.lpsecurity.usefull.DataFolder;
+import fr.loirelique.lpsecurity.usefull.DataListIp;
+import fr.loirelique.lpsecurity.usefull.DataListPlayers;
+import fr.loirelique.lpsecurity.usefull.DataPlayersFiles;
+import fr.loirelique.lpsecurity.usefull.DateAndTime;
 
 /**
  * Information sur la class!LPSECURITY
@@ -180,72 +172,50 @@ public class Main extends JavaPlugin implements Listener {
      */
     @EventHandler
     public void playerBeforeJoinServer(AsyncPlayerPreLoginEvent p_event) {
-
         String uuidPlayers = getUuidHash(p_event);
         String ipPlayers = p_event.getAddress().getHostAddress();
-
         //Object Request.
         RequestDatabase requet = new RequestDatabase();
-
-        if (requet.isOnline()==false) {
+        if (RequestDatabase.isOnline()==false) {
             p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,
                     "La base de donné n'est pas en ligne merci de reitérer plus tard.");
-        }else if(requet.isOnline()==true){
-
+                    exitDefaultDataPlayers(uuidPlayers, ipPlayers);
+        }else if(RequestDatabase.isOnline()==true){
             //Request Sql Select Historique sanctions.
-            requet.getHistoriqueSanction(uuidPlayers);
-
+            requet.getHS(uuidPlayers);
             int ban = requet.getBan();
             String motif_ban = requet.getMotif_ban();
             String motif_unban = requet.getMotif_unban();
-
             String temp_ban = requet.getTempban();
             String motif_tempban = requet.getMotif_tempban();
-
             int mute = requet.getMute();
             String motif_mute = requet.getMotif_mute();
             String motif_unmute = requet.getMotif_unmute();
-
             String temp_mute = requet.getTempmute();
             String motif_tempmute = requet.getMotif_tempmute();
-
             String motif_kick = requet.getMotif_kick();
-
             int warn = requet.getWarn();
             String motif_warn = requet.getMotif_warn();
-
             long startTime = System.nanoTime();
             DataPlayersFiles.create(uuidPlayers, dataPlayer);
-
             DataPlayersFiles.setHistoriqueSanctions(uuidPlayers, ban, motif_ban, motif_unban, temp_ban, motif_tempban,mute, motif_mute, motif_unmute, temp_mute, motif_tempmute, motif_kick, warn, motif_warn);
-            if (ban == 0) {
-                if (DataPlayersFiles.getIsOnline(uuidPlayers, dataPlayer) == true) {p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,MessageKick.getKickOnline());}
-                else{DataPlayersFiles.setIsOnline(uuidPlayers, true, dataPlayer);DataListIp.setFile(uuidPlayers, ipPlayers, p_event);}
-            }
-            if (temp_ban.equals("null") == true && ban == 1) {p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,motif_ban);}
-            else if(temp_ban.equals("null") == false && ban == 1) { 
-                DateAndTime objDateAndTime = new DateAndTime();
-                objDateAndTime.getCalendrier();
-                          
+            if (DataPlayersFiles.getIsOnline(uuidPlayers, dataPlayer) == true) {p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,MessageKick.getKickOnline()); exitDefaultDataPlayers(uuidPlayers, ipPlayers);}
+            else{DataPlayersFiles.setIsOnline(uuidPlayers, true, dataPlayer);DataListIp.setFile(uuidPlayers, ipPlayers, p_event);}
+            
+            if (temp_ban.equals("null") == true && ban == 1) {p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,motif_ban);exitDefaultDataPlayers(uuidPlayers, ipPlayers);}
+            else if(temp_ban.equals("null") == false && ban == 1) {           
                 Calendar dateTimeNow = Calendar.getInstance();
                 Date dateTimeZone = dateTimeNow.getTime();
-    
-                Date dateTime_temp_ban = DateAndTime.getDateFromBddToCompare(temp_ban);
-    
-                if (dateTimeZone.after(dateTime_temp_ban)) {RequestTempban.setUnBanAndTempBanMotif(uuidPlayers);} 
-                else{String dateTemp_ban = DateAndTime.getDateFormatToString(DateAndTime.getDateFromBddToCompare(temp_ban));p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,"Bannie jusqu'au: " + dateTemp_ban + " Raison: " + motif_tempban);}
-    
+                Date dateTime_temp_ban = DateAndTime.setDateFromBddToCompare(temp_ban);
+                if (dateTimeZone.after(dateTime_temp_ban)) {RequestDatabase.upHS(uuidPlayers,"motif_tempban" , "null");RequestDatabase.upHS(uuidPlayers,"tempban" , "null");RequestDatabase.upHS(uuidPlayers,"ban" , 0);DataPlayersFiles.setUnbanTempBanAndMotif(uuidPlayers);} 
+                else{p_event.disallow(org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result.KICK_OTHER,"Bannie jusqu'au: " + DateAndTime.getDateFormatToString(DateAndTime.setDateFromBddToCompare(temp_ban)) + " Raison: " + motif_tempban);exitDefaultDataPlayers(uuidPlayers, ipPlayers);}
             }
             if (temp_mute.equals("null") == true && mute == 1) {DataPlayersFiles.setMuteAndMotif(uuidPlayers, motif_mute);} 
             else if (temp_mute.equals("null") == false && mute == 1) {
                 Calendar dateTimeNow1 = Calendar.getInstance();
                 Date dateTimeZone1 = dateTimeNow1.getTime();
-
-                DateAndTime dateAndTime1 = new DateAndTime();
-                Date dateTime_temp_mute1 = dateAndTime1.getDateFromBddToCompare(temp_mute);
-
-                if (dateTimeZone1.after(dateTime_temp_mute1)) {RequestTempmute.setUnMuteAndTempMuteMotif(uuidPlayers);DataPlayersFiles.setUnmuteTempMuteAndMotif(uuidPlayers);}
-
+                Date dateTime_temp_mute1 = DateAndTime.setDateFromBddToCompare(temp_mute);
+                if (dateTimeZone1.after(dateTime_temp_mute1)) {RequestDatabase.upHS(uuidPlayers,"motif_tempmute" , "null");RequestDatabase.upHS(uuidPlayers,"tempmute" , "null");RequestDatabase.upHS(uuidPlayers,"mute" , 0);;DataPlayersFiles.setUnmuteTempMuteAndMotif(uuidPlayers);}
                 long endTime = System.nanoTime();
                 System.out.println("Test de vitesse before : " + (endTime - startTime) * Math.pow(10, -6) + " ms");
             }
@@ -255,108 +225,42 @@ public class Main extends JavaPlugin implements Listener {
     /**
      * EVENT PLAYER JOIN EVENT
      */
-    @EventHandler
+    @EventHandler @Deprecated
     public void playerJoinServer(PlayerJoinEvent p_event) {
-        
-
-        // Variable utile
         final Player p = p_event.getPlayer();
         String uuidPlayers = getUuidHash(p);
-        String uuidRequet = "";
-
+        // Ajoue Player à la listePlayer
+        DataListPlayers.setFile(uuidPlayers, p);    
         // Début test de vitesse
         long startTime = System.nanoTime();
-        // Ajoue Player à la listePlayer
-        DataListPlayers.setFile(uuidPlayers, p);
-
-
-        // On fait un requet qui récupère l'uuid du joueur et on le cherche dans la base
-        // de donnée.
-        try (Connection connection_select = DriverManager.getConnection(
-                ConfigBdd.getDriver() + "://" + ConfigBdd.getHost() + ":" + ConfigBdd.getPort() + "/"
-                        + ConfigBdd.getDatabase1()
-                        + "?characterEncoding=latin1&useConfigs=maxPerformance",
-                ConfigBdd.getUser1(), ConfigBdd.getPass1())) {
-            String requet_Select_sql1 = "SELECT * FROM " + ConfigBdd.getTable1() + " WHERE uuid=?";
-            try (PreparedStatement statement1_select = connection_select
-                    .prepareStatement(requet_Select_sql1)) {
-                statement1_select.setString(1, uuidPlayers);
-
-                try (ResultSet resultat_requete_select = statement1_select.executeQuery()) {
-                    while (resultat_requete_select.next()) {
-                        uuidRequet = resultat_requete_select.getString("uuid");
-
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        RequestDatabase requet = new RequestDatabase();
+         // On fait un requet qui récupère l'uuid du joueur et on le cherche dans la base de donnée.
+        requet.getColumn(uuidPlayers);
+        String uuidPlayersBdd = requet.getUuidPlayers();
         // Si l'uuid du joueur est égale à un uuid deja enregistrer.
-        if (uuidPlayers.equals(uuidRequet)) {
-            setTaskBlockSpawn(p);
-            setTaskLoginTime(p);
-            MessageLogin.sendLogin(p);
-
-        } // Si l'uuid du joueur n'est pas égale à un uuid deja enregistrer.
-        else {
-            setTaskBlockSpawn(p);
-            setTaskRegisterTime(p);
-            MessageRegister.sendRegister(p);
-        }
-
+        if (uuidPlayers.equals(uuidPlayersBdd)) {setTaskBlockSpawn(p);setTaskLoginTime(p);MessageLogin.sendLogin(p);} 
+        // Si l'uuid du joueur n'est pas égale à un uuid deja enregistrer.
+        else {setTaskBlockSpawn(p);setTaskRegisterTime(p);MessageRegister.sendRegister(p);}
         // Fin test de vitesse
         long endTime = System.nanoTime();
         System.out.println("Test de vitesse Join : " + (endTime - startTime) * Math.pow(10, -6) + " ms");
     }
-
     /**
      * Player Quit Evnet
      */
     @EventHandler
     public void playerQuitServer(PlayerQuitEvent p_event) {
-
-        // Variable utile
         final Player p = p_event.getPlayer();
-        String uuid = getUuidHash(p);
         String uuidPlayers = getUuidHash(p);
         String ipPlayers = p.getAddress().getHostString();
         // Début test de vitesse
         long startTime = System.nanoTime();
-
-        // Permet de supprimer les entrées Liste des différents joueurs du serveur en
-        // fonction de l'uuid.
-        if (listTacheRegister.get(uuid) != null) {
-            Bukkit.getScheduler().cancelTask(getTaskRegisterTime(p));
-            getTaskRegisterTimeRemove(p);
-        }
-        if (listTacheLogin.get(uuid) != null) {
-            Bukkit.getScheduler().cancelTask(getTaskLoginTime(p));
-            getTaskLoginTimeRemove(p);
-        }
-        if (listTacheSpawnBlock.get(uuid) != null) {
-            Bukkit.getScheduler().cancelTask(getTaskBlockSpawn(p));
-            getTaskBlockSpawnRemove(p);
-        }
-
-        // Enleve l'ip du joueur de la List
-        if (DataListIp.getFileIp(ipPlayers)!=null) {
-            DataListIp.removeFileOrPlayers(uuidPlayers, ipPlayers);
-        }    
-        // If player is online
-        if (DataPlayersFiles.getIsOnline(uuidPlayers, dataPlayer) == true) {
-            DataPlayersFiles.setIsOnline(uuidPlayers, false, dataPlayer);
-        }
-        if (DataPlayersFiles.getIsLogin(uuidPlayers, dataPlayer) == true) {
-            DataPlayersFiles.setIsLogin(uuidPlayers, false, dataPlayer);
-        }
-        // List tentative pass
-        DataPlayersFiles.setNumberTentativeLogin(uuidPlayers, 0, Main.plugin.dataPlayer);
-        // List mute
-
-        if (DataListPlayers.getObjectPlayers(uuidPlayers) != null) {
-            DataListPlayers.removeObjectPlayers(uuidPlayers);
-        }
+        // Permet de supprimer les entrées Liste des différents joueurs du serveur enfonction de l'uuid.
+        if (listTacheRegister.get(uuidPlayers) != null) {Bukkit.getScheduler().cancelTask(getTaskRegisterTime(p));getTaskRegisterTimeRemove(p);}
+        if (listTacheLogin.get(uuidPlayers) != null) {Bukkit.getScheduler().cancelTask(getTaskLoginTime(p));getTaskLoginTimeRemove(p);}
+        if (listTacheSpawnBlock.get(uuidPlayers) != null) {Bukkit.getScheduler().cancelTask(getTaskBlockSpawn(p));getTaskBlockSpawnRemove(p);}
+        //Fermeture des infos jouers.
+        exitDefaultDataPlayers(uuidPlayers, ipPlayers);
         // Fin test de vitesse
         long endTime = System.nanoTime();
         System.out.println("Test de vitesse quit : " + (endTime - startTime) * Math.pow(10, -6) + " ms");
@@ -366,28 +270,17 @@ public class Main extends JavaPlugin implements Listener {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent p_envent) {
         final Player player = p_envent.getPlayer();
-        String uuidPlayers = getUuidHash(player);
-        
-        if(DataPlayersFiles.getIsLogin(uuidPlayers, dataPlayer) == false){
-            p_envent.setCancelled(true);
-            player.sendMessage("Identifie toi pour parler.");
+        String uuidPlayers = getUuidHash(player); 
+        if(DataPlayersFiles.getIsLogin(uuidPlayers, dataPlayer) == false){p_envent.setCancelled(true);player.sendMessage("Identifie toi pour parler.");
         }else if(DataPlayersFiles.getIsLogin(uuidPlayers, dataPlayer)==true){
             if(DataPlayersFiles.getMute(uuidPlayers, dataPlayer) == 1) {
                 String message = "null";
                 p_envent.setCancelled(true);
-                if (DataPlayersFiles.getMotifMute(uuidPlayers, dataPlayer).equals("null")) {
-                    message = DataPlayersFiles.getMotifTempMute(uuidPlayers, dataPlayer);
-                } else {
-                    message = DataPlayersFiles.getMotifMute(uuidPlayers, dataPlayer);
-                }
+                if (DataPlayersFiles.getMotifMute(uuidPlayers, dataPlayer).equals("null")) { message = DataPlayersFiles.getMotifTempMute(uuidPlayers, dataPlayer);} 
+                else {message = DataPlayersFiles.getMotifMute(uuidPlayers, dataPlayer);}
                 player.sendMessage("Mute: " + message);
-            } else {
-                p_envent.setCancelled(false);
-            }
+            } else {p_envent.setCancelled(false);}
         } 
-
-
-
     }
 
     @EventHandler
@@ -398,51 +291,33 @@ public class Main extends JavaPlugin implements Listener {
         String []messageSplit = message.split(" ");
         String messageSplit0 = messageSplit[0];
         if (DataPlayersFiles.getIsLogin(uuidPlayers, dataPlayer)==false){
-            if(messageSplit0.equals("/login")==true|messageSplit0.equals("/register")==true){
-                p_envent.setCancelled(false);
-            }else{
-                p_envent.setCancelled(true);
-                p.sendMessage("Identifie toi pour entrer une commande.");
-            }
-        }else if (DataPlayersFiles.getIsLogin(uuidPlayers, dataPlayer)==true){
-            p_envent.setCancelled(false);
-            if (messageSplit0.equals("/stop")) {
-                final File folder = new File(getDataFolder().toString(), dataPlayer);
-                DataPlayersFiles.defaultInfosPlayers(folder);}
+            if(messageSplit0.equals("/login")==true|messageSplit0.equals("/register")==true){p_envent.setCancelled(false);}
+            else{p_envent.setCancelled(true);p.sendMessage("Identifie toi pour entrer une commande.");}
+        }else if (DataPlayersFiles.getIsLogin(uuidPlayers, dataPlayer)==true){p_envent.setCancelled(false);
+            if (messageSplit0.equals("/stop")) {final File folder = new File(getDataFolder().toString(), dataPlayer);DataPlayersFiles.defaultInfosPlayers(folder);}
         }
-    
     }
 
     @EventHandler
     public void ServerCommandEvent(ServerCommandEvent event) {
-        if (event.getCommand().equals("stop")) {
-            final File folder = new File(getDataFolder().toString(), dataPlayer);
-            DataPlayersFiles.defaultInfosPlayers(folder);
-        }
+        if (event.getCommand().equals("stop")) {final File folder = new File(getDataFolder().toString(), dataPlayer);DataPlayersFiles.defaultInfosPlayers(folder);}
     }
 
     /**
      * Getter de tache register.
      * On recupère l'id de la tache register en fonction de l'uuid du joueur.
      */
-    public Integer getTaskRegisterTime(Player p) {
-        return listTacheRegister.get(getUuidHash(p));
-    }
-
+    public Integer getTaskRegisterTime(Player p) {return listTacheRegister.get(getUuidHash(p));}
     /**
      * Methode de tache register.
      * On supprime le joueur de la list tache register et ca donnée.
      */
-    public void getTaskRegisterTimeRemove(Player p) {
-        listTacheRegister.remove(getUuidHash(p));
-    }
-
+    public void getTaskRegisterTimeRemove(Player p) {listTacheRegister.remove(getUuidHash(p));}
     /**
      * Methode de tache register.
      * Tache de temps d'enregistrement au serveur.
      */
     public void setTaskRegisterTime(Player p) {
-
         BukkitTask tache = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
             // Au dela du delais donner dépasser le joueur est kick.
             int time_run1 = MessageRegister.getRegisterTime();
@@ -467,7 +342,6 @@ public class Main extends JavaPlugin implements Listener {
         listTacheRegister.put(getUuidHash(p), idtache);
 
     }
-
     /**
      * Getter de tache Login.
      * On recupère l'id de la tache login en fonction de l'uuid du joueur.
@@ -643,6 +517,28 @@ public class Main extends JavaPlugin implements Listener {
         String strTemp = Normalizer.normalize(s, Normalizer.Form.NFD);
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
         return pattern.matcher(strTemp).replaceAll("");
+    }
+
+    public void exitDefaultDataPlayers(String uuidPlayers, String ipPlayers) {
+
+        // Enleve l'ip du joueur de la List
+        if (DataListIp.getFileIp(ipPlayers)!=null) {
+            DataListIp.removeFileOrPlayers(uuidPlayers, ipPlayers);
+        }    
+        // If player is online
+        if (DataPlayersFiles.getIsOnline(uuidPlayers, dataPlayer) == true) {
+            DataPlayersFiles.setIsOnline(uuidPlayers, false, dataPlayer);
+        }
+        if (DataPlayersFiles.getIsLogin(uuidPlayers, dataPlayer) == true) {
+            DataPlayersFiles.setIsLogin(uuidPlayers, false, dataPlayer);
+        }
+        // List tentative pass
+        DataPlayersFiles.setNumberTentativeLogin(uuidPlayers, 0, dataPlayer);
+        // List mute
+
+        if (DataListPlayers.getObjectPlayers(uuidPlayers) != null) {
+            DataListPlayers.removeObjectPlayers(uuidPlayers);
+        }
     }
 
 }

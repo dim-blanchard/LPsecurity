@@ -1,4 +1,4 @@
-package fr.loirelique.lpsecurity.Command;
+package fr.loirelique.lpsecurity.command;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -7,13 +7,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
-import fr.loirelique.lpsecurity.Request.RequestDatabase;
-import fr.loirelique.lpsecurity.String.MessageLogin;
-import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
+import fr.loirelique.lpsecurity.sqlrequest.RequestDatabase;
+import fr.loirelique.lpsecurity.string.MessageLogin;
+import fr.loirelique.lpsecurity.usefull.DataPlayersFiles;
 
 public class CommandLogin implements CommandExecutor {
     
-    @Override
+    @Override @Deprecated
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
             Player p = (Player) sender;
@@ -25,7 +25,7 @@ public class CommandLogin implements CommandExecutor {
 
                         //Request Sql Select.
                         RequestDatabase requet = new RequestDatabase();
-                        requet.getColomun(uuidPlayers);
+                        requet.getColumn(uuidPlayers);
                         String uuidPlayersbdd = requet.getUuidPlayers();
                         String passwordBdd = requet.getPassword();
                         

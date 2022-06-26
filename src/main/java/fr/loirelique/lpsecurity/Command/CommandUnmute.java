@@ -1,4 +1,4 @@
-package fr.loirelique.lpsecurity.Command;
+package fr.loirelique.lpsecurity.command;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -6,11 +6,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
-import fr.loirelique.lpsecurity.Request.RequestMute;
-import fr.loirelique.lpsecurity.Request.RequestUnmute;
-import fr.loirelique.lpsecurity.String.MessageUnmute;
-import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
-import fr.loirelique.lpsecurity.Usefull.MotifBuilder;
+import fr.loirelique.lpsecurity.sqlrequest.RequestDatabase;
+import fr.loirelique.lpsecurity.string.MessageUnmute;
+import fr.loirelique.lpsecurity.usefull.DataPlayersFiles;
+import fr.loirelique.lpsecurity.usefull.MotifBuilder;
 
 public class CommandUnmute implements CommandExecutor {
 
@@ -22,14 +21,17 @@ public class CommandUnmute implements CommandExecutor {
             if (p.hasPermission("lpsecurity.unmute")) {
                 if (cmd.getName().equalsIgnoreCase("unmute")) { // Si c'est la commande "banish" qui a été tapée:
                     if (args.length >= 2) {
-                        int mute = 2;
                         String uuidPlayers = Main.plugin.getUuidHash(args[0]);
                         //Motif Bulder.
                         String motif_unmute = MotifBuilder.getMotif(args, 1);
-                        mute = RequestMute.getMute(uuidPlayers);
+                        //Request Sql Select.
+                        RequestDatabase request = new RequestDatabase();
+                        request.getHS(uuidPlayers);
+                        int mute = request.getMute();
                         if (mute == 1) {
                             //Request Sql Update.
-                            RequestUnmute.setUnmuteAndMotif(uuidPlayers, motif_unmute);
+                            RequestDatabase.upHS(uuidPlayers, "motif_unmute", "null");
+                            RequestDatabase.upHS(uuidPlayers, "mute", 0);
                             //Data Player Update.
                             DataPlayersFiles.setUnmuteAndMotif(uuidPlayers, motif_unmute);
                             //Valid Message.

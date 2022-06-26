@@ -1,4 +1,4 @@
-package fr.loirelique.lpsecurity.List;
+package fr.loirelique.lpsecurity.list;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

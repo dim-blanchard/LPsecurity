@@ -1,4 +1,4 @@
-package fr.loirelique.lpsecurity.Command;
+package fr.loirelique.lpsecurity.command;
 
 import java.util.List;
 
@@ -8,14 +8,13 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
-import fr.loirelique.lpsecurity.Request.RequestMute;
-import fr.loirelique.lpsecurity.Request.RequestTempmute;
-import fr.loirelique.lpsecurity.String.MessageTempmute;
-import fr.loirelique.lpsecurity.Usefull.DataListPlayers;
-import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
-import fr.loirelique.lpsecurity.Usefull.DateAndTime;
-import fr.loirelique.lpsecurity.Usefull.MotifBuilder;
-import fr.loirelique.lpsecurity.Usefull.TestString;
+import fr.loirelique.lpsecurity.sqlrequest.RequestDatabase;
+import fr.loirelique.lpsecurity.string.MessageTempmute;
+import fr.loirelique.lpsecurity.usefull.DataListPlayers;
+import fr.loirelique.lpsecurity.usefull.DataPlayersFiles;
+import fr.loirelique.lpsecurity.usefull.DateAndTime;
+import fr.loirelique.lpsecurity.usefull.MotifBuilder;
+import fr.loirelique.lpsecurity.usefull.TestString;
 
 public class CommandTempmute implements TabExecutor {
 
@@ -27,7 +26,6 @@ public class CommandTempmute implements TabExecutor {
             if (p.hasPermission("lpsecurity.tempmute")) {
                 if (cmd.getName().equalsIgnoreCase("tempmute")) { // Si c'est la commande "tempmute" qui a été tapée:
                     if (args.length >= 3) {
-                        int mute = 2;
                         String uuidPlayers = Main.plugin.getUuidHash(args[0]);
 
                         if (TestString.isNumber(args[1])==false) {p.sendMessage("§dLe nombre de temps donner ne dois comporter que des chiffres.");return true;
@@ -41,10 +39,14 @@ public class CommandTempmute implements TabExecutor {
                             }else if (motif_tempmute.length()==0) {p.sendMessage(MessageTempmute.setColorErrorTempmute() + MessageTempmute.getErrorTempmute());return false;
                             }else{
                                 //Request Sql Select.
-                                mute = RequestMute.getMute(uuidPlayers);
+                                RequestDatabase request = new RequestDatabase();
+                                request.getHS(uuidPlayers);
+                                int mute = request.getMute();
                                     if (mute == 0) {
                                         //Request Sql Update.
-                                        RequestTempmute.setMuteAndTempMuteMotif(uuidPlayers, temp_mute, motif_tempmute);
+                                        RequestDatabase.upHS(uuidPlayers, "motif_tempmute", motif_tempmute);
+                                        RequestDatabase.upHS(uuidPlayers, "tempmute", temp_mute);
+                                        RequestDatabase.upHS(uuidPlayers, "mute", 1);
                                         //Data Player Update.
                                         DataPlayersFiles.setMuteTempMuteAndMotif(uuidPlayers, temp_mute, motif_tempmute);
                                          //Valid Message Tempmute. 

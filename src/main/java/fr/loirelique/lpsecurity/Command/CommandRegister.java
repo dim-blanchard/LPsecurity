@@ -1,4 +1,4 @@
-package fr.loirelique.lpsecurity.Command;
+package fr.loirelique.lpsecurity.command;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -7,15 +7,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
-import fr.loirelique.lpsecurity.Request.RequestDatabase;
-import fr.loirelique.lpsecurity.String.MessageLogin;
-import fr.loirelique.lpsecurity.String.MessageRegister;
-import fr.loirelique.lpsecurity.Usefull.DataListIp;
-import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
+import fr.loirelique.lpsecurity.sqlrequest.RequestDatabase;
+import fr.loirelique.lpsecurity.string.MessageLogin;
+import fr.loirelique.lpsecurity.string.MessageRegister;
+import fr.loirelique.lpsecurity.usefull.DataListIp;
+import fr.loirelique.lpsecurity.usefull.DataPlayersFiles;
 
 public class CommandRegister implements CommandExecutor {
 
-    @Override
+    @Override @Deprecated
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
             Player p = (Player) sender;
@@ -27,13 +27,13 @@ public class CommandRegister implements CommandExecutor {
                         String ipPlayers= p.getAddress().getHostString();
                         String pseudo = p.getName();
                         pseudo = pseudo.toLowerCase();
-                        pseudo = pseudo.replaceAll("\\s", "");
-                                            
+                        pseudo = pseudo.replaceAll("\\s", "");               
+                        
                         RequestDatabase requet = new RequestDatabase();
                         //If the DataBase Was Online
-                        if(requet.isOnline()==false){p.kickPlayer("La base de donné n'est pas en ligne merci de reitérer."); return false;}
+                        if(RequestDatabase.isOnline()==false){p.kickPlayer("La base de donné n'est pas en ligne merci de reitérer."); return false;}
                         else{
-                            requet.getColomun(uuidPlayers);
+                            requet.getColumn(uuidPlayers);
                             String uuidPlayersBdd = requet.getUuidPlayers();
 
                             if (uuidPlayers.equals(uuidPlayersBdd)){p.sendMessage(MessageRegister.getwrongRegister());} 
@@ -47,7 +47,7 @@ public class CommandRegister implements CommandExecutor {
                                     DataListIp.setFile(uuidPlayers, ipPlayers,p);
 
                                     //Request Sql Insert.
-                                    requet.insertNewPlayers(uuidPlayers, pseudo, password);
+                                    RequestDatabase.insertNewPlayers(uuidPlayers, pseudo, password);
                                     
                                     if (Main.plugin.getTaskRegisterTime(p) != null) {Bukkit.getScheduler().cancelTask(Main.plugin.getTaskRegisterTime(p)); Main.plugin.getTaskRegisterTimeRemove(p);Main.plugin.setTaskLoginTime(p);MessageLogin.sendLogin(p);return true;}
                                     else{ p.sendMessage(MessageRegister.getErrorRegister());return false;}

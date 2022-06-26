@@ -1,4 +1,4 @@
-package fr.loirelique.lpsecurity.Command;
+package fr.loirelique.lpsecurity.command;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -6,11 +6,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
-import fr.loirelique.lpsecurity.Request.RequestBan;
-import fr.loirelique.lpsecurity.String.MessageBan;
-import fr.loirelique.lpsecurity.Usefull.DataListPlayers;
-import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
-import fr.loirelique.lpsecurity.Usefull.MotifBuilder;
+import fr.loirelique.lpsecurity.sqlrequest.RequestDatabase;
+import fr.loirelique.lpsecurity.string.MessageBan;
+import fr.loirelique.lpsecurity.usefull.DataListPlayers;
+import fr.loirelique.lpsecurity.usefull.DataPlayersFiles;
+import fr.loirelique.lpsecurity.usefull.MotifBuilder;
 
 public class CommandBan implements CommandExecutor {
 
@@ -23,14 +23,16 @@ public class CommandBan implements CommandExecutor {
                 if (cmd.getName().equalsIgnoreCase("ban")) { // Si c'est la commande "banish" qui a été tapée:
                     if (args.length >= 2) { 
                         String uuidPlayers = Main.plugin.getUuidHash(args[0]);
-                        int ban = 2;
                         //Request SQL select. 
-                        ban = RequestBan.getBan(uuidPlayers);
+                        RequestDatabase request= new RequestDatabase();
+                        request.getHS(uuidPlayers);
+                        int ban = request.getBan();
                         if (ban == 0) {
                             //Motif Builder.
                             String motif_ban = MotifBuilder.getMotif(args,1);
                             //Request SQL Update.
-                            RequestBan.setBanAndMotif(uuidPlayers, motif_ban);
+                            RequestDatabase.upHS(uuidPlayers, "motif_ban", motif_ban);
+                            RequestDatabase.upHS(uuidPlayers, "ban", 1);
                             //Data Player Update.
                             DataPlayersFiles.setBanAndMotif(uuidPlayers, motif_ban);
                             //Kick player.

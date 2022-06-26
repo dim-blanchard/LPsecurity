@@ -1,4 +1,4 @@
-package fr.loirelique.lpsecurity.Command;
+package fr.loirelique.lpsecurity.command;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
-import fr.loirelique.lpsecurity.Request.RequestHistorique;
+import fr.loirelique.lpsecurity.sqlrequest.RequestDatabase;
 
 public class CommandHistorique implements CommandExecutor {
 
@@ -19,19 +19,19 @@ public class CommandHistorique implements CommandExecutor {
                     if (args.length == 1) {
                         String uuidPlayers = Main.plugin.getUuidHash(args[0]);
                         //Objet Requet Sql 
-                        RequestHistorique requet = new RequestHistorique(uuidPlayers);
-
-                        String motif_ban = requet.getMotif_ban();
-                        String motif_tempban = requet.getMotif_tempban();
-                        String motif_unban = requet.getMotif_unban();
-                        String motif_kick = requet.getMotif_kick();
-                        String motif_mute = requet.getMotif_mute();
-                        String motif_warn = requet.getMotif_warn();
-                        String motif_unmute = requet.getMotif_unmute();
-                        String motif_tempmute = requet.getMotif_tempmute();
-                        int ban = requet.getBan();
-                        int warn = requet.getWarn();
-                        int mute = requet.getMute();
+                        RequestDatabase request = new RequestDatabase();
+                        request.getHS(uuidPlayers);
+                        String motif_ban = request.getMotif_ban();
+                        String motif_tempban = request.getMotif_tempban();
+                        String motif_unban = request.getMotif_unban();
+                        String motif_kick = request.getMotif_kick();
+                        String motif_mute = request.getMotif_mute();
+                        String motif_warn = request.getMotif_warn();
+                        String motif_unmute = request.getMotif_unmute();
+                        String motif_tempmute = request.getMotif_tempmute();
+                        int ban = request.getBan();
+                        int warn = request.getWarn();
+                        int mute = request.getMute();
 
                         if (ban!=0) {p.sendMessage("["+args[0]+"]"+" Ban: "+ban);}
                         if (warn!=0) {p.sendMessage("["+args[0]+"]"+" Warn: "+warn);}

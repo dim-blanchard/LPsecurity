@@ -1,4 +1,4 @@
-package fr.loirelique.lpsecurity.Command;
+package fr.loirelique.lpsecurity.command;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -6,11 +6,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
-import fr.loirelique.lpsecurity.Request.RequestBan;
-import fr.loirelique.lpsecurity.Request.RequestUnban;
-import fr.loirelique.lpsecurity.String.MessageUnban;
-import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
-import fr.loirelique.lpsecurity.Usefull.MotifBuilder;
+import fr.loirelique.lpsecurity.sqlrequest.RequestDatabase;
+import fr.loirelique.lpsecurity.string.MessageUnban;
+import fr.loirelique.lpsecurity.usefull.DataPlayersFiles;
+import fr.loirelique.lpsecurity.usefull.MotifBuilder;
 
 public class CommandUnban implements CommandExecutor {
 
@@ -22,14 +21,16 @@ public class CommandUnban implements CommandExecutor {
             if (p.hasPermission("lpsecurity.unban")) {
                 if (cmd.getName().equalsIgnoreCase("unban")) { // Si c'est la commande "banish" qui a été tapée:
                     if (args.length >= 2) {
-                        int ban = 2;
                         String uuidPlayers = Main.plugin.getUuidHash(args[0]);      
                         String motif_unban = MotifBuilder.getMotif(args,1);
                         //Request Sql Select.
-                        ban = RequestBan.getBan(uuidPlayers);
+                        RequestDatabase request= new RequestDatabase();
+                        request.getHS(uuidPlayers);
+                        int ban = request.getBan();
                         if (ban == 1) {
                             //Request Sql Update.
-                            RequestUnban.setUnbanAndMotif(uuidPlayers, motif_unban);
+                            RequestDatabase.upHS(uuidPlayers, "motif_unban", motif_unban);
+                            RequestDatabase.upHS(uuidPlayers, "ban", 0);
                             //Data Player Update
                             DataPlayersFiles.setUnbanAndMotif(uuidPlayers, motif_unban);
                             //Valid Message Unban.

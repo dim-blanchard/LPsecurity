@@ -1,8 +1,8 @@
-package fr.loirelique.lpsecurity.List;
+package fr.loirelique.lpsecurity.list;
 
 import java.util.HashMap;
 
-import fr.loirelique.lpsecurity.String.MessageWarn;
+import fr.loirelique.lpsecurity.string.MessageWarn;
 
 public class ListWarningDegresAndMotifs {
     private static HashMap<String, String> warningMotifs = new HashMap<String,String>();

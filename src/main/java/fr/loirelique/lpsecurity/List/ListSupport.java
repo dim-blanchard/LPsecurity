@@ -1,4 +1,4 @@
-package fr.loirelique.lpsecurity.List;
+package fr.loirelique.lpsecurity.list;
 
 import java.util.HashMap;
 
@@ -8,31 +8,11 @@ public class ListSupport {
 
     private static HashMap<String, HashMap<String, Player>> listSupport = new HashMap<String, HashMap<String, Player>>();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
     public static boolean creatSupport(String nomSupport, Player player, String uuidPlayers) {
         boolean error = false;
         Object lisObject[] = listSupport.keySet().toArray();
         String list = "";
-        for (int i = 0; i < lisObject.length; i++) {
+        for (int i = 0; i < lisObject.length;) {
             list = lisObject[i].toString();
             if (listSupport.get(list).get(nomSupport) == null) {
                 System.out.println("Pas de joueur dans list");

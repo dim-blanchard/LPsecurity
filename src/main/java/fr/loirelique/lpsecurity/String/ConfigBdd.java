@@ -1,4 +1,4 @@
-package fr.loirelique.lpsecurity.String;
+package fr.loirelique.lpsecurity.string;
 
 import fr.loirelique.lpsecurity.Main;
 

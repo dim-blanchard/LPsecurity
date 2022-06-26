@@ -1,4 +1,4 @@
-package fr.loirelique.lpsecurity.List;
+package fr.loirelique.lpsecurity.list;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -8,7 +8,7 @@ public class CommandListSupport implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        // TODO Auto-generated method stub
+        
         
         return false;
     }

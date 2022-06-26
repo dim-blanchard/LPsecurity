@@ -1,4 +1,4 @@
-package fr.loirelique.lpsecurity.Command;
+package fr.loirelique.lpsecurity.command;
 
 import java.util.List;
 
@@ -8,14 +8,13 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
-import fr.loirelique.lpsecurity.Request.RequestBan;
-import fr.loirelique.lpsecurity.Request.RequestTempban;
-import fr.loirelique.lpsecurity.String.MessageTempban;
-import fr.loirelique.lpsecurity.Usefull.DataListPlayers;
-import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
-import fr.loirelique.lpsecurity.Usefull.DateAndTime;
-import fr.loirelique.lpsecurity.Usefull.MotifBuilder;
-import fr.loirelique.lpsecurity.Usefull.TestString;
+import fr.loirelique.lpsecurity.sqlrequest.RequestDatabase;
+import fr.loirelique.lpsecurity.string.MessageTempban;
+import fr.loirelique.lpsecurity.usefull.DataListPlayers;
+import fr.loirelique.lpsecurity.usefull.DataPlayersFiles;
+import fr.loirelique.lpsecurity.usefull.DateAndTime;
+import fr.loirelique.lpsecurity.usefull.MotifBuilder;
+import fr.loirelique.lpsecurity.usefull.TestString;
 
 public class CommandTempban implements TabExecutor {
 
@@ -26,12 +25,13 @@ public class CommandTempban implements TabExecutor {
             Player p = (Player) sender;// On récupère le joueur.
             if (p.hasPermission("lpsecurity.tempban")) {
                 if (cmd.getName().equalsIgnoreCase("tempban")) { // Si c'est la commande "banish" qui a été tapée:
-                    if (args.length >= 3) {
-                        int ban = 2;
+                    if (args.length >= 3) {  
                         String uuidPlayers = Main.plugin.getUuidHash(args[0]);
-
+                        
                         if (TestString.isNumber(args[1])==false) {p.sendMessage("§dLe nombre de temps donner ne dois comporter que des chiffres.");return true;
                         }else if(TestString.isNumber(args[1])==true) {
+                            RequestDatabase request = new RequestDatabase();
+                            request.getHS(uuidPlayers);
                             int donneTemps = Integer.parseInt(args[1]);
                             String typeTemps = args[2];                       
                             String temp_ban = DateAndTime.getDateToString(donneTemps, typeTemps);
@@ -41,10 +41,12 @@ public class CommandTempban implements TabExecutor {
                             }else if (motif_tempban.length()==0) {p.sendMessage(MessageTempban.setColorErrorTempban() + MessageTempban.getErrorTempban());return false;
                             }else{
                                 //Request Sql Select.
-                                ban = RequestBan.getBan(uuidPlayers);
+                               int ban = request.getBan();
                                     if (ban == 0) {
                                         //Request Sql Update.
-                                        RequestTempban.setBanAndTempBanMotif(uuidPlayers, motif_tempban, temp_ban);
+                                        RequestDatabase.upHS(uuidPlayers, "motif_tempban", motif_tempban);
+                                        RequestDatabase.upHS(uuidPlayers, "tempban", temp_ban);
+                                        RequestDatabase.upHS(uuidPlayers, "ban", 1);
                                         //Data Player Update.
                                         DataPlayersFiles.setBanAndTempBanMotif(uuidPlayers, motif_tempban , temp_ban);
                                          //Valid Message Tempban. 

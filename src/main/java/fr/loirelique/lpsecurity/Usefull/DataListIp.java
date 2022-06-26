@@ -1,4 +1,4 @@
-package fr.loirelique.lpsecurity.Usefull;
+package fr.loirelique.lpsecurity.usefull;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,10 +10,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 
 import fr.loirelique.lpsecurity.Main;
-import fr.loirelique.lpsecurity.String.MessageKick;
+import fr.loirelique.lpsecurity.string.MessageKick;
+
 
 public class DataListIp {
-    /////////////////////////////////////////
+    @SuppressWarnings("unchecked")
     public static List<String> getFileIp(String nameFiles) {
         List<String> value = new ArrayList<String>();
         final String chemainFile = Main.plugin.getDataFolder().toString() +Main.plugin.dataListIp;
@@ -55,7 +56,7 @@ public class DataListIp {
                 try {
                     fileConfiguration.save(file);
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
+                   
                     e.printStackTrace();
                 }
                 }
@@ -70,7 +71,7 @@ public class DataListIp {
             try {
                 fileConfiguration.save(file);
             } catch (IOException e1) {
-                // TODO Auto-generated catch block
+                
                 e1.printStackTrace();
             }
             System.out.println("[LPsecurity] File Data List Ip Was Create.");
@@ -99,7 +100,7 @@ public class DataListIp {
                 try {
                     fileConfiguration.save(file);
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
+                    
                     e.printStackTrace();
                 }
             }else{           
@@ -107,7 +108,7 @@ public class DataListIp {
                 try {
                     fileConfiguration.save(file);
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
+                    
                     e.printStackTrace();
                 }
             }
@@ -146,7 +147,7 @@ public class DataListIp {
                 try {
                     fileConfiguration.save(file);
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
+                   
                     e.printStackTrace();
                 }
                 }
@@ -155,13 +156,13 @@ public class DataListIp {
             
         } else {
             System.out.println("[LPsecurity] File Data List Ip Not Exists.");
-            final List ip = new ArrayList<String>();
+            final List<String> ip = new ArrayList<String>();
             ip.add(uuidPlayers);
             fileConfiguration.set("list", ip);
             try {
                 fileConfiguration.save(file);
             } catch (IOException e1) {
-                // TODO Auto-generated catch block
+                
                 e1.printStackTrace();
             }
             System.out.println("[LPsecurity] File Data List Ip Was Create.");

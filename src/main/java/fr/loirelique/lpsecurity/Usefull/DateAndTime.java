@@ -1,4 +1,4 @@
-package fr.loirelique.lpsecurity.Usefull;
+package fr.loirelique.lpsecurity.usefull;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -10,24 +10,40 @@ import java.util.Locale;
 
 public class DateAndTime {
 
-    private Calendar calendrier = Calendar.getInstance();
+    private Calendar calendrier;
     public Calendar getCalendrier() {return calendrier;}
     public void setCalendrier(Calendar calendrier) {this.calendrier = calendrier;}
     
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+    private SimpleDateFormat simpleDateFormat ;
     public SimpleDateFormat getSimpleDateFormat() {return simpleDateFormat;}
     public void setSimpleDateFormat(SimpleDateFormat simpleDateFormat) {this.simpleDateFormat = simpleDateFormat;}
 
-    private DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+    private DateFormat dateFormat;
     public DateFormat getDateFormat() {return dateFormat;}
     public void setDateFormat(DateFormat dateFormat) {this.dateFormat = dateFormat;}
 
-    private static ArrayList<String> listTypeTemps = new ArrayList<String>(); 
-    private static ArrayList<String> listNumber = new ArrayList<String>(); 
-    public static ArrayList<String> getListTypeTemps() {return listTypeTemps;}  
-    public static ArrayList<String> getListNumber() {return listNumber;}
-    public static void initializeList() {listTypeTemps.add("Jours");listTypeTemps.add("Mois"); listTypeTemps.add("Heures");listTypeTemps.add("Minutes");for (int i = 1 ; i <= 100; i++) {listNumber.add(Integer.toString(i));}}
+    private Date date;
+    public Date getDate() {return date;}
+    public void setDate(Date date) {this.date = date;}
+
+    private int donneTemps;
+    public int getDonneTemps() {return donneTemps;}
+    public void setDonneTemps(int donneTemps) {this.donneTemps = donneTemps;}
+
+    private String typeTemps;
+    public String getTypeTemps() {return typeTemps;}
+    public void setTypeTemps(String typeTemps) {this.typeTemps = typeTemps;}
+
     
+    public DateAndTime() {
+    this.calendrier = Calendar.getInstance() ;
+    this.simpleDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH) ;
+    this.dateFormat  = new SimpleDateFormat("yyyy/MM/dd HH:mm") ;
+    this.date = getCalendrier().getTime() ;
+    this.donneTemps = 0 ;
+    this.typeTemps = "error" ;
+    }
+
     public static String getDateFormatToString(Date date) {
         // Date retouner au joueur
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
@@ -70,4 +86,9 @@ public class DateAndTime {
     }
 
 
+    private static ArrayList<String> listTypeTemps = new ArrayList<String>(); 
+    private static ArrayList<String> listNumber = new ArrayList<String>(); 
+    public static ArrayList<String> getListTypeTemps() {return listTypeTemps;}  
+    public static ArrayList<String> getListNumber() {return listNumber;}
+    public static void initializeList() {listTypeTemps.add("Jours");listTypeTemps.add("Mois"); listTypeTemps.add("Heures");listTypeTemps.add("Minutes");for (int i = 1 ; i <= 100; i++) {listNumber.add(Integer.toString(i));}}
 }

@@ -1,4 +1,4 @@
-package fr.loirelique.lpsecurity.Command;
+package fr.loirelique.lpsecurity.command;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -6,11 +6,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
-import fr.loirelique.lpsecurity.Request.RequestMute;
-import fr.loirelique.lpsecurity.String.MessageMute;
-import fr.loirelique.lpsecurity.Usefull.DataListPlayers;
-import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
-import fr.loirelique.lpsecurity.Usefull.MotifBuilder;
+import fr.loirelique.lpsecurity.sqlrequest.RequestDatabase;
+import fr.loirelique.lpsecurity.string.MessageMute;
+import fr.loirelique.lpsecurity.usefull.DataListPlayers;
+import fr.loirelique.lpsecurity.usefull.DataPlayersFiles;
+import fr.loirelique.lpsecurity.usefull.MotifBuilder;
 
 public class CommandMute implements CommandExecutor {
 
@@ -23,14 +23,16 @@ public class CommandMute implements CommandExecutor {
                 if (cmd.getName().equalsIgnoreCase("mute")){ // Si c'est la commande "mute" qui a été tapée:
                     if (args.length >= 2) {
                         String uuidPlayers = Main.plugin.getUuidHash(args[0]);
-                        int mute = 2;
                         //Request Sql Select
-                        mute = RequestMute.getMute(uuidPlayers);
+                        RequestDatabase request = new RequestDatabase();
+                        request.getHS(uuidPlayers);
+                        int mute = request.getMute();
                         if (mute == 0) {
                             ////Motif Builder.
                             String motif_mute = MotifBuilder.getMotif(args, 1);
                             //Request Sql Update.
-                            RequestMute.setMuteAndMotif(uuidPlayers, motif_mute);
+                            RequestDatabase.upHS(uuidPlayers, "motif_mute", motif_mute);
+                            RequestDatabase.upHS(uuidPlayers, "mute", 1);
                             //Data Player Update.
                             DataPlayersFiles.setMuteAndMotif(uuidPlayers,motif_mute);
                             //Valid Message.

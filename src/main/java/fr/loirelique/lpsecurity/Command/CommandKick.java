@@ -1,4 +1,4 @@
-package fr.loirelique.lpsecurity.Command;
+package fr.loirelique.lpsecurity.command;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -6,10 +6,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
-import fr.loirelique.lpsecurity.Request.RequestKick;
-import fr.loirelique.lpsecurity.Usefull.DataListPlayers;
-import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
-import fr.loirelique.lpsecurity.Usefull.MotifBuilder;
+import fr.loirelique.lpsecurity.sqlrequest.RequestDatabase;
+import fr.loirelique.lpsecurity.usefull.DataListPlayers;
+import fr.loirelique.lpsecurity.usefull.DataPlayersFiles;
+import fr.loirelique.lpsecurity.usefull.MotifBuilder;
 
 public class CommandKick implements CommandExecutor {
 
@@ -23,7 +23,7 @@ public class CommandKick implements CommandExecutor {
                         String uuidPlayers = Main.plugin.getUuidHash(args[0]);
                         String motif_kick = MotifBuilder.getMotif(args, 1);
 
-                        RequestKick.setKickAndMotif(uuidPlayers, motif_kick);
+                        RequestDatabase.upHS(uuidPlayers,"motif_kick", motif_kick);
 
                         p.sendMessage("Le joueur "+ args[0]+" à était exclue de la communauté de serveur.");
                         if (DataPlayersFiles.getIsOnline(uuidPlayers, Main.plugin.dataPlayer)==true){Player player = DataListPlayers.getObjectPlayers(uuidPlayers);player.kickPlayer("Motif Kick: "+ motif_kick);}

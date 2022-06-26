@@ -1,4 +1,4 @@
-package fr.loirelique.lpsecurity.Command;
+package fr.loirelique.lpsecurity.command;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,12 +9,11 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import fr.loirelique.lpsecurity.Main;
-import fr.loirelique.lpsecurity.List.ListWarningDegresAndMotifs;
-import fr.loirelique.lpsecurity.Request.RequestHistoriqueSanction;
-import fr.loirelique.lpsecurity.Request.RequestWarn;
-import fr.loirelique.lpsecurity.String.MessageWarn;
-import fr.loirelique.lpsecurity.Usefull.DataListPlayers;
-import fr.loirelique.lpsecurity.Usefull.DataPlayersFiles;
+import fr.loirelique.lpsecurity.list.ListWarningDegresAndMotifs;
+import fr.loirelique.lpsecurity.sqlrequest.RequestDatabase;
+import fr.loirelique.lpsecurity.string.MessageWarn;
+import fr.loirelique.lpsecurity.usefull.DataListPlayers;
+import fr.loirelique.lpsecurity.usefull.DataPlayersFiles;
 
 public class CommandWarn implements TabExecutor {
 
@@ -31,9 +30,10 @@ public class CommandWarn implements TabExecutor {
                         String motif_warn = args[1]; 
 
                         //Request Sql Select
-                        RequestHistoriqueSanction requet = new RequestHistoriqueSanction(uuidPlayers);
-                        int ban = requet.getBan();
-                        int warn = requet.getWarn();
+                        RequestDatabase request = new RequestDatabase();
+                        request.getHS(uuidPlayers);
+                        int ban = request.getBan();
+                        int warn = request.getWarn();
 
                         //Get degres of motifs.
                         if (motif_warn.equals(MessageWarn.getMotifWarnLvl1())) {
@@ -60,14 +60,18 @@ public class CommandWarn implements TabExecutor {
                         }       
                         //If the condition was true and ban zero the player is ban 1 and kick if islogin true.
                         if (condition == true && ban == 0) {
-                            RequestWarn.setWarnBanAndMotifs(uuidPlayers,warn,motif_warn);
+                            RequestDatabase.upHS(uuidPlayers, "motif_warn", ListWarningDegresAndMotifs.getMotifs(motif_warn));
+                            RequestDatabase.upHS(uuidPlayers, "warn", warn);
+                            RequestDatabase.upHS(uuidPlayers, "ban", 1);
+                            RequestDatabase.upHS(uuidPlayers, "motif_ban",ListWarningDegresAndMotifs.getMotifs(motif_warn));
                             if (DataPlayersFiles.getIsOnline(uuidPlayers, Main.plugin.dataPlayer)==true) {Player player = DataListPlayers.getObjectPlayers(uuidPlayers);player.kickPlayer("Motif Warn: "+ ListWarningDegresAndMotifs.getMotifs(motif_warn));}    
                             p.sendMessage(MessageWarn.setColorWarnAndBan() + "[" + args[0] + "] " + MessageWarn.getWarnAndBan());
                             return true;
                         
                         //If the condition was false and ban zero the player is warn incrementation.
                         }else if (condition == false && ban == 0) { 
-                            RequestWarn.setWarnAndMotif(uuidPlayers, warn, motif_warn);
+                            RequestDatabase.upHS(uuidPlayers, "motif_warn", ListWarningDegresAndMotifs.getMotifs(motif_warn));
+                            RequestDatabase.upHS(uuidPlayers, "warn", warn);
                             if (DataPlayersFiles.getIsOnline(uuidPlayers, Main.plugin.dataPlayer)==true) {Player player = DataListPlayers.getObjectPlayers(uuidPlayers);player.sendMessage("Motif Warn: "+ ListWarningDegresAndMotifs.getMotifs(motif_warn));}
                             p.sendMessage(MessageWarn.setColorWarn() + "[" + args[0] + "] " + MessageWarn.getWarn());
                             return true;
