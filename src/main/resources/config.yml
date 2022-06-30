@@ -3,10 +3,32 @@ bdd:
   driver: jdbc:mysql
   host: localhost
   port: 3306
-  database: ec4wdw13erizia
-  user: dimdim
-  pass: Dimitri11!
-  table: pf8kr9g9players
+  database: 
+  user: 
+  pass: 
+  table: 
+
+#Copier et executer les deux requets Sql l'une apres l'autre.
+
+  # CREATE DATABASE `MotAuHazard+Nombdd` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+
+  # CREATE TABLE `MotAuHazard+NomDeLaTable` (
+  # `id` int NOT NULL AUTO_INCREMENT,
+  # `uuid` varchar(32) DEFAULT NULL,
+  # `pseudo` varchar(255) DEFAULT NULL,
+  # `password` varchar(64) DEFAULT NULL,
+  # `historique_sanctions` json DEFAULT NULL,
+  # PRIMARY KEY (`id`),
+  # UNIQUE KEY `uuid_UNIQUE` (`uuid`),
+  # UNIQUE KEY `pseudo_UNIQUE` (`pseudo`)
+  # ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+#Salage pour l'algorithme sha 256 et MD5 à modifier au lancement du serveur et ne jamais le remodifier. Sinon corruption des mots de passe de la base de données.
+security:
+  sel: ec4wdw13
+
+
+  #(Ne pas utiliser pour le moment)
   #Utilisateur de la base de données qui n'as que les droits SELECT et UPDATE sur la table.
   user_select_update:
   pass_select_update:
@@ -17,9 +39,7 @@ bdd:
   user_select:
   pass_select:
 
-#Salage pour l'algorithme sha 256 et MD5 à modifier au lancement du serveur et ne jamais le remodifier. Sinon corruption des mots de passe de la base de données.
-security:
-  sel: ec4wdw13
+
 
 ##########################################################################
 #Liste des codes couleur du tchat
@@ -65,7 +85,8 @@ security:
   #Couleur[Nom du joueur] a étais réintégrer à la communauté de serveur.
 
 string:
-#Spawn Register And Login
+#Spawn
+  #Mettre les positions du spwan Ici
   spawnX: 0
   spawnY: 73
   spawnZ: 0
