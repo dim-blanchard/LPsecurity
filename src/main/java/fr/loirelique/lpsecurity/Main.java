@@ -420,9 +420,9 @@ public class Main extends JavaPlugin implements Listener {
 
         BukkitTask tache = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
 
-            double x = 0;
-            double y = 73;
-            double z = 0;
+            double x = MessageLogin.getSpwanX();
+            double y = MessageLogin.getSpwanY();
+            double z = MessageLogin.getSpwanZ();
 
             World player_world = p.getWorld();
             Location player_tp = new Location(player_world, x, y, z);

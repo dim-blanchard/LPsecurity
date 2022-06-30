@@ -87,4 +87,21 @@ public class MessageLogin {
         alreadyLogin = new String(alreadyLogin.getBytes(), StandardCharsets.UTF_8);
         return alreadyLogin;
     }
+
+
+
+    
+
+    public static int getSpwanX() {
+        int spawnLogin = Integer.parseInt(Main.plugin.getConfig().getString("string.spawnX"));
+        return spawnLogin;
+    }
+    public static int getSpwanY() {
+        int spawnLogin = Integer.parseInt(Main.plugin.getConfig().getString("string.spawnY"));
+        return spawnLogin;
+    }
+    public static int getSpwanZ() {
+        int spawnLogin = Integer.parseInt(Main.plugin.getConfig().getString("string.spawnZ"));
+        return spawnLogin;
+    }
 }

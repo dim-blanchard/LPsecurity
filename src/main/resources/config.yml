@@ -65,11 +65,17 @@ security:
   #Couleur[Nom du joueur] a étais réintégrer à la communauté de serveur.
 
 string:
+#Spawn Register And Login
+  spawnX: 0
+  spawnY: 73
+  spawnZ: 0
+
 #Login
   #Message d'entré plus le temps avant identification dans le serveur.
   title_login: Salut !
   subtitles_login: Identifie toi -> /login  !
   time_login: 120
+
   #Message d'erreurs de mot de passe ou utilisation de la commande non approprier.
   already_login: Tu es déja connecter au serveur.
   wrong_login_pass: Le mot de passe est incorecte.
